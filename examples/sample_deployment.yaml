@@ -1,0 +1,48 @@
+# Sample SDV / edge deployment description.
+# Parsed by DeploymentScannerAgent into the {actors, datasources, edges}
+# graph that paper-2 (AgentHeLLM) consumes.
+
+actors:
+  - id: in_car_agent
+    type: LLMAgent
+    trust_level: authenticated
+  - id: external_a2a_agent
+    type: ExternalA2AAgent
+    trust_level: external           # A2A authenticates sender, not content
+  - id: high_perf_computer
+    type: HighPerformanceComputer
+    trust_level: authenticated
+  - id: zone_ecu
+    type: ZoneECU
+    trust_level: authenticated
+  - id: driver
+    type: HumanUser
+    trust_level: authenticated
+
+datasources:
+  - id: long_term_memory
+    holds: ["user preferences", "memory rules"]
+  - id: rag_index
+    holds: ["navigation tips", "manuals"]
+  - id: vehicle_signals
+    holds: ["VSS, CAN signals"]
+
+edges:
+  - source: high_perf_computer
+    target: zone_ecu
+    primitive: communicate
+    transport: can_fd                # BAD — TOP-001 expects ethernet/IEEE-1722
+    standard: vendor_specific
+  - source: zone_ecu
+    target: vehicle_signals
+    primitive: write
+    transport: can_fd
+  - source: external_a2a_agent
+    target: long_term_memory
+    primitive: write                 # BAD — TOP-002 forbids external writes
+  - source: in_car_agent
+    target: rag_index
+    primitive: read
+  - source: in_car_agent
+    target: driver
+    primitive: respond

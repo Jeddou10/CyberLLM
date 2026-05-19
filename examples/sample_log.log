@@ -1,0 +1,14 @@
+2026-05-19T09:21:01Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:03Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:05Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:06Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:07Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:08Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:09Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:10Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:12Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:13Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:14Z auth sshd[1023]: Failed password for root from 10.0.0.42 port 51234 ssh2
+2026-05-19T09:21:14Z can0    burst_id=0x7E0  src_ecu=BodyCtrl   1247 pkts in 1s
+2026-05-19T09:21:16Z net     10.0.0.42 → 10.0.0.255  port 7000  rate 1218 pkts/s
+2026-05-19T09:21:17Z app     decision_agent recommended_tier=moderate confidence=0.72

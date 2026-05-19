@@ -1,0 +1,66 @@
+# --------------------------------------------------------------------------
+# CyberLLM — main configuration.
+# Each section is referenced by code in agents/, skills/, tools/.
+# --------------------------------------------------------------------------
+
+# ---- LLM configurations (paper 4: Härer LLM-Config block) -----------------
+llm_configs:
+  default:
+    provider: stub             # stub | openai | anthropic | ollama
+    model: stub-echo
+    temperature: 0.2
+    max_tokens: 1024
+  reasoning:
+    provider: stub
+    model: stub-reasoning
+    temperature: 0.0
+    max_tokens: 2048
+
+# ---- Agent configurations -------------------------------------------------
+agent_configs:
+  source_code_scanner:
+    llm: default
+    objective: "Identify insecure patterns in the given source code and map each finding to a rule id."
+  log_analyzer:
+    llm: default
+    objective: "Detect anomalies in the provided log lines and classify the threat type."
+  deployment_scanner:
+    llm: default
+    objective: "Build the actor/datasource graph from the deployment config and check it against topology rules."
+  decision_agent:
+    llm: reasoning
+    objective: "Aggregate scanner findings, tag each by asset category, and decide on a response."
+  action_generator:
+    llm: default
+    objective: "Produce a concrete defensive action (soft / moderate / hard) or a code-level fix."
+
+# ---- Security policy (paper 1: contextual security properties) ------------
+security:
+  allowed_objectives:                # set O
+    - "analyze logs"
+    - "scan source code"
+    - "scan deployment config"
+    - "produce findings report"
+    - "produce defensive action"
+    - "auto-correct insecure code"
+  authenticated_sources:             # S_auth,t
+    - user
+    - rules_engine
+    - mcp_tool
+  trusted_destinations:              # destinations that data isolation accepts
+    - findings_report
+    - mitigation_plan
+    - audit_log
+
+# ---- Response intensity thresholds (paper 5: tiered response) -------------
+response_tiers:
+  soft_threshold: 0.40               # confidence required to act softly
+  moderate_threshold: 0.65
+  hard_threshold: 0.85
+
+# ---- Paths ----------------------------------------------------------------
+paths:
+  rules_dir: rules
+  examples_dir: examples
+  memory_dir: memory
+  prompts_dir: prompts
