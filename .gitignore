@@ -34,6 +34,11 @@ ENV/
 # Timestamped run outputs (keep example fixtures in examples/logs/)
 run_logs/
 memory/last_run.json
+# Signed incident store (Phase E) — regenerated on every run
+*.db
+incidents.db
+# Action-engine scratch dir (patches, snapshots, secret store, runbooks)
+mcp_workspace/
 
 # --- OS files ---
 .DS_Store

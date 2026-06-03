@@ -15,6 +15,7 @@ import json
 import re
 
 from .base_agent import BaseAgent, AgentResult, Finding, Input
+from .memory_store import MemoryStore
 
 
 # Paper 2: human-centric asset categories used for tagging findings.
@@ -44,6 +45,9 @@ class DecisionAgent(BaseAgent):
         "You are the central decision agent in a multi-agent cybersecurity "
         "defense system for an automotive / edge deployment.\n\n"
         "Aggregated findings from scanner agents:\n[findings]\n\n"
+        "Similar past incidents recalled from signed memory (paper 5 "
+        "adaptive learning — use them as precedent, not gospel):\n"
+        "[memory]\n\n"
         "Allowed asset categories (paper-2 taxonomy): [assets]\n"
         "Response tiers and thresholds: [tiers]\n\n"
         "Decide:\n"
@@ -56,7 +60,16 @@ class DecisionAgent(BaseAgent):
         "\"confidence\": <float>, \"justification\": \"...\"}"
     )
 
-    def run(self, scanner_results: list[AgentResult]) -> Decision:  # type: ignore[override]
+    def __init__(self, agent_id: str, cfg: dict, llm,
+                 memory: MemoryStore | None = None):
+        super().__init__(agent_id, cfg, llm)
+        self.memory = memory
+        self.recall_k = int(cfg.get("recall_k", 5))
+        # Most recent recall, exposed for the run-logger.
+        self.consulted_memory: list = []
+
+    def run(self, scanner_results: list[AgentResult],   # type: ignore[override]
+            scenario_name: str | None = None) -> Decision:
         all_findings: list[Finding] = []
         for r in scanner_results:
             all_findings.extend(r.findings)
@@ -68,7 +81,16 @@ class DecisionAgent(BaseAgent):
             for f in all_findings
         ) or "(no findings)"
 
+        # ---- E.2: consult signed memory for similar past incidents -----
+        self.consulted_memory = []
+        if self.memory is not None:
+            rule_ids = sorted({f.rule_id for f in all_findings})
+            self.consulted_memory = self.memory.recall_similar(
+                rule_ids, k=self.recall_k,
+                exclude_scenario=scenario_name, mode="defense")
+
         self.data["findings"] = rendered
+        self.data["memory"] = MemoryStore.render_fewshot(self.consulted_memory)
         self.data["assets"] = ", ".join(ASSET_CATEGORIES)
         self.data["tiers"] = json.dumps(self.cfg.get("response_tiers", {}))
 

@@ -2,12 +2,7 @@
   "defense": [
     {
       "name": "juliet_smoke",
-      "files_scanned": 260,
-      "findings": 1730,
-      "tier": "moderate",
-      "confidence": 0.72,
-      "guard": "PASS",
-      "action": "block_ip"
+      "error": "Azure OpenAI request failed (400) for deployment 'gpt-4o-2' at https://swcentralaiforhana.openai.azure.com (api-version 2024-10-21). Check the AZURE_OPENAI_* settings in .env. Response: {\n  \"error\": {\n    \"message\": \"This model's maximum context length is 128000 tokens. However, your messages resulted in 152033 tokens. Please reduce the length of the messages.\",\n    \"type\": \"invalid_request_error\",\n    \"param\": \"messages\",\n    \"code\": \"context_length_exceeded\"\n  }\n}"
     }
   ],
   "attack": []

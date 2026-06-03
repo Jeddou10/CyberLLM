@@ -191,3 +191,10 @@ _LEGACY_KIND_MAP = {
 
 def _legacy_kind(step: ActionStep) -> str:
     return _LEGACY_KIND_MAP.get(step.tool, "alert_only")
+
+
+def legacy_kind(step: ActionStep) -> str:
+    """Public alias — maps an ActionStep's MCP tool to the legacy
+    `kind` vocabulary the SecurityGuard understands. Used by the
+    per-step guard adapter (roadmap C.4)."""
+    return _legacy_kind(step)

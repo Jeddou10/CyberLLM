@@ -1,0 +1,64 @@
+# Ground-truth labels for the STATIC evaluation harness (evaluate.py).
+#
+# The supervisor's constraint is that the system "mainly detects static
+# vulnerabilities" — so the harness scores the deterministic static
+# analyzer against these labels WITHOUT running the target dynamically.
+#
+# - `expected`  : the rule_ids the static analyzer MUST surface for this
+#                 scenario (the deterministic must-haves; this is the same
+#                 ground truth that tests/test_scenario_regression.py uses,
+#                 so a green suite implies recall == 1.0 here).
+# - `clean: true`: a negative control. Ground truth is *zero* static
+#                 findings; any static hit here is a true false-positive.
+#
+# `expected` is a must-have set, not an exhaustive one: detecting a rule
+# beyond this list on a vulnerable scenario is NOT counted as a false
+# positive (that is why false-positive rate is measured only on the
+# clean controls, where the exhaustive ground truth is "nothing").
+
+scenarios:
+  # ---- negative controls (false-positive measurement) -------------------
+  - name: clean_auth
+    clean: true
+    code: examples/small/01_clean_auth.py
+    log: examples/logs/01_clean_baseline.log
+    deployment: examples/deployments/01_clean_minimal.yaml
+    expected: []
+
+  - name: clean_jwt_keys
+    clean: true
+    code: examples/large/fleet_management/auth/jwt_keys.py
+    log: examples/logs/01_clean_baseline.log
+    deployment: examples/deployments/01_clean_minimal.yaml
+    expected: []
+
+  # ---- vulnerable scenarios (detection-rate measurement) ----------------
+  - name: can_gateway
+    code: examples/small/02_can_gateway.py
+    log: examples/logs/03_can_injection.log
+    deployment: examples/deployments/03_complex_sdv.yaml
+    expected: [CODE-005, CODE-006, TOP-001, TOP-002, LOG-CAN-02]
+
+  - name: ota_updater
+    code: examples/small/03_ota_updater.py
+    log: examples/logs/05_lateral_movement.log
+    deployment: examples/deployments/02_misconfigured_cloud.yaml
+    expected: [CODE-010, TOP-005, TOP-006]
+
+  - name: telemetry_uploader
+    code: examples/small/04_telemetry_uploader.py
+    log: examples/logs/04_data_exfiltration.log
+    deployment: examples/deployments/02_misconfigured_cloud.yaml
+    expected: [CODE-003, CODE-006, CODE-012, LOG-EXFIL-01, LOG-EXFIL-02]
+
+  - name: mqtt_handler
+    code: examples/small/05_mqtt_handler.c
+    log: examples/logs/02_brute_force_ssh.log
+    deployment: examples/deployments/03_complex_sdv.yaml
+    expected: [CODE-013, TOP-001, TOP-002, LOG-AUTH-03]
+
+  - name: ev_charging_api
+    code: examples/medium/ev_charging_api
+    log: examples/logs/04_data_exfiltration.log
+    deployment: examples/deployments/02_misconfigured_cloud.yaml
+    expected: [CODE-003, CODE-012, TOP-005, TOP-006, LOG-EXFIL-01, LOG-EXFIL-02]

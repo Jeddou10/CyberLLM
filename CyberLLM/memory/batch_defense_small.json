@@ -3,45 +3,45 @@
     {
       "name": "clean_auth",
       "files_scanned": 1,
-      "findings": 6,
-      "tier": "moderate",
-      "confidence": 0.72,
+      "findings": 2,
+      "tier": "hard",
+      "confidence": 0.9,
       "guard": "PASS",
-      "action": "rate_limit"
+      "action": "isolate_node"
     },
     {
       "name": "can_gateway",
       "files_scanned": 1,
-      "findings": 15,
-      "tier": "moderate",
-      "confidence": 0.72,
+      "findings": 22,
+      "tier": "hard",
+      "confidence": 0.92,
       "guard": "PASS",
       "action": "isolate_node"
     },
     {
       "name": "ota_updater",
       "files_scanned": 1,
-      "findings": 15,
-      "tier": "moderate",
-      "confidence": 0.72,
-      "guard": "REFUSED",
-      "action": "alert_only"
+      "findings": 18,
+      "tier": "hard",
+      "confidence": 0.93,
+      "guard": "PASS",
+      "action": "patch_code"
     },
     {
       "name": "telemetry_uploader",
       "files_scanned": 1,
-      "findings": 20,
-      "tier": "moderate",
-      "confidence": 0.72,
-      "guard": "REFUSED",
-      "action": "alert_only"
+      "findings": 26,
+      "tier": "hard",
+      "confidence": 0.95,
+      "guard": "PASS",
+      "action": "patch_code"
     },
     {
       "name": "mqtt_handler",
       "files_scanned": 1,
-      "findings": 22,
-      "tier": "moderate",
-      "confidence": 0.72,
+      "findings": 28,
+      "tier": "hard",
+      "confidence": 0.95,
       "guard": "PASS",
       "action": "patch_code"
     }

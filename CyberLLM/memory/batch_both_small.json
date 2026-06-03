@@ -7,16 +7,16 @@
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",
-      "action": "block_ip"
+      "action": "rate_limit"
     },
     {
       "name": "can_gateway",
       "files_scanned": 1,
-      "findings": 14,
+      "findings": 15,
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",
-      "action": "block_ip"
+      "action": "isolate_node"
     },
     {
       "name": "ota_updater",
@@ -24,26 +24,26 @@
       "findings": 15,
       "tier": "moderate",
       "confidence": 0.72,
-      "guard": "PASS",
-      "action": "block_ip"
+      "guard": "REFUSED",
+      "action": "alert_only"
     },
     {
       "name": "telemetry_uploader",
       "files_scanned": 1,
-      "findings": 18,
+      "findings": 20,
       "tier": "moderate",
       "confidence": 0.72,
-      "guard": "PASS",
-      "action": "block_ip"
+      "guard": "REFUSED",
+      "action": "alert_only"
     },
     {
       "name": "mqtt_handler",
       "files_scanned": 1,
-      "findings": 21,
+      "findings": 22,
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",
-      "action": "block_ip"
+      "action": "patch_code"
     }
   ],
   "attack": [
@@ -104,8 +104,8 @@
       "files_scanned": 1,
       "chosen": [
         "CODE-014",
-        "CODE-002",
-        "TOP-002"
+        "CODE-014",
+        "CODE-002"
       ],
       "target_asset": "Privacy and Personal Data",
       "confidence": 0.0,

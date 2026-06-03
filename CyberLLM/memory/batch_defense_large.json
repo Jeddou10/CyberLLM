@@ -3,11 +3,11 @@
     {
       "name": "fleet_management",
       "files_scanned": 20,
-      "findings": 59,
-      "tier": "moderate",
-      "confidence": 0.72,
+      "findings": 52,
+      "tier": "hard",
+      "confidence": 0.95,
       "guard": "PASS",
-      "action": "block_ip"
+      "action": "patch_code"
     }
   ],
   "attack": []

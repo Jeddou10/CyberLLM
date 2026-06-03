@@ -11,26 +11,57 @@ paper 5 (edge MAS coordination).
 
 ---
 
+## Status as of 2026-06-03
+
+A second implementation pass closed the **research / learning** gaps that
+remained after the engineering backbone was built. Checkboxes below are
+now accurate (`[x]` done, `[~]` partial, `[ ]` deferred). What changed in
+this pass:
+
+- **Phase A** — A.2 graceful credential fallback + A.4 token budgeting:
+  **done** (`llm_client.py`, `tools/tokens.py`, `agents/base_agent.py`).
+- **Phase C.4** — per-step contextual guard is now wired into the action
+  executor (`pipeline.build_step_guard`).
+- **Phase E** — the adaptive memory loop is **closed**: a signed SQLite
+  incident store (`agents/memory_store.py`), recall-as-few-shot in the
+  Decision Agent, and HMAC-verified, source-authenticated reads.
+- **Phase F** — H_a LLM-judge (`agents/ha_judge.py`), mandatory
+  provenance, delegation rules, and compositional + temporal trajectory
+  checks (`agents/security_guard.py`).
+- **D.4 / D.5 / G.4** — a **static** evaluation harness (`evaluate.py` +
+  `examples/labels.yaml`): detection recall, false-positive rate on
+  clean controls, a property-violation table, and an asset×scenario×skill
+  scoreboard. (No MTTD — that is a dynamic metric; see the note in
+  `evaluate.py`.)
+
+Deferred by decision (need heavy deps or external corpora): **Phase B**
+(RAG), **G.1–G.3** (CyberMetric / AgentDojo / CAR-bench), **Phase H**
+(federated / quantised-edge / auto-spawn research).
+
+---
+
 ## Phase A — Replace the stub LLM with a real one (≈ 1 week)
 
 **Why first.** Everything downstream becomes meaningful only when a real
 model is generating findings and decisions.
 
-- [ ] **A.1 — Wire up Ollama for local development.** *(P4)*
-  Pull `llama3.1:8b-instruct` or `qwen2.5-coder:7b`. Switch
-  `config.yaml` `llm_configs.default.provider` to `ollama`. Re-run
-  `python pipeline.py` and confirm scanners produce non-stub findings.
-- [ ] **A.2 — Add OpenAI / Anthropic configs.** *(P4)*
-  Keep stub as a CI fallback. Add an env-var read in `llm_client.py`
-  so missing keys fall back to stub with a warning.
-- [ ] **A.3 — Add a reasoning agent.** *(P4)*
-  In `config.yaml`, the `reasoning` LLM config currently points at
-  the stub. Point it at `gpt-4o`, `o1-preview`, or DeepSeek-R1 (see
-  paper 4 §IV results: these three completed all 12 cybersecurity
-  test cases). The decision agent uses `reasoning` by design.
-- [ ] **A.4 — Stream + token-budgeting.** *(P3)*
-  Add a per-prompt token counter and warn when prompts exceed 4 096
-  tokens (the threshold paper 3 used for LLaMA-3.3 70B).
+- [x] **A.1 — Wire up Ollama for local development.** *(P4)*
+  `OllamaLLM` provider exists in `llm_client.py`; switching
+  `config.yaml` `llm_configs.default.provider` to `ollama` is all that's
+  needed (pulling the model is the operator's machine-local step).
+- [x] **A.2 — Add OpenAI / Anthropic configs.** *(P4)*
+  Both providers exist; `LLMClient.create` now reads the API-key env var
+  and **falls back to the stub with a warning** when it is missing, so
+  CI / offline demos never crash (`_PROVIDER_KEY_ENV`).
+- [x] **A.3 — Add a reasoning agent.** *(P4)*
+  The `reasoning` LLM config + slot exist and are used by the decision
+  agent and attack orchestrator; point it at `gpt-4o` / `o1` / DeepSeek-R1
+  via config.
+- [x] **A.4 — Token-budgeting.** *(P3)*
+  `tools/tokens.py` (`estimate_tokens`, `TokenBudget`) — a dependency-free
+  estimator; `BaseAgent.call_llm` accounts every prompt and warns past
+  `max_prompt_tokens` (default 4 096, paper 3's threshold). (Streaming is
+  provider-specific and left to the real client.)
 
 **Done when:** the same `python pipeline.py` produces *model-generated*
 findings, the decision JSON is consistent, and a regression test runs
@@ -69,21 +100,18 @@ rather than included verbatim in the prompt.
 
 ## Phase C — Real MCP tools (≈ 1 week)
 
-- [ ] **C.1 — nmap MCP.** *(P4, P5)*
-  Replace `tools/mcp_tools.PortScanTool.run` with a `subprocess` call
-  to `nmap -sS -p 1-1024 …`. Parse XML output to the existing dict
-  schema.
-- [ ] **C.2 — Static analysis MCP.** *(P3)*
-  Wrap `bandit` (Python) and `semgrep` (multi-language). The
-  source-code scanner agent should call this *first* and pass the
-  output to the LLM as evidence, not as raw code.
-- [ ] **C.3 — Packet capture MCP.** *(P5)*
-  Wrap `tshark` / `tcpdump` with a 10-second cap. For automotive
-  experimentation, add a `can-utils` adapter (`candump`).
-- [ ] **C.4 — Tool-use security check.** *(P1)*
-  Before invoking any tool, the Security Guard runs an `H_a` check:
-  *"does invoking this tool serve the declared objective?"*. Reject
-  if not.
+- [ ] **C.1 — nmap MCP.** *(P4, P5)*  Deferred — dynamic/active probe,
+  out of scope for the static-first pass. `observe.port_closed` does a
+  socket check today.
+- [x] **C.2 — Static analysis MCP.** *(P3)*
+  `agents/action_engine/mcp_tools.CodeStaticScan` runs real
+  `bandit -r … -f json` (and `semgrep --config=auto` when present),
+  falling back to a dry-run envelope otherwise.
+- [ ] **C.3 — Packet capture MCP.** *(P5)*  Deferred — dynamic capture.
+- [x] **C.4 — Tool-use security check.** *(P1)*
+  The per-step `GuardAdapter` is now wired into the action executor
+  (`pipeline.build_step_guard`): paper 1's four properties **and** the
+  H_a judge run on *every* MCP tool call, not just the final action.
 
 **Done when:** the pipeline can scan a real localhost target and
 detect a real port-listing diff.
@@ -94,27 +122,25 @@ detect a real port-listing diff.
 
 This is the "attack simulation" half of the project assignment.
 
-- [ ] **D.1 — Build an actor/datasource graph from the deployment YAML.**
-  *(P2)*  Implemented partially in `deployment_scanner.parse_actor_graph`.
-  Extract trusted vs. untrusted nodes.
-- [ ] **D.2 — Implement bi-level path search.** *(P2)*
-  Main planner: A\* over poison paths. Sub-search: BFS over trigger
-  paths. Use unit cost for trigger steps, variable cost for poison
-  steps. Output ranked attack paths.
-- [ ] **D.3 — Realise each `skills/skills.py:ATTACK_SKILLS` skill.**
-  *(P2)*  Make `memory_poison`, `a2a_fear_injection`,
-  `rag_poisoning`, `confused_deputy`, `resource_depletion` produce
-  *actual* synthetic traces that flow back through the defense
-  pipeline.
-- [ ] **D.4 — Add a Red / Blue evaluation harness.** *(P1, P2)*
-  For each attack scenario, measure:
-  - true-positive detection rate,
-  - mean time to detect,
-  - false-positive rate on benign traffic.
-- [ ] **D.5 — Map every attack to the contextual security properties
-  it violates.** *(P1)*  Output a table for each scenario: which
-  property failed, which oracle approximation missed it, what would
-  need to improve.
+- [x] **D.1 — Build an actor/datasource graph from the deployment YAML.**
+  *(P2)*  `agents/attack/system_info_discovery.py` builds the
+  `SystemInstance`; `deployment_exploiter.py` enumerates poison/trigger
+  edges; trusted vs. external nodes are extracted.
+- [ ] **D.2 — Implement bi-level path search.** *(P2)*  Deferred — the
+  orchestrator chooses chains via LLM + severity heuristic today; a true
+  A\*/BFS bi-level search is future work.
+- [ ] **D.3 — Realise each attack skill as a replayable trace.** *(P2)*
+  Deferred — skills emit descriptors; staging synthetic traces back
+  through the defense pipeline (`--poison`) is future work.
+- [x] **D.4 — Red / Blue evaluation harness (static).** *(P1, P2)*
+  `evaluate.py`: per-scenario **detection recall** and **false-positive
+  rate** on clean controls. *Mean-time-to-detect is intentionally N/A* —
+  it is a dynamic metric and this system is static-first (documented in
+  `evaluate.py`).
+- [x] **D.5 — Map findings to the contextual security properties they
+  violate.** *(P1)*  `evaluate.py` emits a property-violation table:
+  each detected finding → the paper-1 property it implicates → the
+  paper-2 asset it threatens.
 
 **Done when:** the harness runs a benchmark of ≥ 5 attack scenarios and
 prints a Red/Blue scoreboard.
@@ -123,14 +149,19 @@ prints a Red/Blue scoreboard.
 
 ## Phase E — Persistent memory and adaptive learning (≈ 1 week)
 
-- [ ] **E.1 — Promote `memory/` from a single JSON to a sqlite DB.** *(P5)*
-- [ ] **E.2 — Add a `consult_memory` step at the start of the
-  Decision Agent.** Retrieve the 5 most-similar past incidents (by
-  finding-rule-id set) and inject them as few-shot examples.
-- [ ] **E.3 — Defend memory.** *(P1, P2)*  Implement memory-poisoning
-  defences: every memory write is signed with the source's
-  authentication token; the security guard rejects reads from
-  unauthenticated writes.
+- [x] **E.1 — Promote `memory/` to a sqlite DB.** *(P5)*
+  `agents/memory_store.MemoryStore` — a stdlib-only SQLite store
+  (`memory/incidents.db`) holding one signed row per past outcome.
+- [x] **E.2 — `consult_memory` at the start of the Decision Agent.**
+  `DecisionAgent.run` recalls the K most-similar past incidents by
+  **Jaccard overlap of the finding rule-id set** and injects them into
+  the prompt as a `[memory]` few-shot block. Verified: in a batch the
+  recall count grows as the store fills.
+- [x] **E.3 — Defend memory.** *(P1, P2)*  Every write is **HMAC-signed**
+  (`signing_key_env`) and tagged with its source; `recall_similar`
+  verifies the signature **and** that the source is authenticated, so a
+  tampered or unauthenticated row can never steer a decision.
+  `verify_all()` is the integrity-sweep / "was my memory poisoned?" check.
 
 ---
 
@@ -139,21 +170,26 @@ prints a Red/Blue scoreboard.
 Paper 1 is clear that all five oracle functions are open problems. We
 should improve our approximations incrementally:
 
-- [ ] **F.1 — `H_a` LLM-judge.** *(P1)*  A small *separate* LLM call
-  whose only job is to answer 0/1: "does action *a* serve objective
-  *o*?". This is the single highest-value addition (paper 1 §6:
-  defenses that approximate `H_a` reduced ASR by 86–88%).
-- [ ] **F.2 — Provenance tags on every input.** *(P1)*  Make
-  `Input.source` and `Input.trust_level` mandatory and let the
-  pipeline refuse to run if any input lacks them.
-- [ ] **F.3 — Compositional check.** *(P1)*  After every action,
-  re-evaluate the trajectory: did the *combination* of recent actions
-  violate any property even though each step individually was OK?
-- [ ] **F.4 — Temporal check.** *(P1)*  Detect TOCTOU and
-  memory-poisoning patterns at the trajectory level.
-- [ ] **F.5 — Delegation rules.** *(P1)*  When agent A invokes agent
-  B, B inherits A's objective but **not** its source set. Make
-  this explicit in `BaseAgent`.
+- [x] **F.1 — `H_a` LLM-judge.** *(P1)*  `agents/ha_judge.HaJudge` — a
+  *separate* call answering `{serves: 0/1}`. The guard takes
+  `action_ok = static_map_ok AND ha_judge_ok`, so the judge can only
+  **tighten** the deterministic floor, never loosen it.
+- [x] **F.2 — Provenance tags mandatory.** *(P1)*  `Input.__post_init__`
+  rejects a missing `source` or an out-of-lattice `trust_level`
+  (`ProvenanceError`); the pipeline therefore cannot feed an
+  un-attributed artefact to an agent.
+- [x] **F.3 — Compositional check.** *(P1)*
+  `SecurityGuard.check_trajectory` flags combinations that are unsafe
+  even when each step passes: read-sensitive→external-egress (exfil),
+  destructive-without-forensics, destructive-without-notify.
+- [x] **F.4 — Temporal check.** *(P1)*  Same method flags TOCTOU
+  (check-then-act with no re-verification) and the memory-poisoning
+  pattern (a destructive step in a plan influenced by a memory-sourced
+  input).
+- [x] **F.5 — Delegation rules.** *(P1)*  `BaseAgent.delegate` — a child
+  inherits the parent's objective but starts with an **empty** trusted-
+  source set (granted explicitly via `grant_sources`), so authority is
+  never laundered through delegation.
 
 ---
 
@@ -171,8 +207,10 @@ should improve our approximations incrementally:
   Paper 2 highlights CAR-bench as evaluating consistency and
   limit-awareness of in-vehicle LLM agents. Use it for the in-vehicle
   agent slice.
-- [ ] **G.4 — Internal Red/Blue scoreboard.** *(P2)*  Output a table
-  per asset category × attack scenario × defense skill.
+- [x] **G.4 — Internal Red/Blue scoreboard.** *(P2)*  `evaluate.py`
+  emits an **asset category × scenario × defense-skill** scoreboard
+  (each scenario's touched assets → implied paper-5 tier → candidate
+  skills), alongside detection recall and the property-violation table.
 
 ---
 
@@ -197,15 +235,17 @@ should improve our approximations incrementally:
 
 ## Practical things to try this week (low-hanging fruit)
 
-1. **Run with Ollama.** *(Phase A.1)* — the single biggest payoff:
-   the pipeline becomes a *real* demo.
-2. **Add a 7th rule to `rules/example_rules.yaml`.** Pick one from the
-   CWE Top 25; verify the source-code scanner picks it up.
-3. **Add one attack scenario end-to-end.** Pick `memory_poison`.
-   Stage the poison via a `--poison` CLI flag, then run the
-   defense pipeline and confirm whether it's caught.
-4. **Wire `bandit` into `StaticAnalysisTool`.** *(Phase C.2)*  A real
-   tool plus a real LLM is much more convincing than either alone.
+1. **Run with Ollama.** *(Phase A.1)* — provider is ready; flip the
+   config and pull a model.
+2. **Add a 7th rule to `rules/*.yaml`.** Done and exceeded —
+   `extended_rules.yaml` carries ~40 rules beyond the baseline.
+3. **Add one attack scenario end-to-end (`--poison`).** Still open
+   (D.3) — staging a synthetic poison trace back through defense.
+4. **Wire `bandit`.** *(Phase C.2)* — done (`CodeStaticScan`).
+
+New since this pass: `python evaluate.py` produces a static Red/Blue
+scoreboard, and the adaptive memory loop (Phase E) is live — run a batch
+and watch the decision agent recall similar past incidents.
 
 ---
 

@@ -35,23 +35,27 @@ is wired in, accuracy goes up monotonically.
 from __future__ import annotations
 import argparse
 import json
+import os
 import sys
 from dataclasses import asdict
 from pathlib import Path
 
 import yaml
 
-if hasattr(sys.stdout, "reconfigure"):
-    try:
-        sys.stdout.reconfigure(encoding="utf-8")
-    except Exception:
-        pass
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
 
 # ---- defense agents -------------------------------------------------------
-from agents.action_generator import ActionGenerator
+from agents.action_engine import GuardAdapter, legacy_kind
+from agents.action_generator import Action, ActionGenerator
 from agents.base_agent import Input
 from agents.decision_agent import DecisionAgent
 from agents.deployment_scanner import DeploymentScannerAgent
+from agents.ha_judge import HaJudge
 from agents.log_analyzer import LogAnalyzerAgent
 from agents.security_guard import SecurityGuard
 from agents.source_code_scanner import SourceCodeScannerAgent
@@ -66,8 +70,11 @@ from agents.attack import (
     SystemInfoDiscoveryAgent,
 )
 
+from agents.memory_store import Incident, MemoryAuthError, MemoryStore
+
 from llm_client import LLMClient
 from run_logger import RunLogger
+from tools.log import Console
 
 
 HERE = Path(__file__).parent
@@ -111,6 +118,77 @@ def build_llms(cfg: dict) -> dict:
     return {name: LLMClient.create(c) for name, c in cfg["llm_configs"].items()}
 
 
+def build_memory(cfg: dict) -> MemoryStore | None:
+    """Construct the signed incident store (Phase E) if enabled.
+
+    The signing key (E.3) is read from the env var named in
+    `memory.signing_key_env` (falling back to a clearly-labelled dev
+    key) so a real deployment keeps the key out of the repo. Returns
+    None when memory is disabled, in which case the pipeline behaves
+    exactly as before.
+    """
+    mem_cfg = cfg.get("memory", {}) or {}
+    if not mem_cfg.get("enabled", True):
+        return None
+    mem_dir = HERE / cfg["paths"]["memory_dir"]
+    db_path = mem_dir / mem_cfg.get("db_file", "incidents.db")
+    key_env = mem_cfg.get("signing_key_env", "CYBERLLM_MEMORY_KEY")
+    signing_key = (os.environ.get(key_env)
+                   or mem_cfg.get("dev_signing_key")
+                   or "cyberllm-dev-insecure-key")
+    return MemoryStore(
+        db_path=db_path,
+        signing_key=signing_key,
+        authenticated_sources=cfg.get("security", {}).get(
+            "authenticated_sources", ["user", "rules_engine", "mcp_tool"]),
+        reject_unverified=bool(mem_cfg.get("reject_unverified", True)),
+    )
+
+
+def _writer_identity(cfg: dict) -> str:
+    return (cfg.get("memory", {}) or {}).get("writer_identity", "rules_engine")
+
+
+# Map a step's legacy kind to the objective + guard-vocabulary destination
+# the SecurityGuard reasons about. This is the translation layer between
+# the action-engine's concrete tool params and the guard's abstract
+# four-property model — it is what lets the paper-1 guard run per step.
+_STEP_KIND_OBJECTIVE = {
+    "patch_code": "auto-correct insecure code",
+    "alert_only": "produce findings report",
+    "noop": "produce findings report",
+}
+_STEP_KIND_DESTINATION = {
+    "rate_limit": "suspect_source_ip",
+    "block_ip": "suspect_source_ip",
+    "isolate_node": "affected_ECU",
+    "patch_code": "vulnerable_file",
+    "alert_only": "security_team",
+    "noop": "audit_log",
+}
+
+
+def build_step_guard(security_guard: SecurityGuard,
+                     inputs: list[Input]) -> GuardAdapter:
+    """Adapt the SecurityGuard into a per-step `GuardAdapter` (C.4).
+
+    The executor calls this on *every* MCP tool call, so paper 1's four
+    properties — and the H_a judge — are enforced per action, not just on
+    the final aggregate action (paper 1 §7: security is per-step, not
+    one-shot)."""
+    def check(step) -> tuple[bool, str]:
+        kind = legacy_kind(step)
+        objective = _STEP_KIND_OBJECTIVE.get(kind, "produce defensive action")
+        dest = _STEP_KIND_DESTINATION.get(kind, "internal")
+        action = Action(kind=kind, target=dest,
+                        parameters={"destination": dest},
+                        rationale=f"per-step guard for {getattr(step, 'tool', '?')}",
+                        originating_decision=None)
+        verdict = security_guard.check(action, objective, inputs)
+        return verdict.allowed, verdict.reason
+    return GuardAdapter(fn=check)
+
+
 def _norm(p: str | Path) -> Path:
     return (HERE / str(p).replace("\\", "/")).resolve()
 
@@ -146,6 +224,30 @@ def _read_scenario(spec: str | None) -> str:
     return spec
 
 
+# ---------------------------------------------------------------------------
+# Logging helpers
+# ---------------------------------------------------------------------------
+
+def _rule_ids(findings) -> str:
+    """Compact, sorted, de-duplicated rule-id list for a findings list."""
+    ids = sorted({getattr(f, "rule_id", "?") for f in findings})
+    return ", ".join(ids) if ids else "(none)"
+
+
+def _llm_banner(llms: dict) -> str:
+    """One-line summary of which concrete client each llm-config resolved
+    to. Crucial during testing: shows whether you are really hitting
+    gpt-4o or silently falling back to the offline stub."""
+    parts = []
+    for name, client in llms.items():
+        impl = type(client).__name__
+        model = client.cfg.get("model", "?")
+        note = " (fallback→stub)" if impl == "StubLLM" \
+            and client.cfg.get("provider", "stub") != "stub" else ""
+        parts.append(f"{name}={impl}<{model}>{note}")
+    return "LLM clients: " + " · ".join(parts)
+
+
 # ===========================================================================
 # DEFENSE PIPELINE
 # ===========================================================================
@@ -158,8 +260,19 @@ def run_defense_pipeline(
     rules: dict,
     scenario_name: str = "default",
     verbose: bool = True,
+    debug: bool = False,
 ) -> dict:
+    con = Console(verbose=verbose, debug=debug)
+    con.section(f"DEFENSE · {scenario_name}")
+    con.kv("code", ", ".join(p.name for p in code_paths) or "(none)")
+    con.kv("log", Path(log_path).name)
+    con.kv("deployment", Path(deploy_path).name)
+
     llms = build_llms(cfg)
+    con.info(_llm_banner(llms))
+    memory = build_memory(cfg)
+    con.kv("memory", "enabled" if memory is not None
+           else "disabled")
     rlog = RunLogger(RUN_LOGS_DIR, mode="defense", scenario=scenario_name)
     rlog.log_meta({
         "mode": "defense",
@@ -196,45 +309,76 @@ def run_defense_pipeline(
               source="user", trust_level="authenticated"),
     ]
     rlog.log_inputs(inputs)
+    con.detail(f"inputs: {len(inputs)} item(s) — "
+               + ", ".join(f"{i.source}[{i.trust_level}]" for i in inputs))
 
-    if verbose:
-        print(f"\n[defense:{scenario_name}] source-code scanner ({len(code_paths)} file(s))")
-    code_result = code_agent.run(inputs)
-    rlog.log_static("source_code", code_agent.last_static_findings)
-    rlog.log_agent("source_code_scanner",
-                   code_agent.last_prompt, code_agent.last_response,
-                   code_result.findings)
-    if verbose:
-        print(f"  -> {len(code_result.findings)} finding(s)")
-        print(f"[defense:{scenario_name}] log analyzer")
-    log_result = log_agent.run(inputs)
-    rlog.log_static("log", log_agent.last_static_findings)
-    rlog.log_agent("log_analyzer",
-                   log_agent.last_prompt, log_agent.last_response,
-                   log_result.findings)
-    if verbose:
-        print(f"  -> {len(log_result.findings)} finding(s)")
-        print(f"[defense:{scenario_name}] deployment scanner")
-    dep_result = dep_agent.run(inputs)
-    rlog.log_static("deployment", dep_agent.last_static_findings)
-    rlog.log_agent("deployment_scanner",
-                   dep_agent.last_prompt, dep_agent.last_response,
-                   dep_result.findings)
-    if verbose:
-        print(f"  -> {len(dep_result.findings)} finding(s)")
+    # ---- scanners (static floor + LLM refinement) ----------------------
+    def _run_scanner(label, n, agent, result_kind):
+        con.info(f"[{n}/6] {label}")
+        with con.timed(label):
+            result = agent.run(inputs)
+        rlog.log_static(result_kind, agent.last_static_findings)
+        rlog.log_agent(agent.agent_id, agent.last_prompt,
+                       agent.last_response, result.findings)
+        con.step(f"{len(result.findings)} finding(s): {_rule_ids(result.findings)}")
+        con.detail(f"static={len(agent.last_static_findings)} → "
+                   f"merged={len(result.findings)} "
+                   f"(LLM added {max(0, len(result.findings) - len(agent.last_static_findings))})")
+        con.detail(f"prompt ~{agent.last_prompt_tokens} tok, "
+                   f"response {len(agent.last_response)} chars")
+        con.blob(f"{agent.agent_id} prompt", agent.last_prompt)
+        con.blob(f"{agent.agent_id} response", agent.last_response)
+        return result
+
+    code_result = _run_scanner(
+        f"source-code scanner ({len(code_paths)} file(s))", 1,
+        code_agent, "source_code")
+    log_result = _run_scanner("log analyzer", 2, log_agent, "log")
+    dep_result = _run_scanner("deployment scanner", 3, dep_agent, "deployment")
 
     decision_cfg = dict(cfg["agent_configs"]["decision_agent"],
-                        response_tiers=cfg["response_tiers"])
+                        response_tiers=cfg["response_tiers"],
+                        recall_k=int((cfg.get("memory", {}) or {}).get("recall_k", 5)))
     decision_agent = DecisionAgent(
-        "decision_agent", decision_cfg, llms[decision_cfg["llm"]])
-    decision = decision_agent.run([code_result, log_result, dep_result])
+        "decision_agent", decision_cfg, llms[decision_cfg["llm"]],
+        memory=memory)
+    con.info(f"[4/6] decision agent "
+             f"(recalled {len(decision_agent.consulted_memory)} past incident(s))")
+    with con.timed("decision agent"):
+        decision = decision_agent.run([code_result, log_result, dep_result],
+                                      scenario_name=scenario_name)
     rlog.log_agent("decision_agent",
                    decision_agent.last_prompt, decision_agent.last_response,
                    findings=None)
     rlog.log_decision(decision)
-    if verbose:
-        print(f"[defense:{scenario_name}] decision: tier={decision.recommended_tier} "
-              f"conf={decision.confidence:.2f}")
+    if decision_agent.consulted_memory:
+        rlog.trace(f"memory: consulted {len(decision_agent.consulted_memory)} "
+                   f"similar past incident(s)")
+        con.detail("recalled: " + ", ".join(
+            f"{i.scenario}(sim={i.similarity},tier={i.tier})"
+            for i in decision_agent.consulted_memory))
+    con.kv("decision", f"tier={decision.recommended_tier} "
+           f"conf={decision.confidence:.2f}")
+    con.kv("assets", ", ".join(decision.asset_categories_touched) or "(none)")
+    con.detail(f"justification: {decision.justification}")
+    con.blob("decision prompt", decision_agent.last_prompt)
+    con.blob("decision response", decision_agent.last_response)
+
+    # ---- SecurityGuard (paper 1) — built up-front so it can also gate
+    #      every action-engine step (C.4) and host the H_a judge (F.1).
+    guard_cfg = cfg.get("guard", {}) or {}
+    ha_judge = (HaJudge(llms.get("reasoning") or llms["default"])
+                if guard_cfg.get("ha_judge_enabled", True) else None)
+    guard = SecurityGuard(
+        allowed_objectives=cfg["security"]["allowed_objectives"],
+        authenticated_sources=cfg["security"]["authenticated_sources"],
+        trusted_destinations=cfg["security"]["trusted_destinations"],
+        ha_judge=ha_judge,
+    )
+    step_guard = (build_step_guard(guard, inputs)
+                  if guard_cfg.get("per_step_enabled", True) else None)
+    con.detail(f"guard: H_a judge {'on' if ha_judge else 'off'}, "
+               f"per-step {'on' if step_guard else 'off'}")
 
     action_cfg = dict(
         cfg["agent_configs"]["action_generator"],
@@ -244,9 +388,11 @@ def run_defense_pipeline(
         repo_path=str(HERE),
         log_path=str(log_path),
         default_file=(str(code_paths[0]) if code_paths else "unknown.py"),
+        max_prompt_tokens=int(guard_cfg.get("max_prompt_tokens", 4096)),
     )
     action_agent = ActionGenerator(
-        "action_generator", action_cfg, llms[action_cfg["llm"]])
+        "action_generator", action_cfg, llms[action_cfg["llm"]],
+        guard=step_guard)
     vulnerable_code = ""
     for p in code_paths:
         if p.suffix.lower() == ".py":
@@ -254,7 +400,9 @@ def run_defense_pipeline(
             break
     if not vulnerable_code and code_paths:
         vulnerable_code = code_paths[0].read_text(encoding="utf-8", errors="replace")
-    action = action_agent.generate(decision, vulnerable_code=vulnerable_code)
+    con.info("[5/6] action engine")
+    with con.timed("action engine"):
+        action = action_agent.generate(decision, vulnerable_code=vulnerable_code)
     if action_agent.last_prompt:
         rlog.log_agent("action_generator",
                        action_agent.last_prompt, action_agent.last_response,
@@ -262,24 +410,38 @@ def run_defense_pipeline(
     rlog.log_action(action)
     if action_agent.last_plan is not None:
         rlog.log_action_plan(action_agent.last_plan, action_agent.last_report)
-    if verbose:
-        print(f"[defense:{scenario_name}] action: kind={action.kind} target={action.target}")
-        if action_agent.last_report is not None:
-            print(f"[defense:{scenario_name}] plan: "
-                  f"{action_agent.last_report.summary}")
+    con.kv("action", f"kind={action.kind} target={action.target}")
+    if action_agent.last_report is not None:
+        con.kv("plan", action_agent.last_report.summary)
+    if action_agent.last_plan is not None:
+        for s in action_agent.last_plan.steps:
+            con.detail(f"step {s.kind.value:9} {s.tool:26} -> {s.status.value}")
 
-    guard = SecurityGuard(
-        allowed_objectives=cfg["security"]["allowed_objectives"],
-        authenticated_sources=cfg["security"]["authenticated_sources"],
-        trusted_destinations=cfg["security"]["trusted_destinations"],
-    )
     objective = ("auto-correct insecure code" if action.kind == "patch_code"
                  else "produce defensive action")
     verdict = guard.check(action, objective, inputs)
     rlog.log_guard(verdict)
-    if verbose:
-        print(f"[defense:{scenario_name}] guard: allowed={verdict.allowed} "
-              f"({verdict.reason})")
+
+    # ---- F.3/F.4: trajectory-level compositional + temporal check ------
+    trajectory = None
+    if action_agent.last_plan is not None:
+        traj = guard.check_trajectory(action_agent.last_plan.steps, inputs)
+        trajectory = asdict(traj)
+        rlog.trace(f"trajectory: compositional_ok={traj.compositional_ok} "
+                   f"temporal_ok={traj.temporal_ok} "
+                   f"violations={len(traj.violations)}")
+    con.info(f"[6/6] security guard")
+    con.kv("guard", f"allowed={verdict.allowed} ({verdict.reason})")
+    con.detail(f"task={verdict.task_alignment} action={verdict.action_alignment} "
+               f"source={verdict.source_authorization} "
+               f"isolation={verdict.data_isolation}")
+    if trajectory is not None:
+        con.kv("trajectory", f"compositional_ok={traj.compositional_ok} "
+               f"temporal_ok={traj.temporal_ok}")
+        for v in traj.violations:
+            con.warn(f"trajectory: {v}")
+    if not verdict.allowed:
+        con.warn(f"action REFUSED: {verdict.reason}")
 
     record = {
         "mode": "defense",
@@ -303,11 +465,29 @@ def run_defense_pipeline(
         "mcp_audit": (action_agent.registry.audit
                        if hasattr(action_agent, "registry") else []),
         "guard_verdict": asdict(verdict),
+        "trajectory_verdict": trajectory,
         "findings": [asdict(f) for f in decision.findings],
+        "consulted_memory": [
+            {"scenario": i.scenario, "similarity": i.similarity,
+             "rule_ids": i.rule_ids, "tier": i.tier,
+             "guard_allowed": i.guard_allowed}
+            for i in decision_agent.consulted_memory
+        ],
         "committed": ({"action": action.kind, "target": action.target,
                        "parameters": action.parameters}
                       if verdict.allowed else None),
     }
+
+    # ---- E.2/E.3: record this outcome into the signed memory store -----
+    rule_ids = sorted({getattr(f, "rule_id", "?") for f in decision.findings})
+    record["memory_recorded"] = _record_incident(
+        memory, cfg, mode="defense", scenario=scenario_name,
+        rule_ids=rule_ids,
+        asset_categories=decision.asset_categories_touched,
+        tier=decision.recommended_tier, confidence=decision.confidence,
+        action_kind=action.kind, guard_allowed=verdict.allowed)
+
+    con.kv("memory", f"recorded={record['memory_recorded']}")
 
     mem_dir = HERE / cfg["paths"]["memory_dir"]
     mem_dir.mkdir(parents=True, exist_ok=True)
@@ -316,7 +496,34 @@ def run_defense_pipeline(
     (mem_dir / fname).write_text(json.dumps(record, indent=2), encoding="utf-8")
     record["run_log_dir"] = _rel_or_abs(rlog.dir)
     rlog.finalize()
+    con.kv("record", _rel_or_abs(mem_dir / fname))
+    con.kv("run log", record["run_log_dir"])
+    con.section(f"DEFENSE · {scenario_name} · DONE "
+                f"({len(record['findings'])} findings, "
+                f"tier={decision.recommended_tier}, "
+                f"guard={'PASS' if verdict.allowed else 'REFUSED'})")
     return record
+
+
+def _record_incident(memory: MemoryStore | None, cfg: dict, *, mode: str,
+                     scenario: str, rule_ids: list[str],
+                     asset_categories: list[str], tier: str,
+                     confidence: float, action_kind: str,
+                     guard_allowed: bool) -> bool:
+    """Persist one outcome to the signed store. Never crashes the run —
+    a memory failure is logged via the return flag, not an exception."""
+    if memory is None:
+        return False
+    try:
+        memory.record(Incident(
+            mode=mode, scenario=scenario, rule_ids=rule_ids,
+            asset_categories=list(asset_categories or []),
+            tier=tier or "", confidence=float(confidence or 0.0),
+            action_kind=action_kind or "", guard_allowed=bool(guard_allowed),
+            source=_writer_identity(cfg)))
+        return True
+    except MemoryAuthError:
+        return False
 
 
 # ===========================================================================
@@ -332,8 +539,17 @@ def run_attack_pipeline(
     scenario_name: str = "default",
     verbose: bool = True,
     cli_authorized_targets: list[str] | None = None,
+    debug: bool = False,
 ) -> dict:
+    con = Console(verbose=verbose, debug=debug)
+    con.section(f"ATTACK · {scenario_name}")
+    con.kv("code", ", ".join(p.name for p in code_paths) or "(none)")
+    con.kv("deployment", Path(deploy_path).name)
+    con.kv("scenario", (scenario or "")[:120].replace("\n", " "))
+
     llms = build_llms(cfg)
+    con.info(_llm_banner(llms))
+    memory = build_memory(cfg)
     rlog = RunLogger(RUN_LOGS_DIR, mode="attack", scenario=scenario_name)
     rlog.log_meta({
         "mode": "attack",
@@ -377,46 +593,58 @@ def run_attack_pipeline(
         Input(content=scenario, source="user", trust_level="authenticated"),
     ]
     rlog.log_inputs(inputs)
+    con.detail(f"inputs: {len(inputs)} item(s) — "
+               + ", ".join(f"{i.source}[{i.trust_level}]" for i in inputs))
 
-    if verbose:
-        print(f"\n[attack:{scenario_name}] system_info_discovery")
-    discovery_result = discovery.run(inputs)
+    con.info("[1/5] system info discovery")
+    with con.timed("system_info_discovery"):
+        discovery_result = discovery.run(inputs)
     instance = getattr(discovery_result, "system_instance", None)
     rlog.log_agent("system_info_discovery",
                    discovery.last_prompt, discovery.last_response,
                    findings=None)
     if instance is not None:
         rlog.log_system_instance(instance)
-    if verbose and instance is not None:
-        print(f"  -> external={instance.external_actors} "
-              f"safety={instance.safety_actors}")
+        con.step(f"external={instance.external_actors} "
+                 f"safety={instance.safety_actors}")
+        con.detail(f"actors={len(instance.actors)} "
+                   f"datasources={len(instance.datasources)} "
+                   f"edges={len(instance.edges)}")
+    con.blob("discovery response", discovery.last_response)
 
-    if verbose:
-        print(f"[attack:{scenario_name}] source_code_exploiter ({len(code_paths)} file(s))")
-    code_result = code_exploit.run(inputs)
+    con.info(f"[2/5] source-code exploiter ({len(code_paths)} file(s))")
+    with con.timed("source_code_exploiter"):
+        code_result = code_exploit.run(inputs)
     rlog.log_static("source_code_exploit", code_exploit.last_static_findings)
     rlog.log_agent("source_code_exploiter",
                    code_exploit.last_prompt, code_exploit.last_response,
                    code_result.findings)
-    if verbose:
-        print(f"  -> {len(code_result.findings)} exploit(s)")
-        print(f"[attack:{scenario_name}] deployment_exploiter")
-    dep_result = dep_exploit.run(inputs)
+    con.step(f"{len(code_result.findings)} exploit(s): {_rule_ids(code_result.findings)}")
+    con.blob("source_code_exploiter prompt", code_exploit.last_prompt)
+    con.blob("source_code_exploiter response", code_exploit.last_response)
+
+    con.info("[3/5] deployment exploiter")
+    with con.timed("deployment_exploiter"):
+        dep_result = dep_exploit.run(inputs)
     rlog.log_static("deployment_exploit", dep_exploit.last_static_findings)
     rlog.log_agent("deployment_exploiter",
                    dep_exploit.last_prompt, dep_exploit.last_response,
                    dep_result.findings)
-    if verbose:
-        print(f"  -> {len(dep_result.findings)} exploit(s)")
+    con.step(f"{len(dep_result.findings)} exploit(s): {_rule_ids(dep_result.findings)}")
+    con.blob("deployment_exploiter response", dep_exploit.last_response)
 
-    plan = orchestrator.plan([code_result, dep_result], scenario, instance)
+    con.info("[4/5] attack orchestrator")
+    with con.timed("attack_orchestrator"):
+        plan = orchestrator.plan([code_result, dep_result], scenario, instance)
     rlog.log_agent("attack_orchestrator",
                    orchestrator.last_prompt, orchestrator.last_response,
                    findings=None)
     rlog.log_plan(plan)
-    if verbose:
-        print(f"[attack:{scenario_name}] orchestrator: target={plan.target_asset} "
-              f"conf={plan.confidence:.2f} chose={[f.rule_id for f in plan.chosen_findings]}")
+    con.kv("plan target", f"{plan.target_asset} (conf={plan.confidence:.2f})")
+    con.kv("chosen", ", ".join(f.rule_id for f in plan.chosen_findings) or "(none)")
+    con.detail(f"poison_path={plan.poison_path} trigger_path={plan.trigger_path}")
+    con.detail(f"justification: {plan.justification}")
+    con.blob("orchestrator response", orchestrator.last_response)
 
     # ---- Ethics / scope guard --------------------------------------------
     guard = EthicsGuard(
@@ -427,18 +655,23 @@ def run_attack_pipeline(
     )
     verdict = guard.check_plan(scenario, plan.target_asset)
     rlog.log_ethics(verdict)
-    if verbose:
-        print(f"[attack:{scenario_name}] ethics: allowed={verdict.allowed} ({verdict.reason})")
+    con.info("[5/5] ethics guard + script generation")
+    con.kv("ethics", f"allowed={verdict.allowed} ({verdict.reason})")
+    con.detail(f"scope_ok={verdict.scope_ok} target_ok={verdict.target_ok} "
+               f"non_destructive={verdict.non_destructive}")
 
     scripts = []
     redacted: list[str] = []
     if verdict.allowed:
-        scripts = generator.generate(plan)
+        with con.timed("attack_generator"):
+            scripts = generator.generate(plan)
         scripts, redacted = guard.filter_scripts(scripts)
         rlog.log_attack_scripts(scripts, redacted)
-        if verbose:
-            print(f"[attack:{scenario_name}] generated {len(scripts)} script(s); "
-                  f"redacted {len(redacted)}")
+        con.step(f"generated {len(scripts)} script(s); redacted {len(redacted)}")
+        for s in scripts:
+            con.detail(f"script {s.rule_id:10} [{s.language}] {s.title}")
+    else:
+        con.warn(f"ethics REFUSED — no scripts generated ({verdict.reason})")
 
     record = {
         "mode": "attack",
@@ -476,6 +709,16 @@ def run_attack_pipeline(
         "redacted": redacted,
     }
 
+    # ---- E.2/E.3: record the attack outcome into the signed store ------
+    record["memory_recorded"] = _record_incident(
+        memory, cfg, mode="attack", scenario=scenario_name,
+        rule_ids=sorted({f.rule_id for f in plan.chosen_findings}),
+        asset_categories=[plan.target_asset] if plan.target_asset else [],
+        tier=plan.target_asset, confidence=plan.confidence,
+        action_kind=f"{len(scripts)} script(s)", guard_allowed=verdict.allowed)
+
+    con.kv("memory", f"recorded={record['memory_recorded']}")
+
     mem_dir = HERE / cfg["paths"]["memory_dir"]
     mem_dir.mkdir(parents=True, exist_ok=True)
     fname = "last_run_attack.json" if scenario_name == "default" \
@@ -483,6 +726,11 @@ def run_attack_pipeline(
     (mem_dir / fname).write_text(json.dumps(record, indent=2), encoding="utf-8")
     record["run_log_dir"] = _rel_or_abs(rlog.dir)
     rlog.finalize()
+    con.kv("record", _rel_or_abs(mem_dir / fname))
+    con.kv("run log", record["run_log_dir"])
+    con.section(f"ATTACK · {scenario_name} · DONE "
+                f"(ethics={'PASS' if verdict.allowed else 'REFUSED'}, "
+                f"{len(scripts)} script(s))")
     return record
 
 
@@ -512,6 +760,8 @@ def run_example_batch(
     deployment_override: str | None = None,
     scenario_override: str | None = None,
     cli_authorized_targets: list[str] | None = None,
+    verbose: bool = True,
+    debug: bool = False,
 ) -> int:
     scenarios = _scenarios_for(kind, cfg)
     print(f"==> mode={mode}  example={kind}  ({len(scenarios)} scenario(s))\n")
@@ -519,8 +769,11 @@ def run_example_batch(
     defense_rows: list[dict] = []
     attack_rows: list[dict] = []
 
-    for s in scenarios:
+    for idx, s in enumerate(scenarios, start=1):
         name = s["name"]
+        if verbose:
+            print(f"\n>>> [{idx}/{len(scenarios)}] scenario '{name}'",
+                  file=sys.stderr)
         code_target = _norm(s["code"])
         try:
             code_paths = _collect_code_files(code_target)
@@ -533,7 +786,8 @@ def run_example_batch(
             dep_path = _norm(deployment_override) if deployment_override else _norm(s["deployment"])
             try:
                 rec = run_defense_pipeline(code_paths, log_path, dep_path,
-                                           cfg, rules, scenario_name=name)
+                                           cfg, rules, scenario_name=name,
+                                           verbose=verbose, debug=debug)
                 defense_rows.append({
                     "name": name,
                     "files_scanned": len(code_paths),
@@ -554,7 +808,8 @@ def run_example_batch(
             try:
                 rec = run_attack_pipeline(code_paths, dep_path, scenario_text,
                                           cfg, rules, scenario_name=name,
-                                          cli_authorized_targets=cli_authorized_targets)
+                                          cli_authorized_targets=cli_authorized_targets,
+                                          verbose=verbose, debug=debug)
                 attack_rows.append({
                     "name": name,
                     "files_scanned": len(code_paths),
@@ -643,7 +898,19 @@ def main(argv: list[str] | None = None) -> int:
                         help="Attack mode: path to a scenario .txt OR a literal hint string.")
     parser.add_argument("--authorize-target", action="append", default=[],
                         help="Add an extra authorised target (attack EthicsGuard).")
+    parser.add_argument("-v", "--verbose", action="store_true",
+                        help="Debug logging: timings, token counts, recalled "
+                             "memory, per-step status, and truncated previews "
+                             "of every prompt and LLM response.")
+    parser.add_argument("-q", "--quiet", action="store_true",
+                        help="Suppress per-step progress (only the final "
+                             "summary tables / record on stdout).")
     args = parser.parse_args(argv)
+
+    # Verbosity: -q silences progress; -v adds debug detail; default is the
+    # mid-level per-step view.
+    verbose = not args.quiet
+    debug = args.verbose
 
     cfg = load_config()
     rules = load_rules(cfg)
@@ -657,6 +924,8 @@ def main(argv: list[str] | None = None) -> int:
             deployment_override=args.deployment,
             scenario_override=args.scenario,
             cli_authorized_targets=args.authorize_target,
+            verbose=verbose,
+            debug=debug,
         )
 
     # ---- single-run mode -----------------------------------------------
@@ -674,7 +943,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.mode in {"defense", "both"}:
         rec_def = run_defense_pipeline(code_paths, log_path, dep_path, cfg, rules,
-                                       scenario_name="default", verbose=True)
+                                       scenario_name="default", verbose=verbose,
+                                       debug=debug)
         if args.mode == "defense":
             print("\n========== defense run summary ==========")
             print(json.dumps(rec_def, indent=2))
@@ -683,8 +953,9 @@ def main(argv: list[str] | None = None) -> int:
         scenario_text = _read_scenario(args.scenario)
         rec_atk = run_attack_pipeline(code_paths, dep_path, scenario_text,
                                       cfg, rules, scenario_name="default",
-                                      verbose=True,
-                                      cli_authorized_targets=args.authorize_target)
+                                      verbose=verbose,
+                                      cli_authorized_targets=args.authorize_target,
+                                      debug=debug)
         print("\n========== attack run summary ==========")
         print(json.dumps(rec_atk, indent=2))
 

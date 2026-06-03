@@ -162,9 +162,22 @@ python pipeline.py --mode attack \
     --scenario   examples/attack_scenarios/01_data_exfiltration.txt
 ```
 
-Everything runs offline with a deterministic stub LLM. Swap in a real
-provider in `config.yaml -> llm_configs.default.provider`
-(`openai` / `anthropic` / `ollama`).
+**Verbosity (great for testing).** Diagnostics go to **stderr**, results
+(summary tables / record JSON) to **stdout**, so they never mix.
+
+```bash
+python pipeline.py --example small        # default: per-step progress
+python pipeline.py -v --example small     # debug: timings, token counts,
+                                          #   static-vs-LLM split, recalled
+                                          #   memory, per-step status, and a
+                                          #   preview of every prompt+response
+python pipeline.py -q --example small     # quiet: only the summary tables
+python pipeline.py -v --code … 2>run.log  # capture the debug trace to a file
+```
+
+The default LLM is **gpt-4o via GitHub Models** (`config.yaml`); set
+`GITHUB_TOKEN` in `.env` to activate it, otherwise it falls back to the
+offline stub. `CYBERLLM_FORCE_STUB=1` forces the stub regardless.
 
 Output:
 
@@ -494,20 +507,23 @@ entering the generated artifacts".
 ```
 CyberLLM/
 ├── pipeline.py                  # entry point — defense / attack / both
-├── config.yaml                  # LLM, agent, security, example_sets, attack scope
-├── llm_client.py                # provider abstraction (stub / openai / anthropic / ollama)
+├── evaluate.py                  # static eval harness (D.4/D.5/G.4) — recall, FP, scoreboard
+├── config.yaml                  # LLM, agent, security, memory, guard, example_sets
+├── llm_client.py                # provider abstraction (+ A.2 credential fallback to stub)
 ├── requirements.txt
 ├── README.md                    # this file
 ├── improvements_and_exploration.md
 │
 ├── agents/
-│   ├── base_agent.py            # paper 4 schema-driven template
+│   ├── base_agent.py            # paper 4 template (+ F.2 provenance, F.5 delegation, A.4 budget)
 │   ├── source_code_scanner.py   # defense
 │   ├── log_analyzer.py          # defense
 │   ├── deployment_scanner.py    # defense
-│   ├── decision_agent.py        # defense orchestrator (paper 5)
-│   ├── action_generator.py      # defense action (paper 5 tiers + paper 3 fix)
-│   ├── security_guard.py        # paper 1 four properties
+│   ├── decision_agent.py        # defense orchestrator (paper 5) — + E.2 memory recall
+│   ├── action_generator.py      # defense action (shim → action_engine/)
+│   ├── security_guard.py        # paper 1 four properties + F.1/F.3/F.4 hardening
+│   ├── ha_judge.py              # F.1 — separate H_a action-alignment oracle
+│   ├── memory_store.py          # Phase E — signed sqlite incident store
 │   └── attack/                  # diagram 2 mirror
 │       ├── system_info_discovery.py
 │       ├── source_code_exploiter.py
@@ -518,6 +534,7 @@ CyberLLM/
 │
 ├── tools/
 │   ├── mcp_tools.py             # MCP adapters: nmap / bandit / pcap stubs
+│   ├── tokens.py                # A.4 — dependency-free token estimator + budget
 │   └── static_analyzer.py       # deterministic regex + graph checks (the floor)
 │
 ├── skills/
@@ -532,6 +549,7 @@ CyberLLM/
 ├── examples/
 │   ├── README.md
 │   ├── scenarios.md             # expected findings per (code, log, dep) triple
+│   ├── labels.yaml              # machine-readable ground truth for evaluate.py
 │   ├── run_examples.py          # legacy batch runner
 │   ├── small/                   # 5 single-file scenarios
 │   ├── medium/                  # 2 mini-projects
@@ -610,20 +628,42 @@ Then `python pipeline.py --example small`.
 
 ### 8.3  Wire in a real LLM
 
+**Default: Azure OpenAI (`gpt-4o`).** `config.yaml` ships with the
+`azure` provider for both `default` and `reasoning`. Fill the four
+`AZURE_OPENAI_*` values in `.env`:
+
+```bash
+# .env  (git-ignored)
+AZURE_OPENAI_ENDPOINT=https://<your-resource>.openai.azure.com
+AZURE_OPENAI_API_KEY=<your key>
+AZURE_OPENAI_DEPLOYMENT=<your gpt-4o deployment name>   # NOT the model name!
+AZURE_OPENAI_API_VERSION=2024-10-21
+```
+
+On Azure, the model is selected by the **deployment name** (not the model
+id), auth uses the `api-key` header, and requests are versioned. The
+`model` field in `config.yaml` is only used as the deployment name when
+`AZURE_OPENAI_DEPLOYMENT` is unset. ⚠️ A deployment can be named anything —
+verify which deployment actually serves gpt-4o (list them with
+`GET {endpoint}/openai/deployments?api-version=2023-03-15-preview`, header
+`api-key`). Until the Azure credentials are filled in, the client
+**transparently falls back to the offline stub**.
+
+Prefer a different backend? Swap the provider:
+
 ```yaml
 llm_configs:
   default:
-    provider: ollama          # or openai / anthropic
-    model:    llama3.1:8b-instruct-q4_K_M
-    temperature: 0.2
-    max_tokens: 1024
+    provider: github          # azure | github | openai | anthropic | ollama | stub
+    model:    openai/gpt-5-mini   # GitHub Models id (needs GITHUB_TOKEN)
   reasoning:
-    provider: openai
+    provider: azure
     model:    gpt-4o
 ```
 
-Set `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` or start `ollama serve`,
-and re-run.
+Set `OPENAI_API_KEY` / `ANTHROPIC_API_KEY`, start `ollama serve`, or put
+`GITHUB_TOKEN` in `.env`, then re-run. (Tip: `CYBERLLM_FORCE_STUB=1`
+forces the offline stub regardless of config — the test suite uses it.)
 
 ### 8.4  Add a new attack skill / template
 
@@ -648,11 +688,16 @@ Three layers, run them in order:
 # 1. 30-second smoke check, no pytest needed.
 python verify.py
 
-# 2. Full automated suite (~2 s, 62 tests).
+# 2. Full automated suite (~3 s, 131 tests).
 pip install pytest
 python -m pytest tests/
 
-# 3. Manual / qualitative spot-checks — inspect the run-log summary
+# 3. Static evaluation scoreboard (detection recall, false-positive rate,
+#    paper-1 property table, asset×scenario×skill scoreboard). No LLM,
+#    no dynamic execution. Writes memory/eval_report.md.
+python evaluate.py
+
+# 4. Manual / qualitative spot-checks — inspect the run-log summary
 #    of the most recent run.
 python pipeline.py --mode both --example small
 cat "$(cat run_logs/_latest_defense.txt)/_summary.md"
@@ -674,26 +719,48 @@ What each layer asserts is documented in [`tests/README.md`](tests/README.md):
   is your regression alarm when a rule regex breaks.
 - `tests/test_cli_smoke.py` — `python pipeline.py --help` + each
   `--mode` runs.
+- `tests/test_memory_store.py` / `tests/test_memory_pipeline.py` —
+  the signed store (Phase E): recall by Jaccard, HMAC tamper detection,
+  unauthenticated-write refusal, and the recall loop closing end-to-end.
+- `tests/test_ha_judge_and_trajectory.py` — the H_a judge (F.1, tightens
+  only) + compositional/temporal trajectory checks (F.3/F.4).
+- `tests/test_provenance_and_delegation.py` — mandatory provenance (F.2)
+  + delegation source-set isolation (F.5).
+- `tests/test_token_budget.py` — token estimation (A.4) + credential
+  fallback to stub (A.2).
+- `tests/test_evaluation.py` — the static eval harness (D.4/D.5/G.4).
 
 If something LLM-quality-related needs judgement (does the
 `justification` text make sense? is the auto-generated patch
 correct?), do it manually via the run-log `_summary.md`.
 
-## 9. What's deliberately NOT done yet
+## 9. What's done, and what's deliberately deferred
 
-These are tracked in [`improvements_and_exploration.md`](improvements_and_exploration.md):
+Full status is in [`improvements_and_exploration.md`](improvements_and_exploration.md)
+(updated 2026-06-03). The **research / learning** gaps that used to live
+here have now been closed:
 
-- **Active analysis** — real `nmap` / `tcpdump` / live `bandit`.
-  Today's `tools/mcp_tools.py` stubs hand back canned data.
-- **Full RAG over CVEs / VSS catalogs** — rules are inlined in
-  prompts; paper 3's `MiniLM + cross-encoder` flow is Phase B.
-- **Real H_a LLM judge** — the SecurityGuard's action-alignment
-  check is a coarse mapping today. Phase F.1 swaps in a separate
-  LLM call dedicated to the H_a oracle (paper 1 §7).
-- **Adaptive memory loop** — `memory/` is written but not yet read
-  by the next run. Phase E.
-- **Benchmarks** — CyberMetric Q&A (paper 4), AgentDojo (paper 1),
-  CAR-bench (paper 2).
+- **Adaptive memory loop (Phase E)** — *done*. A signed SQLite store
+  (`agents/memory_store.py`) records every outcome; the Decision Agent
+  recalls the K most-similar past incidents as few-shot context; writes
+  are HMAC-signed and reads are source-authenticated (anti-poisoning).
+- **H_a LLM judge (F.1)** — *done*. `agents/ha_judge.py` is a separate
+  0/1 oracle call that can only *tighten* the guard's action-alignment.
+- **Guard hardening (F.2–F.5, C.4)** — *done*. Mandatory provenance,
+  delegation rules, compositional + temporal trajectory checks, and a
+  per-step guard wired into the action executor.
+- **Static evaluation (D.4/D.5/G.4)** — *done*. `python evaluate.py`
+  scores detection recall + false-positives on clean controls, a
+  property-violation table, and an asset×scenario×skill scoreboard —
+  all **statically** (no MTTD; that is a dynamic metric).
+
+Still deferred (need heavy deps or external corpora):
+
+- **Active analysis** — real `nmap` / `tcpdump` (dynamic). Note `bandit`
+  /`semgrep` *are* wired (`action_engine/mcp_tools.CodeStaticScan`).
+- **Full RAG over CVE / VSS catalogs** — Phase B (`MiniLM + cross-encoder`).
+- **External benchmarks** — CyberMetric (paper 4), AgentDojo (paper 1),
+  CAR-bench (paper 2). The *internal* static scoreboard (G.4) is done.
 
 ---
 

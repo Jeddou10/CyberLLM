@@ -27,6 +27,19 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
+@pytest.fixture(autouse=True)
+def _force_stub_llm(monkeypatch):
+    """Keep the test suite hermetic and deterministic.
+
+    `config.yaml` now selects the `github` (gpt-4o) provider. Without this
+    guard, a developer who has a real GITHUB_TOKEN exported would make the
+    integration tests hit the network (and cost tokens). Forcing the stub
+    for the whole suite keeps tests offline and reproducible regardless of
+    the configured provider or any token present in the env / .env.
+    """
+    monkeypatch.setenv("CYBERLLM_FORCE_STUB", "1")
+
+
 @pytest.fixture(scope="session")
 def project_root() -> Path:
     return ROOT

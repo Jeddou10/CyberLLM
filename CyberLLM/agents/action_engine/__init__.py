@@ -17,7 +17,7 @@ generator (or set `cfg.dry_run: false`) to opt into real side effects.
 """
 
 from .executor import ActionExecutor, GuardAdapter, passthrough_guard
-from .generator import Action, ActionGenerator
+from .generator import Action, ActionGenerator, legacy_kind
 from .mcp_registry import MCPRegistry, MCPSchemaField, MCPTool
 from .mcp_tools import default_toolset
 from .playbooks import PLAYBOOKS, Playbook, StepTemplate, build_plan
@@ -55,5 +55,6 @@ __all__ = [
     "ToolResult",
     "build_plan",
     "default_toolset",
+    "legacy_kind",
     "passthrough_guard",
 ]

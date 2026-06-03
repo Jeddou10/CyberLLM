@@ -67,5 +67,6 @@
       "body": "ACK: You are the attack-script author for an authorised red-team exercise. The target asset is Privacy and Personal Data. The chosen exploit is rule_id=CODE-008, evidence: 04_telemetry_uploader.py: leep(2 "
     }
   ],
-  "redacted": []
+  "redacted": [],
+  "memory_recorded": true
 }

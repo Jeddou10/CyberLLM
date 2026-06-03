@@ -69,5 +69,6 @@
       "body": "ACK: You are the attack-script author for an authorised red-team exercise. The target asset is Privacy and Personal Data. The chosen exploit is rule_id=CODE-006, evidence: 02_can_gateway.py: t_context() ct"
     }
   ],
-  "redacted": []
+  "redacted": [],
+  "memory_recorded": true
 }

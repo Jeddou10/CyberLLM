@@ -17,6 +17,7 @@ If everything green-lights, run `pytest tests/` for the full test suite.
 
 from __future__ import annotations
 
+import os
 import sys
 import traceback
 from pathlib import Path
@@ -24,6 +25,12 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+
+# This is an *offline* plumbing smoke test: it checks the pipeline wiring,
+# not LLM quality. Force the deterministic stub so it stays fast and works
+# with no network / token, even though config.yaml selects gpt-4o. Set the
+# env var yourself before running to exercise the real model instead.
+os.environ.setdefault("CYBERLLM_FORCE_STUB", "1")
 
 
 CHECKS = []
