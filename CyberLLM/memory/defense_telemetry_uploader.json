@@ -1,0 +1,2423 @@
+{
+  "mode": "defense",
+  "scenario": "telemetry_uploader",
+  "inputs": {
+    "code": [
+      "examples\\small\\04_telemetry_uploader.py"
+    ],
+    "log": "examples\\logs\\04_data_exfiltration.log",
+    "deployment": "examples\\deployments\\02_misconfigured_cloud.yaml"
+  },
+  "decision": {
+    "summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+    "asset_categories_touched": [
+      "Material and Economic Resources",
+      "Privacy and Personal Data",
+      "Life and Bodily Health"
+    ],
+    "recommended_tier": "moderate",
+    "confidence": 0.72,
+    "justification": "Authenticated scanner agents flagged 6 findings (3 high, 3 medium); trajectory and action alignment hold; source authorization OK. Tier 'moderate' chosen \u2014 confidence above moderate_threshold (0.65) but below hard (0.85)."
+  },
+  "action": {
+    "kind": "alert_only",
+    "target": "engine",
+    "parameters": {
+      "severity": "critical",
+      "summary": "Secrets store is world-readable",
+      "rule_id": "TOP-006"
+    },
+    "plan_id": "38944efc-f1f3-4cd5-b128-9587e185abbc"
+  },
+  "action_report": {
+    "plan_id": "38944efc-f1f3-4cd5-b128-9587e185abbc",
+    "status": "completed",
+    "summary": "[completed] 31 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=network; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
+    "started_at": "2026-06-03T15:21:17.545008",
+    "finished_at": "2026-06-03T15:21:17.546010",
+    "tallies": {
+      "total": 31,
+      "completed": 31,
+      "failed": 0,
+      "refused": 0,
+      "rolled_back": 0,
+      "skipped": 0
+    },
+    "plan": {
+      "plan_id": "38944efc-f1f3-4cd5-b128-9587e185abbc",
+      "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+      "blast_radius": "network",
+      "asset_categories": [
+        "Material and Economic Resources",
+        "Privacy and Personal Data",
+        "Life and Bodily Health"
+      ],
+      "created_at": "2026-06-03T15:21:17.545008",
+      "estimated_duration_s": 930,
+      "steps": [
+        {
+          "rule_id": "TOP-006",
+          "kind": "contain",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "critical",
+            "summary": "Secrets store is world-readable",
+            "rule_id": "TOP-006"
+          },
+          "description": "open a critical incident on the secrets store",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "099d1c9d-3557-4b70-8cb8-35297b8c1aa2",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "critical",
+              "summary": "Secrets store is world-readable",
+              "rule_id": "TOP-006"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-01",
+          "kind": "contain",
+          "tool": "firewall.block_ipv4",
+          "params": {
+            "ipv4": "0.0.0.0",
+            "duration_minutes": 240,
+            "reason": "data exfiltration"
+          },
+          "description": "block the exfiltration peer",
+          "side_effect": "write",
+          "severity_min": "high",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "c2d103d0-058c-4397-9047-5c759fb43686",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "netsh",
+            "params": {
+              "ipv4": "0.0.0.0",
+              "duration_minutes": 240,
+              "reason": "data exfiltration"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-02",
+          "kind": "contain",
+          "tool": "firewall.block_ipv4",
+          "params": {
+            "ipv4": "10.0.4.18",
+            "duration_minutes": 240,
+            "reason": "data exfiltration"
+          },
+          "description": "block the exfiltration peer",
+          "side_effect": "write",
+          "severity_min": "high",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "aa4c6363-18d2-429f-87a0-1219fc340d3f",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "netsh",
+            "params": {
+              "ipv4": "10.0.4.18",
+              "duration_minutes": 240,
+              "reason": "data exfiltration"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "contain",
+          "tool": "firewall.rate_limit",
+          "params": {
+            "ipv4": "0.0.0.0",
+            "rate_per_minute": 6,
+            "duration_minutes": 30
+          },
+          "description": "rate-limit the suspect source IP",
+          "side_effect": "write",
+          "severity_min": "medium",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "588e3712-460c-4d56-8110-9d00686622e0",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "ipv4": "0.0.0.0",
+              "rate_per_minute": 6,
+              "duration_minutes": 30
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "contain",
+          "tool": "firewall.block_ipv4",
+          "params": {
+            "ipv4": "0.0.0.0",
+            "duration_minutes": 60,
+            "reason": "LOG-AUTH-03"
+          },
+          "description": "block the source IP if attempts continue",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "599ef78d-6b5e-4ca6-a6e3-77170cab8ec5",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "netsh",
+            "params": {
+              "ipv4": "0.0.0.0",
+              "duration_minutes": 60,
+              "reason": "LOG-AUTH-03"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-012",
+          "kind": "observe",
+          "tool": "code.static_scan",
+          "params": {
+            "path": "04_telemetry_uploader.py",
+            "analyser": "auto"
+          },
+          "description": "run a real second-opinion static scanner",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "d02e7afc-51dc-4f12-9102-72bacfff4253",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "bandit",
+            "params": {
+              "path": "04_telemetry_uploader.py",
+              "analyser": "auto"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "observe",
+          "tool": "code.static_scan",
+          "params": {
+            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+            "analyser": "auto"
+          },
+          "description": "run a real second-opinion static scanner",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "1377b88a-fc84-40ba-86c5-f1f52f126b45",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "bandit",
+            "params": {
+              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+              "analyser": "auto"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "observe",
+          "tool": "observe.log_tail",
+          "params": {
+            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\04_data_exfiltration.log",
+            "pattern": "Failed password",
+            "timeout_s": 5
+          },
+          "description": "watch the auth log for 5 s after the rate-limit",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "b4156afd-4235-4b6e-8ebf-74c8fa574416",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\04_data_exfiltration.log",
+              "pattern": "Failed password",
+              "timeout_s": 5
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-003",
+          "kind": "eradicate",
+          "tool": "secrets.rotate",
+          "params": {
+            "secret_id": "primary-api-token"
+          },
+          "description": "rotate the secret in the secret store",
+          "side_effect": "destructive",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "65f9a5aa-a0a2-410a-816a-be0ef9487c98",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "vault",
+            "params": {
+              "secret_id": "primary-api-token"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-003",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-003",
+            "file": "04_telemetry_uploader.py",
+            "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ secret-load-site @@\n- API_KEY = '<hard-coded-secret>'\n+ import os\n+ API_KEY = os.environ['API_KEY']        # CODE-003 remediation\n",
+            "rationale": "Move secret to env var or secret manager."
+          },
+          "description": "propose a patch that reads the secret from env",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "2a0d9184-4140-4458-b32f-42db346565ca",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-003",
+              "file": "04_telemetry_uploader.py",
+              "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ secret-load-site @@\n- API_KEY = '<hard-coded-secret>'\n+ import os\n+ API_KEY = os.environ['API_KEY']        # CODE-003 remediation\n",
+              "rationale": "Move secret to env var or secret manager."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-012",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-012",
+            "file": "04_telemetry_uploader.py",
+            "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-012  (critical)\n# evidence: 04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va\n# remediation: convert f-string SQL to parameterised query:\n    cur.execute('SELECT \u2026 WHERE u = ?', (u,))\n",
+            "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+          },
+          "description": "propose a safe-by-construction patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "1f94deb2-ebeb-4056-bb88-9dab8edd139c",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-012",
+              "file": "04_telemetry_uploader.py",
+              "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-012  (critical)\n# evidence: 04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va\n# remediation: convert f-string SQL to parameterised query:\n    cur.execute('SELECT \u2026 WHERE u = ?', (u,))\n",
+              "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-006",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-006",
+            "file": "04_telemetry_uploader.py",
+            "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-006  (high)\n# evidence: 04_telemetry_uploader.py: ource. - CODE-006: `verify=False` on requests. - COD\n# remediation: remove `verify=False`; provide a CA bundle via `verify='/path/to/ca.pem'`.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "c175f8be-745d-447d-96d6-f9e2ce2cbd29",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-006",
+              "file": "04_telemetry_uploader.py",
+              "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-006  (high)\n# evidence: 04_telemetry_uploader.py: ource. - CODE-006: `verify=False` on requests. - COD\n# remediation: remove `verify=False`; provide a CA bundle via `verify='/path/to/ca.pem'`.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-001",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+            "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+          },
+          "description": "propose a safe-by-construction patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "45f7d3ea-92d0-4898-b0ea-3fc2e84318ed",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-001",
+              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+              "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-01",
+          "kind": "eradicate",
+          "tool": "secrets.rotate",
+          "params": {
+            "secret_id": "primary-api-token",
+            "length": 32
+          },
+          "description": "rotate the credentials likely to have been exposed",
+          "side_effect": "destructive",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "6019933c-3714-4e17-a92c-b937953a6721",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.545008",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "vault",
+            "params": {
+              "secret_id": "primary-api-token",
+              "length": 32
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-008",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-008",
+            "file": "04_telemetry_uploader.py",
+            "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-008  (medium)\n# evidence: 04_telemetry_uploader.py: uests. - CODE-008: `random.random()` used to seed jitt\n# remediation: follow the rule's remediation guidance.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "3b5ba976-a28b-40a0-a74f-fc50de5d3c8a",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.545008",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-008",
+              "file": "04_telemetry_uploader.py",
+              "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-008  (medium)\n# evidence: 04_telemetry_uploader.py: uests. - CODE-008: `random.random()` used to seed jitt\n# remediation: follow the rule's remediation guidance.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-002",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-002",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "173f4b38-91ea-485e-a5f4-bfd5f05a3f74",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-002",
+              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-003",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "critical",
+            "summary": "Hard-coded secret in source",
+            "rule_id": "CODE-003",
+            "evidence": "04_telemetry_uploader.py: port requests   AWS_ACCESS_KEY_ID = \"AKIAIOSFODNN7EXAMPLE\""
+          },
+          "description": "record the hard-coded-secret incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "e594ab29-35e7-4697-825d-6ca548e43dd0",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "critical",
+              "summary": "Hard-coded secret in source",
+              "rule_id": "CODE-003",
+              "evidence": "04_telemetry_uploader.py: port requests   AWS_ACCESS_KEY_ID = \"AKIAIOSFODNN7EXAMPLE\""
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-012",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "critical",
+            "summary": "CODE-012: Raw SQL with interpolated variables (f-string / format)",
+            "rule_id": "CODE-012",
+            "evidence": "04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va"
+          },
+          "description": "open a code-vulnerability incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "6fd92554-f023-400a-9c8e-7d003db99a74",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "critical",
+              "summary": "CODE-012: Raw SQL with interpolated variables (f-string / format)",
+              "rule_id": "CODE-012",
+              "evidence": "04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-006",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-006: TLS certificate verification disabled",
+            "rule_id": "CODE-006"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "6c4739de-0806-47b8-b261-649429c6c725",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "CODE-006: TLS certificate verification disabled",
+              "rule_id": "CODE-006"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+            "rule_id": "CODE-001",
+            "evidence": "subprocess.call(user_input, shell=True)"
+          },
+          "description": "open a code-vulnerability incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "52a8d8a5-a6e4-48d3-beb9-137790fc5883",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+              "rule_id": "CODE-001",
+              "evidence": "subprocess.call(user_input, shell=True)"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-01",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "critical",
+            "summary": "Likely data exfiltration",
+            "rule_id": "LOG-EXFIL-01",
+            "evidence": "7 DNS queries, avg subdomain entropy=3.58"
+          },
+          "description": "open a high-severity incident",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "3f285c57-4992-49e6-8ddf-6dcb80693688",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "critical",
+              "summary": "Likely data exfiltration",
+              "rule_id": "LOG-EXFIL-01",
+              "evidence": "7 DNS queries, avg subdomain entropy=3.58"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-02",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "critical",
+            "summary": "Likely data exfiltration",
+            "rule_id": "LOG-EXFIL-02",
+            "evidence": "2026-05-19T22:00:13Z net  10.0.4.18 \u2192 185.220.101.42  port 443  bytes_out=12_582_912  duration=8s   note=\"single TLS flow\""
+          },
+          "description": "open a high-severity incident",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "f483615d-c205-4e77-9c01-cf2e517c3707",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "critical",
+              "summary": "Likely data exfiltration",
+              "rule_id": "LOG-EXFIL-02",
+              "evidence": "2026-05-19T22:00:13Z net  10.0.4.18 \u2192 185.220.101.42  port 443  bytes_out=12_582_912  duration=8s   note=\"single TLS flow\""
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-NET-01",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "LOG-NET-01: log anomaly",
+            "rule_id": "LOG-NET-01",
+            "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+          },
+          "description": "open a log-anomaly incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "d20fbf17-50ff-4945-b5dc-7b5bcc215495",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "LOG-NET-01: log anomaly",
+              "rule_id": "LOG-NET-01",
+              "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-002",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-002: External actors must not write to long-term memory",
+            "rule_id": "TOP-002"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "071a3c8b-8e58-42c5-8419-5b81fc91295a",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-002: External actors must not write to long-term memory",
+              "rule_id": "TOP-002"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-004",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-004: topology rule violated",
+            "rule_id": "TOP-004"
+          },
+          "description": "open a topology-violation ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "e726d9c6-7e7e-4f70-b974-cc19817d6f8d",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-004: topology rule violated",
+              "rule_id": "TOP-004"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-005",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-005: Database bound to 0.0.0.0",
+            "rule_id": "TOP-005"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "5ea313c0-4969-45f4-a68e-3e2bda263db1",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-005: Database bound to 0.0.0.0",
+              "rule_id": "TOP-005"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-001",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+            "rule_id": "TOP-001"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "1f8f2234-bf94-4478-81b2-f99fc3a04e13",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+              "rule_id": "TOP-001"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-008",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "CODE-008: Non-cryptographic randomness for security",
+            "rule_id": "CODE-008"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "88f8f9dc-621e-4a97-9e17-9248209f1a97",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "medium",
+              "summary": "CODE-008: Non-cryptographic randomness for security",
+              "rule_id": "CODE-008"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-002",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "CODE-002: Weak hash algorithm for password storage.",
+            "rule_id": "CODE-002"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "33e1f6bf-a13c-449d-a0b5-22a1468568f1",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "medium",
+              "summary": "CODE-002: Weak hash algorithm for password storage.",
+              "rule_id": "CODE-002"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "Brute-force pattern detected",
+            "rule_id": "LOG-AUTH-03",
+            "evidence": "12 failed auth attempts in 30 s, user='root'"
+          },
+          "description": "open a security-team incident",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "731d9bf5-ed0e-4630-9719-07eba63ff2a6",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "Brute-force pattern detected",
+              "rule_id": "LOG-AUTH-03",
+              "evidence": "12 failed auth attempts in 30 s, user='root'"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-003",
+          "kind": "audit",
+          "tool": "code.scrub_git_history",
+          "params": {
+            "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+            "pattern": "AKIAIOSFODNN7EXAMPLE"
+          },
+          "description": "generate a runbook to scrub the secret from git history",
+          "side_effect": "destructive",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "b973660d-16d5-4df5-aed0-fac3f3144710",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.546010",
+          "finished_at": "2026-06-03T15:21:17.546010",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "git",
+            "params": {
+              "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+              "pattern": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        }
+      ]
+    },
+    "audit_log": [
+      {
+        "step_id": "099d1c9d-3557-4b70-8cb8-35297b8c1aa2",
+        "tool": "notify.create_incident",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "c2d103d0-058c-4397-9047-5c759fb43686",
+        "tool": "firewall.block_ipv4",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "aa4c6363-18d2-429f-87a0-1219fc340d3f",
+        "tool": "firewall.block_ipv4",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "588e3712-460c-4d56-8110-9d00686622e0",
+        "tool": "firewall.rate_limit",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "599ef78d-6b5e-4ca6-a6e3-77170cab8ec5",
+        "tool": "firewall.block_ipv4",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "d02e7afc-51dc-4f12-9102-72bacfff4253",
+        "tool": "code.static_scan",
+        "kind": "observe",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "1377b88a-fc84-40ba-86c5-f1f52f126b45",
+        "tool": "code.static_scan",
+        "kind": "observe",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "b4156afd-4235-4b6e-8ebf-74c8fa574416",
+        "tool": "observe.log_tail",
+        "kind": "observe",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "65f9a5aa-a0a2-410a-816a-be0ef9487c98",
+        "tool": "secrets.rotate",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "2a0d9184-4140-4458-b32f-42db346565ca",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "1f94deb2-ebeb-4056-bb88-9dab8edd139c",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "c175f8be-745d-447d-96d6-f9e2ce2cbd29",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "45f7d3ea-92d0-4898-b0ea-3fc2e84318ed",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "6019933c-3714-4e17-a92c-b937953a6721",
+        "tool": "secrets.rotate",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "3b5ba976-a28b-40a0-a74f-fc50de5d3c8a",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "173f4b38-91ea-485e-a5f4-bfd5f05a3f74",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "e594ab29-35e7-4697-825d-6ca548e43dd0",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "6fd92554-f023-400a-9c8e-7d003db99a74",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "6c4739de-0806-47b8-b261-649429c6c725",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "52a8d8a5-a6e4-48d3-beb9-137790fc5883",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "3f285c57-4992-49e6-8ddf-6dcb80693688",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "f483615d-c205-4e77-9c01-cf2e517c3707",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "d20fbf17-50ff-4945-b5dc-7b5bcc215495",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "071a3c8b-8e58-42c5-8419-5b81fc91295a",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "e726d9c6-7e7e-4f70-b974-cc19817d6f8d",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "5ea313c0-4969-45f4-a68e-3e2bda263db1",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "1f8f2234-bf94-4478-81b2-f99fc3a04e13",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "88f8f9dc-621e-4a97-9e17-9248209f1a97",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "33e1f6bf-a13c-449d-a0b5-22a1468568f1",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "731d9bf5-ed0e-4630-9719-07eba63ff2a6",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "b973660d-16d5-4df5-aed0-fac3f3144710",
+        "tool": "code.scrub_git_history",
+        "kind": "audit",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      }
+    ]
+  },
+  "mcp_audit": [
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "critical",
+        "summary": "Secrets store is world-readable",
+        "rule_id": "TOP-006"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "critical",
+          "summary": "Secrets store is world-readable",
+          "rule_id": "TOP-006"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "firewall.block_ipv4",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "0.0.0.0",
+        "duration_minutes": 240,
+        "reason": "data exfiltration"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "netsh",
+        "params": {
+          "ipv4": "0.0.0.0",
+          "duration_minutes": 240,
+          "reason": "data exfiltration"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "firewall.block_ipv4",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "10.0.4.18",
+        "duration_minutes": 240,
+        "reason": "data exfiltration"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "netsh",
+        "params": {
+          "ipv4": "10.0.4.18",
+          "duration_minutes": 240,
+          "reason": "data exfiltration"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "firewall.rate_limit",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "0.0.0.0",
+        "rate_per_minute": 6,
+        "duration_minutes": 30
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "ipv4": "0.0.0.0",
+          "rate_per_minute": 6,
+          "duration_minutes": 30
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "firewall.block_ipv4",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "0.0.0.0",
+        "duration_minutes": 60,
+        "reason": "LOG-AUTH-03"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "netsh",
+        "params": {
+          "ipv4": "0.0.0.0",
+          "duration_minutes": 60,
+          "reason": "LOG-AUTH-03"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "code.static_scan",
+      "side_effect": "read",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "path": "04_telemetry_uploader.py",
+        "analyser": "auto"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "bandit",
+        "params": {
+          "path": "04_telemetry_uploader.py",
+          "analyser": "auto"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "code.static_scan",
+      "side_effect": "read",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+        "analyser": "auto"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "bandit",
+        "params": {
+          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+          "analyser": "auto"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "observe.log_tail",
+      "side_effect": "read",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\04_data_exfiltration.log",
+        "pattern": "Failed password",
+        "timeout_s": 5
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\04_data_exfiltration.log",
+          "pattern": "Failed password",
+          "timeout_s": 5
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "secrets.rotate",
+      "side_effect": "destructive",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "secret_id": "***redacted***"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "vault",
+        "params": {
+          "secret_id": "***redacted***"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-003",
+        "file": "04_telemetry_uploader.py",
+        "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ secret-load-site @@\n- API_KEY = '<hard-coded-secret>'\n+ import os\n+ API_KEY = os.environ['API_KEY']        # CODE-003 remediation\n",
+        "rationale": "Move secret to env var or secret manager."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-003",
+          "file": "04_telemetry_uploader.py",
+          "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ secret-load-site @@\n- API_KEY = '<hard-coded-secret>'\n+ import os\n+ API_KEY = os.environ['API_KEY']        # CODE-003 remediation\n",
+          "rationale": "Move secret to env var or secret manager."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-012",
+        "file": "04_telemetry_uploader.py",
+        "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-012  (critical)\n# evidence: 04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va\n# remediation: convert f-string SQL to parameterised query:\n    cur.execute('SELECT \u2026 WHERE u = ?', (u,))\n",
+        "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-012",
+          "file": "04_telemetry_uploader.py",
+          "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-012  (critical)\n# evidence: 04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va\n# remediation: convert f-string SQL to parameterised query:\n    cur.execute('SELECT \u2026 WHERE u = ?', (u,))\n",
+          "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-006",
+        "file": "04_telemetry_uploader.py",
+        "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-006  (high)\n# evidence: 04_telemetry_uploader.py: ource. - CODE-006: `verify=False` on requests. - COD\n# remediation: remove `verify=False`; provide a CA bundle via `verify='/path/to/ca.pem'`.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-006",
+          "file": "04_telemetry_uploader.py",
+          "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-006  (high)\n# evidence: 04_telemetry_uploader.py: ource. - CODE-006: `verify=False` on requests. - COD\n# remediation: remove `verify=False`; provide a CA bundle via `verify='/path/to/ca.pem'`.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-001",
+        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+        "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-001",
+          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+          "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.545",
+      "tool": "secrets.rotate",
+      "side_effect": "destructive",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "secret_id": "***redacted***",
+        "length": 32
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "vault",
+        "params": {
+          "secret_id": "***redacted***",
+          "length": 32
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-008",
+        "file": "04_telemetry_uploader.py",
+        "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-008  (medium)\n# evidence: 04_telemetry_uploader.py: uests. - CODE-008: `random.random()` used to seed jitt\n# remediation: follow the rule's remediation guidance.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-008",
+          "file": "04_telemetry_uploader.py",
+          "diff": "--- a/04_telemetry_uploader.py\n+++ b/04_telemetry_uploader.py\n@@ context-of-finding @@\n# rule_id: CODE-008  (medium)\n# evidence: 04_telemetry_uploader.py: uests. - CODE-008: `random.random()` used to seed jitt\n# remediation: follow the rule's remediation guidance.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-002",
+        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-002",
+          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\04_telemetry_uploader.py",
+          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "critical",
+        "summary": "Hard-coded secret in source",
+        "rule_id": "CODE-003",
+        "evidence": "04_telemetry_uploader.py: port requests   AWS_ACCESS_KEY_ID = \"AKIAIOSFODNN7EXAMPLE\""
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "critical",
+          "summary": "Hard-coded secret in source",
+          "rule_id": "CODE-003",
+          "evidence": "04_telemetry_uploader.py: port requests   AWS_ACCESS_KEY_ID = \"AKIAIOSFODNN7EXAMPLE\""
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "critical",
+        "summary": "CODE-012: Raw SQL with interpolated variables (f-string / format)",
+        "rule_id": "CODE-012",
+        "evidence": "04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "critical",
+          "summary": "CODE-012: Raw SQL with interpolated variables (f-string / format)",
+          "rule_id": "CODE-012",
+          "evidence": "04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "CODE-006: TLS certificate verification disabled",
+        "rule_id": "CODE-006"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "CODE-006: TLS certificate verification disabled",
+          "rule_id": "CODE-006"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+        "rule_id": "CODE-001",
+        "evidence": "subprocess.call(user_input, shell=True)"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+          "rule_id": "CODE-001",
+          "evidence": "subprocess.call(user_input, shell=True)"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "critical",
+        "summary": "Likely data exfiltration",
+        "rule_id": "LOG-EXFIL-01",
+        "evidence": "7 DNS queries, avg subdomain entropy=3.58"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "critical",
+          "summary": "Likely data exfiltration",
+          "rule_id": "LOG-EXFIL-01",
+          "evidence": "7 DNS queries, avg subdomain entropy=3.58"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "critical",
+        "summary": "Likely data exfiltration",
+        "rule_id": "LOG-EXFIL-02",
+        "evidence": "2026-05-19T22:00:13Z net  10.0.4.18 \u2192 185.220.101.42  port 443  bytes_out=12_582_912  duration=8s   note=\"single TLS flow\""
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "critical",
+          "summary": "Likely data exfiltration",
+          "rule_id": "LOG-EXFIL-02",
+          "evidence": "2026-05-19T22:00:13Z net  10.0.4.18 \u2192 185.220.101.42  port 443  bytes_out=12_582_912  duration=8s   note=\"single TLS flow\""
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "LOG-NET-01: log anomaly",
+        "rule_id": "LOG-NET-01",
+        "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "LOG-NET-01: log anomaly",
+          "rule_id": "LOG-NET-01",
+          "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-002: External actors must not write to long-term memory",
+        "rule_id": "TOP-002"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-002: External actors must not write to long-term memory",
+          "rule_id": "TOP-002"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-004: topology rule violated",
+        "rule_id": "TOP-004"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-004: topology rule violated",
+          "rule_id": "TOP-004"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-005: Database bound to 0.0.0.0",
+        "rule_id": "TOP-005"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-005: Database bound to 0.0.0.0",
+          "rule_id": "TOP-005"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+        "rule_id": "TOP-001"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+          "rule_id": "TOP-001"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "medium",
+        "summary": "CODE-008: Non-cryptographic randomness for security",
+        "rule_id": "CODE-008"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "medium",
+          "summary": "CODE-008: Non-cryptographic randomness for security",
+          "rule_id": "CODE-008"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "medium",
+        "summary": "CODE-002: Weak hash algorithm for password storage.",
+        "rule_id": "CODE-002"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "medium",
+          "summary": "CODE-002: Weak hash algorithm for password storage.",
+          "rule_id": "CODE-002"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "Brute-force pattern detected",
+        "rule_id": "LOG-AUTH-03",
+        "evidence": "12 failed auth attempts in 30 s, user='root'"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "Brute-force pattern detected",
+          "rule_id": "LOG-AUTH-03",
+          "evidence": "12 failed auth attempts in 30 s, user='root'"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.546",
+      "tool": "code.scrub_git_history",
+      "side_effect": "destructive",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+        "pattern": "AKIAIOSFODNN7EXAMPLE"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "git",
+        "params": {
+          "repo_path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM",
+          "pattern": "AKIAIOSFODNN7EXAMPLE"
+        }
+      },
+      "error": null
+    }
+  ],
+  "guard_verdict": {
+    "allowed": false,
+    "task_alignment": true,
+    "action_alignment": false,
+    "source_authorization": true,
+    "data_isolation": true,
+    "reason": "action 'alert_only' incompatible with objective 'produce defensive action' (expected one of ['produce findings report'])"
+  },
+  "findings": [
+    {
+      "rule_id": "CODE-003",
+      "severity": "critical",
+      "evidence": "04_telemetry_uploader.py: port requests   AWS_ACCESS_KEY_ID = \"AKIAIOSFODNN7EXAMPLE\"",
+      "explanation": "Hard-coded secret \u2014 Hard-coded secrets leak via repo / binary.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 23
+    },
+    {
+      "rule_id": "CODE-003",
+      "severity": "critical",
+      "evidence": "04_telemetry_uploader.py: # CODE-003 AWS_SECRET_ACCESS_KEY = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"  # CODE-003 INGEST_",
+      "explanation": "Hard-coded secret \u2014 Hard-coded secrets leak via repo / binary.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 24
+    },
+    {
+      "rule_id": "CODE-006",
+      "severity": "high",
+      "evidence": "04_telemetry_uploader.py: ource. - CODE-006: `verify=False` on requests. - COD",
+      "explanation": "TLS certificate verification disabled",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Privacy and Personal Data",
+      "line": 8
+    },
+    {
+      "rule_id": "CODE-006",
+      "severity": "high",
+      "evidence": "04_telemetry_uploader.py: out=10,             verify=False,          # CODE-00",
+      "explanation": "TLS certificate verification disabled",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Privacy and Personal Data",
+      "line": 62
+    },
+    {
+      "rule_id": "CODE-008",
+      "severity": "medium",
+      "evidence": "04_telemetry_uploader.py: uests. - CODE-008: `random.random()` used to seed jitt",
+      "explanation": "Non-cryptographic randomness for security",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Privacy and Personal Data",
+      "line": 9
+    },
+    {
+      "rule_id": "CODE-008",
+      "severity": "medium",
+      "evidence": "04_telemetry_uploader.py: {int(time.time())}-{random.randint(0, 1 << 32):08x}\"",
+      "explanation": "Non-cryptographic randomness for security",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Privacy and Personal Data",
+      "line": 46
+    },
+    {
+      "rule_id": "CODE-008",
+      "severity": "medium",
+      "evidence": "04_telemetry_uploader.py: leep(2 ** attempt + random.random())             retur",
+      "explanation": "Non-cryptographic randomness for security",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Privacy and Personal Data",
+      "line": 68
+    },
+    {
+      "rule_id": "CODE-012",
+      "severity": "critical",
+      "evidence": "04_telemetry_uploader.py: db\")     cur = conn.execute(         f\"SELECT sensor_id, va",
+      "explanation": "Raw SQL with interpolated variables (f-string / format)",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 38
+    },
+    {
+      "rule_id": "CODE-001",
+      "severity": "high",
+      "evidence": "subprocess.call(user_input, shell=True)",
+      "explanation": "Shell-injection sink fed by untrusted input.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 14
+    },
+    {
+      "rule_id": "CODE-002",
+      "severity": "medium",
+      "evidence": "hashlib.md5(password)",
+      "explanation": "Weak hash algorithm for password storage.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 22
+    },
+    {
+      "rule_id": "LOG-EXFIL-01",
+      "severity": "high",
+      "evidence": "7 DNS queries, avg subdomain entropy=3.58",
+      "explanation": "DNS subdomain entropy / volume spike (covert channel)",
+      "source_agent": "log_analyzer",
+      "asset_category": "Privacy and Personal Data",
+      "line": null
+    },
+    {
+      "rule_id": "LOG-EXFIL-02",
+      "severity": "high",
+      "evidence": "2026-05-19T22:00:13Z net  10.0.4.18 \u2192 185.220.101.42  port 443  bytes_out=12_582_912  duration=8s   note=\"single TLS flow\"",
+      "explanation": "Large outbound transfer to a rare destination",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "LOG-NET-01",
+      "severity": "high",
+      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
+      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "LOG-AUTH-03",
+      "severity": "medium",
+      "evidence": "12 failed auth attempts in 30 s, user='root'",
+      "explanation": "Brute-force pattern on privileged account.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-002",
+      "severity": "high",
+      "evidence": "external actor external_a2a_agent writes to long_term_memory (poison path)",
+      "explanation": "External actors must not write to long-term memory",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-004",
+      "severity": "high",
+      "evidence": "public_internet \u2192 admin_portal: no WAF on admin surface",
+      "explanation": "Admin portal exposed to public internet",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-005",
+      "severity": "high",
+      "evidence": "database postgres binds 0.0.0.0",
+      "explanation": "Database bound to 0.0.0.0",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-006",
+      "severity": "critical",
+      "evidence": "secrets store secrets_store access_policy=world-readable",
+      "explanation": "Secrets store world-readable",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-001",
+      "severity": "high",
+      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
+      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-002",
+      "severity": "medium",
+      "evidence": "External A2A agent has write-edge to long_term_memory",
+      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    }
+  ],
+  "committed": null
+}

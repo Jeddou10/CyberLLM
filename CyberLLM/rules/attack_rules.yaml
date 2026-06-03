@@ -1,0 +1,96 @@
+# Attack rules — offensive analogue of the defense rules.
+# Used by the source_code_exploiter, deployment_exploiter, and
+# attack_orchestrator. Each entry says: "if you find this defensive
+# rule violated, here is the attack primitive you can build on it."
+#
+# Inspiration: MITRE ATT&CK + paper 2 (AgentHeLLM) poison/trigger
+# primitives.
+
+attack_rules:
+  - id: ATK-CODE-001
+    severity: high
+    title: "RCE via command injection"
+    triggers_on: ["CODE-001"]
+    paper2_path: "external_user → app (write to vulnerable param) → shell exec"
+    paper1_violations: ["source_authorization", "action_alignment"]
+    asset_category: "Material and Economic Resources"
+
+  - id: ATK-CODE-005
+    severity: critical
+    title: "Pickle / eval deserialization RCE"
+    triggers_on: ["CODE-005", "CODE-038"]
+    paper2_path: "external_user → service.body → deserializer"
+    paper1_violations: ["source_authorization", "action_alignment"]
+    asset_category: "Privacy and Personal Data"
+
+  - id: ATK-CODE-007
+    severity: high
+    title: "Arbitrary file read / write"
+    triggers_on: ["CODE-007", "CODE-037"]
+    paper2_path: "external_user → file_path param → filesystem read"
+    paper1_violations: ["data_isolation"]
+    asset_category: "Privacy and Personal Data"
+
+  - id: ATK-CODE-012
+    severity: critical
+    title: "SQL injection → auth bypass / data exfil"
+    triggers_on: ["CODE-012"]
+    paper2_path: "external_user → query param → DB → response"
+    paper1_violations: ["source_authorization", "data_isolation"]
+    asset_category: "Privacy and Personal Data"
+
+  - id: ATK-CODE-020
+    severity: critical
+    title: "JWT alg=none forgery"
+    triggers_on: ["CODE-020"]
+    paper2_path: "attacker → forged token → privileged endpoint"
+    paper1_violations: ["source_authorization", "task_alignment"]
+    asset_category: "Privacy and Personal Data"
+
+  - id: ATK-CODE-026
+    severity: high
+    title: "SSRF → cloud metadata / internal pivot"
+    triggers_on: ["CODE-026"]
+    paper2_path: "external_user → callback_url → IMDS"
+    paper1_violations: ["data_isolation"]
+    asset_category: "Privacy and Personal Data"
+
+  - id: ATK-TOP-001
+    severity: critical
+    title: "Tamper with HPC↔ZoneECU on non-IEEE-1722 bus"
+    triggers_on: ["TOP-001"]
+    paper2_path: "attacker on CAN-FD → ZoneECU → safety actuator"
+    paper1_violations: ["source_authorization", "action_alignment"]
+    asset_category: "Life and Bodily Health"
+
+  - id: ATK-TOP-002
+    severity: critical
+    title: "Memory-poison rule"
+    triggers_on: ["TOP-002"]
+    paper2_path: "external_a2a → memory (write) → in-car agent (read) → user"
+    paper1_violations: ["source_authorization", "task_alignment", "data_isolation"]
+    asset_category: "Privacy and Personal Data"
+
+  - id: ATK-TOP-007
+    severity: critical
+    title: "Spoofed brake command"
+    triggers_on: ["TOP-007"]
+    paper2_path: "compromised body-ECU → CAN ID 0x2F1 → brake_ecu"
+    paper1_violations: ["source_authorization", "action_alignment"]
+    asset_category: "Life and Bodily Health"
+
+  - id: ATK-TOP-008
+    severity: high
+    title: "A2A fear-injection / disinformation"
+    triggers_on: ["TOP-008"]
+    paper2_path: "external_a2a → respond → in-car agent → driver"
+    paper1_violations: ["source_authorization", "task_alignment"]
+    asset_category: "Mental and Emotional Well-Being"
+
+  - id: ATK-LOG-CAN-02
+    severity: critical
+    title: "Direct CAN injection of safety-critical frames"
+    triggers_on: ["LOG-CAN-02"]
+    paper2_path: "attacker on shared bus → safety actuator"
+    paper1_violations: ["source_authorization", "action_alignment"]
+    asset_category: "Life and Bodily Health"

@@ -1,0 +1,41 @@
+# --- PDFs ---
+*.pdf
+
+# --- Editor / tooling ---
+.claude/
+.vscode/
+.idea/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Environment / secrets ---
+.env
+.env.*
+
+# --- Runtime artifacts ---
+# Timestamped run outputs (keep example fixtures in examples/logs/)
+run_logs/
+memory/last_run.json
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+desktop.ini

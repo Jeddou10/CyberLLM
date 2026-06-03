@@ -1,0 +1,10 @@
+2026-05-19T03:14:00Z net  inbound 203.0.113.55  → fleet-api  port 443  rate=14800/s  syn-flood ack=0
+2026-05-19T03:14:00Z net  inbound 198.51.100.7  → fleet-api  port 443  rate=12400/s  syn-flood ack=0
+2026-05-19T03:14:01Z net  inbound 192.0.2.18    → fleet-api  port 443  rate=15600/s  syn-flood ack=0
+2026-05-19T03:14:02Z net  conn-state half-open=98231 limit=65535
+2026-05-19T03:14:05Z net  inbound 203.0.113.55  → fleet-api  port 443  rate=16800/s  syn-flood ack=0
+2026-05-19T03:14:05Z app  fleet-api ERROR  upstream timeout backend=db.internal connect_timeout=2s
+2026-05-19T03:14:06Z app  fleet-api ERROR  upstream timeout backend=db.internal connect_timeout=2s
+2026-05-19T03:14:11Z fw   rate-limit applied src=any dst=fleet-api/tcp:443  drop_rate=80%
+2026-05-19T03:14:30Z app  decision_agent recommended_tier=moderate confidence=0.81 reason="distributed SYN flood detected"
+2026-05-19T03:15:01Z app  fleet-api health=degraded p99_latency_ms=12_400 rps=240

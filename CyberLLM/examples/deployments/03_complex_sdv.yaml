@@ -1,0 +1,118 @@
+# Complex SDV deployment — full vehicle stack with cloud connectivity.
+# Multiple deliberate violations across the topology, A2A surface, and
+# safety-critical channels.
+
+actors:
+  # In-vehicle
+  - id: driver
+    type: HumanUser
+    trust_level: authenticated
+  - id: ivi
+    type: LLMAgent             # in-vehicle infotainment
+    trust_level: authenticated
+  - id: hpc
+    type: HighPerformanceComputer
+    trust_level: authenticated
+  - id: zone_ecu_front
+    type: ZoneECU
+    trust_level: authenticated
+  - id: zone_ecu_rear
+    type: ZoneECU
+    trust_level: authenticated
+  - id: brake_ecu
+    type: SafetyECU
+    trust_level: authenticated
+  - id: steering_ecu
+    type: SafetyECU
+    trust_level: authenticated
+  - id: camera_front
+    type: Sensor
+    trust_level: authenticated
+  - id: lidar
+    type: Sensor
+    trust_level: authenticated
+  # External / cloud
+  - id: oem_cloud
+    type: CloudService
+    trust_level: authenticated
+  - id: ext_assistant
+    type: ExternalA2AAgent       # third-party voice assistant
+    trust_level: external
+  - id: nav_provider
+    type: ExternalService
+    trust_level: external
+  - id: pirate_radio
+    type: ExternalUser           # attacker model
+    trust_level: external
+
+datasources:
+  - id: long_term_memory
+    holds: ["driver preferences", "memory rules"]
+  - id: rag_navigation
+    holds: ["POIs", "routing tips"]
+  - id: vss_signals
+    holds: ["Vehicle.Speed", "Vehicle.Steering.*"]
+  - id: ota_staging
+    holds: ["firmware blobs"]
+
+edges:
+  # Safety-critical sensing → safety ECUs.
+  - source: camera_front
+    target: zone_ecu_front
+    primitive: communicate
+    transport: ethernet
+    standard: IEEE-1722
+  - source: lidar
+    target: zone_ecu_front
+    primitive: communicate
+    transport: ethernet
+    standard: IEEE-1722
+  # HPC ↔ Zone via CAN-FD — VIOLATES TOP-001 (must be Ethernet/IEEE-1722).
+  - source: hpc
+    target: zone_ecu_front
+    primitive: communicate
+    transport: can_fd
+    standard: vendor_specific
+  # Brake ECU gets a steering command — VIOLATES role isolation.
+  - source: zone_ecu_front
+    target: brake_ecu
+    primitive: communicate
+    transport: can_fd
+  - source: brake_ecu
+    target: steering_ecu
+    primitive: communicate
+    transport: can_fd
+  # External assistant writes to driver's long-term memory.
+  - source: ext_assistant
+    target: long_term_memory
+    primitive: write
+  # Nav provider can write into the RAG index → poison path.
+  - source: nav_provider
+    target: rag_navigation
+    primitive: write
+  # OEM cloud pushes OTA images.
+  - source: oem_cloud
+    target: ota_staging
+    primitive: write
+    transport: tls
+  - source: hpc
+    target: ota_staging
+    primitive: read
+  # IVI normal flows.
+  - source: ivi
+    target: rag_navigation
+    primitive: read
+  - source: ivi
+    target: long_term_memory
+    primitive: read
+  - source: driver
+    target: ivi
+    primitive: communicate
+  # Attacker reach surface — write to RAG nav (poison) and respond
+  # to IVI on an A2A channel.
+  - source: pirate_radio
+    target: rag_navigation
+    primitive: write
+  - source: pirate_radio
+    target: ivi
+    primitive: respond

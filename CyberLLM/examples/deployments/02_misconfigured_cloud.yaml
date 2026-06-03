@@ -1,0 +1,85 @@
+# Cloud + edge deployment for the fleet_management backend.
+# Several deliberate misconfigurations the scanner should catch:
+#
+#   - admin-portal reachable from public internet without WAF (TOP-004)
+#   - psql exposed to 0.0.0.0 (TOP-005)
+#   - secrets store readable by all services (TOP-006)
+#   - ota-worker can read AND write the rag-index (poison path, paper 2)
+#   - external_a2a_agent has a write edge into long_term_memory (TOP-002)
+
+actors:
+  - id: public_internet
+    type: ExternalUser
+    trust_level: external
+
+  - id: fleet_api
+    type: APIServer
+    trust_level: authenticated
+    exposed: true
+
+  - id: admin_portal
+    type: APIServer
+    trust_level: authenticated
+    exposed: true                # BAD — should be VPN-only
+
+  - id: ota_worker
+    type: Worker
+    trust_level: authenticated
+
+  - id: kafka_consumer
+    type: Worker
+    trust_level: authenticated
+
+  - id: postgres
+    type: Database
+    trust_level: authenticated
+    bind_address: "0.0.0.0"      # BAD — should be internal only
+
+  - id: secrets_store
+    type: SecretStore
+    trust_level: authenticated
+    access_policy: world-readable  # BAD
+
+  - id: external_a2a_agent
+    type: ExternalA2AAgent
+    trust_level: external
+
+  - id: rag_index
+    type: VectorStore
+    trust_level: authenticated
+
+datasources:
+  - id: long_term_memory
+    holds: ["user preferences", "memory rules"]
+  - id: vehicle_signals
+    holds: ["VSS"]
+
+edges:
+  - source: public_internet
+    target: admin_portal
+    primitive: communicate
+    transport: tcp
+    notes: "no WAF, no IP allow-list"
+  - source: public_internet
+    target: postgres
+    primitive: communicate
+    transport: tcp
+    notes: "postgres bind 0.0.0.0"
+  - source: ota_worker
+    target: rag_index
+    primitive: write             # potential poison path
+  - source: ota_worker
+    target: rag_index
+    primitive: read
+  - source: external_a2a_agent
+    target: long_term_memory
+    primitive: write             # TOP-002 violation
+  - source: kafka_consumer
+    target: secrets_store
+    primitive: read
+  - source: fleet_api
+    target: secrets_store
+    primitive: read
+  - source: ota_worker
+    target: secrets_store
+    primitive: read

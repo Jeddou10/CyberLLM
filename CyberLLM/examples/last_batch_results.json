@@ -1,0 +1,140 @@
+{
+  "bench:CAN-attack": {
+    "actual_tier": "moderate",
+    "tier_ok": false,
+    "detection_rate": 0.2857142857142857,
+    "fp_rate_or_count": 0.6666666666666666,
+    "matched": [
+      "CODE-001",
+      "TOP-001"
+    ],
+    "missed": [
+      "CODE-003",
+      "CODE-005",
+      "CODE-006",
+      "LOG-CAN-02",
+      "TOP-007"
+    ],
+    "extra": [
+      "CODE-002",
+      "LOG-AUTH-03",
+      "LOG-NET-01",
+      "TOP-002"
+    ],
+    "decision_confidence": 0.72
+  },
+  "bench:OTA-supply-chain": {
+    "actual_tier": "moderate",
+    "tier_ok": false,
+    "detection_rate": 0.0,
+    "fp_rate_or_count": 1.0,
+    "matched": [],
+    "missed": [
+      "CODE-007",
+      "CODE-008",
+      "CODE-010",
+      "CODE-011",
+      "LOG-LATERAL-01",
+      "TOP-006"
+    ],
+    "extra": [
+      "CODE-001",
+      "CODE-002",
+      "LOG-AUTH-03",
+      "LOG-NET-01",
+      "TOP-001",
+      "TOP-002"
+    ],
+    "decision_confidence": 0.72
+  },
+  "bench:exfil-via-api": {
+    "actual_tier": "moderate",
+    "tier_ok": false,
+    "detection_rate": 0.125,
+    "fp_rate_or_count": 0.8333333333333334,
+    "matched": [
+      "CODE-001"
+    ],
+    "missed": [
+      "CODE-005",
+      "CODE-007",
+      "CODE-025",
+      "CODE-026",
+      "LOG-EXFIL-01",
+      "TOP-004",
+      "TOP-005"
+    ],
+    "extra": [
+      "CODE-002",
+      "LOG-AUTH-03",
+      "LOG-NET-01",
+      "TOP-001",
+      "TOP-002"
+    ],
+    "decision_confidence": 0.72
+  },
+  "bench:adas-tampering": {
+    "actual_tier": "moderate",
+    "tier_ok": false,
+    "detection_rate": 0.2,
+    "fp_rate_or_count": 0.8333333333333334,
+    "matched": [
+      "TOP-001"
+    ],
+    "missed": [
+      "CODE-028",
+      "LOG-CAN-02",
+      "SAFE-002",
+      "TOP-007"
+    ],
+    "extra": [
+      "CODE-001",
+      "CODE-002",
+      "LOG-AUTH-03",
+      "LOG-NET-01",
+      "TOP-002"
+    ],
+    "decision_confidence": 0.72
+  },
+  "bench:fleet-full": {
+    "actual_tier": "moderate",
+    "tier_ok": false,
+    "detection_rate": 0.16666666666666666,
+    "fp_rate_or_count": 0.8333333333333334,
+    "matched": [
+      "CODE-001"
+    ],
+    "missed": [
+      "CODE-026",
+      "CODE-037",
+      "LOG-EXFIL-01",
+      "LOG-EXFIL-02",
+      "TOP-006"
+    ],
+    "extra": [
+      "CODE-002",
+      "LOG-AUTH-03",
+      "LOG-NET-01",
+      "TOP-001",
+      "TOP-002"
+    ],
+    "decision_confidence": 0.72
+  },
+  "bench:false-positive": {
+    "actual_tier": "moderate",
+    "tier_ok": false,
+    "detection_rate": 1.0,
+    "fp_rate_or_count": 6,
+    "matched": [],
+    "missed": [],
+    "extra": [
+      "CODE-001",
+      "CODE-002",
+      "LOG-AUTH-03",
+      "LOG-NET-01",
+      "TOP-001",
+      "TOP-002"
+    ],
+    "decision_confidence": 0.72
+  }
+}

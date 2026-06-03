@@ -1,0 +1,253 @@
+# Extended rules catalogue covering the additional vulnerabilities
+# introduced by the new examples. Keep this file separate from
+# `example_rules.yaml` so it's easy to tell what was in the first
+# pipeline vs. what was added with the larger example set.
+
+code_rules:
+  - id: CODE-004
+    severity: critical
+    title: "SQL injection via string concatenation"
+    pattern: "(execute|query)\\(\\s*[\"'].*%[sd].*[\"']\\s*%"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-005
+    severity: critical
+    title: "Unsafe deserialization (pickle / yaml.load / eval)"
+    pattern: "(pickle\\.loads|yaml\\.load\\([^)]*Loader=yaml\\.Loader|eval\\()"
+    asset_category: "Material and Economic Resources"
+
+  - id: CODE-006
+    severity: high
+    title: "TLS certificate verification disabled"
+    pattern: "(verify\\s*=\\s*False|CERT_NONE|check_hostname\\s*=\\s*False)"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-007
+    severity: high
+    title: "Path traversal"
+    pattern: "open\\(.+\\b(\\.\\./|user_input|request\\.args)"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-008
+    severity: medium
+    title: "Non-cryptographic randomness for security"
+    pattern: "random\\.(random|randint|choice)\\("
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-010
+    severity: medium
+    title: "Plain HTTP for software update / sensitive flow"
+    pattern: "http://.+(/update|/firmware|/install|/login)"
+    asset_category: "Material and Economic Resources"
+
+  - id: CODE-011
+    severity: high
+    title: "TOCTOU between verification and use"
+    asset_category: "Life and Bodily Health"
+
+  - id: CODE-012
+    severity: critical
+    title: "Raw SQL with interpolated variables (f-string / format)"
+    pattern: "(execute|text)\\(\\s*f[\"']"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-013
+    severity: high
+    title: "Unsafe C string operation (strcpy / sprintf / gets)"
+    pattern: "\\b(strcpy|sprintf|gets)\\("
+    asset_category: "Life and Bodily Health"
+
+  - id: CODE-014
+    severity: medium
+    title: "Non-constant-time secret comparison"
+    pattern: "strcmp\\(.+secret"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-015
+    severity: high
+    title: "Format-string vulnerability"
+    pattern: "printf\\([^\"]"
+    asset_category: "Life and Bodily Health"
+
+  - id: CODE-016
+    severity: medium
+    title: "Missing error/None check after allocation or fetch"
+
+  - id: CODE-017
+    severity: medium
+    title: "Debug mode enabled in production code path"
+    pattern: "DEBUG\\s*=\\s*True"
+
+  - id: CODE-018
+    severity: medium
+    title: "Insecure cookie / missing CSRF protection"
+    pattern: "(SESSION_COOKIE_SECURE\\s*=\\s*False|SESSION_COOKIE_HTTPONLY\\s*=\\s*False)"
+
+  - id: CODE-019
+    severity: medium
+    title: "Sensitive data logged at INFO level"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-020
+    severity: critical
+    title: "JWT alg='none' accepted"
+    pattern: "algorithms=\\[[^\\]]*none"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-021
+    severity: medium
+    title: "Floating-point equality for safety gate"
+
+  - id: CODE-022
+    severity: medium
+    title: "No rate limiting on auth-sensitive endpoint"
+
+  - id: CODE-025
+    severity: medium
+    title: "Open redirect"
+    pattern: "redirect\\(.+request\\.args"
+
+  - id: CODE-026
+    severity: high
+    title: "Server-Side Request Forgery (SSRF)"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-027
+    severity: medium
+    title: "PII (VIN, email, ssn) logged"
+    pattern: "(vin|VIN)=%s"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-028
+    severity: medium
+    title: "Concurrency: shared state without lock"
+
+  - id: CODE-029
+    severity: medium
+    title: "Safety-critical bus hard-coded (no interface validation)"
+    asset_category: "Life and Bodily Health"
+
+  - id: CODE-030
+    severity: high
+    title: "Hard-coded credential in config fallback"
+    pattern: "://[^:/@\\s]+:[^@\\s]+@"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-031
+    severity: low
+    title: "User-enumeration: distinct errors for unknown vs wrong password"
+
+  - id: CODE-032
+    severity: medium
+    title: "Refresh tokens stored in memory in plaintext"
+
+  - id: CODE-033
+    severity: critical
+    title: "Authorization decision trusts client-supplied role header"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-034
+    severity: high
+    title: "Case-insensitive role compare allows allow-list bypass"
+
+  - id: CODE-035
+    severity: low
+    title: "Unbounded LIMIT in query — DoS vector"
+
+  - id: CODE-036
+    severity: high
+    title: "IDOR — ownership check missing on path parameter"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-037
+    severity: high
+    title: "Arbitrary file read via path parameter"
+    asset_category: "Privacy and Personal Data"
+
+  - id: CODE-038
+    severity: critical
+    title: "eval() of decoded payload"
+    pattern: "eval\\(base64\\.b64decode"
+
+  - id: CODE-039
+    severity: medium
+    title: "Race between manifest fetch and install"
+
+  - id: CODE-040
+    severity: high
+    title: "Sensitive endpoint without authentication"
+
+  - id: CODE-041
+    severity: medium
+    title: "Unbounded list size in API model — memory exhaustion"
+
+  - id: CODE-042
+    severity: medium
+    title: "Client-supplied timestamp without window check (replay)"
+
+  - id: CODE-043
+    severity: low
+    title: "No DLQ / poison-pill handling on message consumer"
+
+  - id: CODE-044
+    severity: high
+    title: "Kafka / MQ client without TLS / SASL configured"
+
+  - id: CODE-045
+    severity: medium
+    title: "OTA install with no rollback on failure"
+    asset_category: "Life and Bodily Health"
+
+# ---- Safety / event-chain rules (paper 3 style) ----------------------------
+safety_rules:
+  - id: SAFE-001
+    severity: critical
+    title: "Brake decision uses stale perception"
+    rule: "decision-brake AFTER perception-fresh"
+  - id: SAFE-002
+    severity: high
+    title: "No integrity check on sensor input"
+  - id: SAFE-003
+    severity: critical
+    title: "Deceleration command outside safe range"
+    rule: "-10.0 <= deceleration_mps2 <= 0.0"
+
+# ---- Topology rules ---------------------------------------------------------
+topology_rules:
+  - id: TOP-004
+    severity: high
+    title: "Admin portal exposed to public internet"
+    rule: "no edge (public_internet -> admin_*) without WAF + allow-list"
+  - id: TOP-005
+    severity: high
+    title: "Database bound to 0.0.0.0"
+    rule: "datastores must bind_address != 0.0.0.0 unless behind PrivateLink"
+  - id: TOP-006
+    severity: critical
+    title: "Secrets store world-readable"
+  - id: TOP-007
+    severity: high
+    title: "Brake ECU receives commands from non-brake source"
+    asset_category: "Life and Bodily Health"
+  - id: TOP-008
+    severity: medium
+    title: "External A2A agent has respond-edge to in-vehicle agent"
+    asset_category: "Life and Bodily Health"
+
+# ---- Log rules ----------------------------------------------------------
+log_rules:
+  - id: LOG-EXFIL-01
+    severity: high
+    title: "DNS subdomain entropy / volume spike (covert channel)"
+  - id: LOG-EXFIL-02
+    severity: high
+    title: "Large outbound transfer to a rare destination"
+  - id: LOG-LATERAL-01
+    severity: high
+    title: "Internal port-scan pattern from a single host"
+  - id: LOG-DDOS-01
+    severity: high
+    title: "Distributed SYN flood: half-open conns above limit"
+  - id: LOG-PRIV-01
+    severity: critical
+    title: "Privileged read of /etc/shadow or equivalent"

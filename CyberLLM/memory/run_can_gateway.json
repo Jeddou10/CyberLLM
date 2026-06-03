@@ -1,0 +1,99 @@
+{
+  "scenario": "can_gateway",
+  "inputs": {
+    "code": [
+      "examples\\small\\02_can_gateway.py"
+    ],
+    "log": "examples\\logs\\03_can_injection.log",
+    "deployment": "examples\\deployments\\03_complex_sdv.yaml"
+  },
+  "decision": {
+    "summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+    "asset_categories_touched": [
+      "Material and Economic Resources",
+      "Privacy and Personal Data",
+      "Life and Bodily Health"
+    ],
+    "recommended_tier": "moderate",
+    "confidence": 0.72,
+    "justification": "Authenticated scanner agents flagged 6 findings (3 high, 3 medium); trajectory and action alignment hold; source authorization OK. Tier 'moderate' chosen \u2014 confidence above moderate_threshold (0.65) but below hard (0.85)."
+  },
+  "action": {
+    "kind": "block_ip",
+    "target": "suspect_source_ip",
+    "parameters": {
+      "duration_minutes": 60
+    }
+  },
+  "guard_verdict": {
+    "allowed": true,
+    "task_alignment": true,
+    "action_alignment": true,
+    "source_authorization": true,
+    "data_isolation": true,
+    "reason": "all four properties satisfied"
+  },
+  "findings": [
+    {
+      "rule_id": "CODE-001",
+      "severity": "high",
+      "evidence": "subprocess.call(user_input, shell=True)",
+      "explanation": "Shell-injection sink fed by untrusted input.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 14
+    },
+    {
+      "rule_id": "CODE-002",
+      "severity": "medium",
+      "evidence": "hashlib.md5(password)",
+      "explanation": "Weak hash algorithm for password storage.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 22
+    },
+    {
+      "rule_id": "LOG-NET-01",
+      "severity": "high",
+      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
+      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
+      "source_agent": "log_analyzer",
+      "asset_category": "Material and Economic Resources",
+      "line": null
+    },
+    {
+      "rule_id": "LOG-AUTH-03",
+      "severity": "medium",
+      "evidence": "12 failed auth attempts in 30 s, user='root'",
+      "explanation": "Brute-force pattern on privileged account.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-001",
+      "severity": "high",
+      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
+      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+      "source_agent": "deployment_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": null
+    },
+    {
+      "rule_id": "TOP-002",
+      "severity": "medium",
+      "evidence": "External A2A agent has write-edge to long_term_memory",
+      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    }
+  ],
+  "committed": {
+    "action": "block_ip",
+    "target": "suspect_source_ip",
+    "parameters": {
+      "duration_minutes": 60
+    }
+  }
+}

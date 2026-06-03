@@ -1,0 +1,14 @@
+{
+  "defense": [
+    {
+      "name": "juliet_smoke",
+      "files_scanned": 260,
+      "findings": 1730,
+      "tier": "moderate",
+      "confidence": 0.72,
+      "guard": "PASS",
+      "action": "block_ip"
+    }
+  ],
+  "attack": []
+}

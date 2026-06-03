@@ -1,0 +1,163 @@
+# --------------------------------------------------------------------------
+# CyberLLM — main configuration.
+# Each section is referenced by code in agents/, skills/, tools/.
+# --------------------------------------------------------------------------
+
+# ---- LLM configurations (paper 4: Härer LLM-Config block) -----------------
+llm_configs:
+  default:
+    provider: stub             # stub | openai | anthropic | ollama
+    model: stub-echo
+    temperature: 0.2
+    max_tokens: 1024
+  reasoning:
+    provider: stub
+    model: stub-reasoning
+    temperature: 0.0
+    max_tokens: 2048
+
+# ---- Agent configurations -------------------------------------------------
+agent_configs:
+  # ---- Defense side ----
+  source_code_scanner:
+    llm: default
+    objective: "Identify insecure patterns in the given source code and map each finding to a rule id."
+  log_analyzer:
+    llm: default
+    objective: "Detect anomalies in the provided log lines and classify the threat type."
+  deployment_scanner:
+    llm: default
+    objective: "Build the actor/datasource graph from the deployment config and check it against topology rules."
+  decision_agent:
+    llm: reasoning
+    objective: "Aggregate scanner findings, tag each by asset category, and decide on a response."
+  action_generator:
+    llm: default
+    objective: "Produce a concrete defensive action (soft / moderate / hard) or a code-level fix."
+
+  # ---- Attack side (diagram 2) ----
+  system_info_discovery:
+    llm: default
+    objective: "Build a structured paper-2 actor/datasource graph from the deployment config."
+  source_code_exploiter:
+    llm: default
+    objective: "Propose concrete exploits for each detected source-code vulnerability."
+  deployment_exploiter:
+    llm: default
+    objective: "Enumerate paper-2 poison/trigger attack paths through the topology."
+  attack_orchestrator:
+    llm: reasoning
+    objective: "Choose 1-3 findings to chain into an end-to-end attack plan that fulfils the scenario."
+  attack_generator:
+    llm: default
+    objective: "Emit per-step attack scripts (Python / shell / payload) for the chosen plan."
+
+# ---- Security policy (paper 1: contextual security properties) ------------
+security:
+  allowed_objectives:                # set O
+    - "analyze logs"
+    - "scan source code"
+    - "scan deployment config"
+    - "produce findings report"
+    - "produce defensive action"
+    - "auto-correct insecure code"
+  authenticated_sources:             # S_auth,t
+    - user
+    - rules_engine
+    - mcp_tool
+  trusted_destinations:              # destinations that data isolation accepts
+    - findings_report
+    - mitigation_plan
+    - audit_log
+
+# ---- Response intensity thresholds (paper 5: tiered response) -------------
+response_tiers:
+  soft_threshold: 0.40               # confidence required to act softly
+  moderate_threshold: 0.65
+  hard_threshold: 0.85
+
+# ---- Attack-side ethics / scope policy ------------------------------------
+# The EthicsGuard blocks attack scripts whose scenario or target is not in
+# scope. `allow_all_in_dev: true` is for offline demos; set it to false in
+# any environment that can reach real systems.
+attack:
+  allow_all_in_dev: true
+  allowed_scenarios:
+    - "data exfiltration"
+    - "brake tampering"
+    - "a2a disinformation"
+    - "fleet customer data"
+    - "memory poisoning"
+    - "rag poisoning"
+  authorized_targets:
+    - "Privacy and Personal Data"
+    - "Life and Bodily Health"
+    - "Mental and Emotional Well-Being"
+    - "Material and Economic Resources"
+    - "fleet-api.lab.example.com"
+    - "W0L0XCFTESTBENCH01"
+    - "*"           # remove this wildcard outside the dev demo
+
+# ---- Paths ----------------------------------------------------------------
+paths:
+  rules_dir: rules
+  examples_dir: examples\small       # default example set used when --example is not given
+  memory_dir: memory
+  prompts_dir: prompts
+
+# ---- Defaults used when CLI flags are not provided ------------------------
+defaults:
+  # Single-run mode (when --code is passed without --log / --deployment).
+  log: examples\sample_log.log
+  deployment: examples\sample_deployment.yaml
+
+# ---- Example-set definitions used by `--example <kind>` -------------------
+# Each scenario lists: scenario name, code path (file OR directory),
+# the log file to pair with, and the deployment YAML to pair with.
+# Paths are relative to the project root (CyberLLM/).
+example_sets:
+  juliet:
+    - name: juliet_smoke
+      code: examples/juliet
+      log: examples/logs/01_clean_baseline.log
+      deployment: examples/deployments/01_clean_minimal.yaml
+  small:
+    - name: clean_auth
+      code: examples/small/01_clean_auth.py
+      log: examples/logs/01_clean_baseline.log
+      deployment: examples/deployments/01_clean_minimal.yaml
+    - name: can_gateway
+      code: examples/small/02_can_gateway.py
+      log: examples/logs/03_can_injection.log
+      deployment: examples/deployments/03_complex_sdv.yaml
+      scenario: examples/attack_scenarios/02_brake_tampering.txt
+    - name: ota_updater
+      code: examples/small/03_ota_updater.py
+      log: examples/logs/05_lateral_movement.log
+      deployment: examples/deployments/02_misconfigured_cloud.yaml
+    - name: telemetry_uploader
+      code: examples/small/04_telemetry_uploader.py
+      log: examples/logs/04_data_exfiltration.log
+      deployment: examples/deployments/02_misconfigured_cloud.yaml
+    - name: mqtt_handler
+      code: examples/small/05_mqtt_handler.c
+      log: examples/logs/02_brute_force_ssh.log
+      deployment: examples/deployments/03_complex_sdv.yaml
+
+  medium:
+    - name: ev_charging_api
+      code: examples/medium/ev_charging_api      # directory — all *.py inside are scanned
+      log: examples/logs/04_data_exfiltration.log
+      deployment: examples/deployments/02_misconfigured_cloud.yaml
+      scenario: examples/attack_scenarios/01_data_exfiltration.txt
+    - name: adas_decision
+      code: examples/medium/adas_decision
+      log: examples/logs/03_can_injection.log
+      deployment: examples/deployments/03_complex_sdv.yaml
+      scenario: examples/attack_scenarios/03_a2a_disinformation.txt
+
+  large:
+    - name: fleet_management
+      code: examples/large/fleet_management
+      log: examples/logs/04_data_exfiltration.log
+      deployment: examples/deployments/02_misconfigured_cloud.yaml

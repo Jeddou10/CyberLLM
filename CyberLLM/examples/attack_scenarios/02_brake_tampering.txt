@@ -1,0 +1,24 @@
+Scenario: Spoof a brake command on the CAN bus of a parked test vehicle.
+
+Goal:
+  Cause the brake ECU to receive a non-zero deceleration command from a
+  source other than the legitimate ADAS decision module — verifying
+  that the safety event-chain rule (paper 3 SAFE-003) trips and the
+  defense pipeline blocks the spoofed frame.
+
+Authorisation:
+  Test bench only — VIN W0L0XCFTESTBENCH01, isolated CAN bus, vehicle
+  on jack stands. The track / public road is OUT of scope.
+
+Allowed assets to target (paper 2):
+  - Life and Bodily Health (lab-only)
+
+Hints for the orchestrator:
+  - Diagram 2 deployment: zone_ecu_front already talks to brake_ecu
+    over can_fd (TOP-001 violation).
+  - LOG-CAN-02 will fire when a non-gateway ECU sends a brake frame.
+
+Constraints:
+  - Maximum spoofed deceleration: -1.0 m/s² (well within the safety
+    bound of -10 m/s²).
+  - One frame, single shot. No persistence on the bus.

@@ -1,0 +1,135 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "properties": {
+        "id": 148895,
+        "version": "1.0.0",
+        "type": "source code",
+        "status": "candidate",
+        "submissionDate": "2014-08-01",
+        "language": "c",
+        "author": "Wireshark Foundation",
+        "description": "CVE-2013-4077",
+        "state": "bad",
+        "cves": [
+          "CVE-2013-4077"
+        ],
+        "application": "cpe:2.3:a:wireshark:wireshark:1.8.0:*:*:*:*:*:*:*",
+        "dependencies": [
+          "wireshark-v1.8.0"
+        ]
+      },
+      "tool": {
+        "driver": {
+          "name": "SARD - SAMATE",
+          "fullName": "Software Assurance Reference Dataset Project",
+          "informationUri": "https://samate.nist.gov/SARD/",
+          "version": "5.0.0",
+          "organization": "NIST",
+          "supportedTaxonomies": [
+            {
+              "name": "CWE",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-nbap.c"
+          },
+          "length": 3726940,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "5de73292fc53ad8e115a03b90f09c7a4a5adba1f3a0e06b9d1e4af79631b2d28"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-per.c"
+          },
+          "length": 83420,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "5f450d511d3445003ee4f197b2d1c705b359804a2aaf9ea89bbb6fe6f4b74f69"
+          }
+        }
+      ],
+      "taxonomies": [
+        {
+          "name": "CWE",
+          "version": "4.6",
+          "informationUri": "https://cwe.mitre.org/data/published/cwe_v4.6.pdf",
+          "downloadUri": "https://cwe.mitre.org/data/xml/cwec_v4.6.xml.zip",
+          "organization": "MITRE",
+          "shortDescription": {
+            "text": "The MITRE Common Weakness Enumeration"
+          },
+          "isComprehensive": false,
+          "taxa": [
+            {
+              "id": "119",
+              "name": "Improper Restriction of Operations within the Bounds of a Memory Buffer"
+            }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "CWE-119",
+          "message": {
+            "text": "Improper Restriction of Operations within the Bounds of a Memory Buffer."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 1
+                },
+                "region": {
+                  "startLine": 1247
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 1
+                },
+                "region": {
+                  "startLine": 1251
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 1
+                },
+                "region": {
+                  "startLine": 1304
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "119",
+              "index": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

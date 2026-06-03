@@ -1,0 +1,20 @@
+[
+  {
+    "name": "ev_charging_api",
+    "files_scanned": 5,
+    "findings": 14,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "adas_decision",
+    "files_scanned": 4,
+    "findings": 12,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  }
+]

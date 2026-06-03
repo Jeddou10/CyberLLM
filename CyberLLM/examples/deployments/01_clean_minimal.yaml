@@ -1,0 +1,48 @@
+# Negative-control deployment: simple two-zone SDV that respects
+# the topology rules. The pipeline should produce zero (or near-zero)
+# topology findings here.
+
+actors:
+  - id: driver
+    type: HumanUser
+    trust_level: authenticated
+  - id: in_car_agent
+    type: LLMAgent
+    trust_level: authenticated
+  - id: high_perf_computer
+    type: HighPerformanceComputer
+    trust_level: authenticated
+  - id: zone_ecu
+    type: ZoneECU
+    trust_level: authenticated
+
+datasources:
+  - id: long_term_memory
+    holds: ["user preferences"]
+  - id: rag_index
+    holds: ["manuals"]
+  - id: vehicle_signals
+    holds: ["VSS"]
+
+edges:
+  - source: high_perf_computer
+    target: zone_ecu
+    primitive: communicate
+    transport: ethernet
+    standard: IEEE-1722
+  - source: zone_ecu
+    target: vehicle_signals
+    primitive: write
+    transport: ethernet
+  - source: in_car_agent
+    target: rag_index
+    primitive: read
+  - source: in_car_agent
+    target: long_term_memory
+    primitive: write
+  - source: in_car_agent
+    target: long_term_memory
+    primitive: read
+  - source: driver
+    target: in_car_agent
+    primitive: communicate

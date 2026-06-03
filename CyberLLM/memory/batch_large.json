@@ -1,0 +1,11 @@
+[
+  {
+    "name": "fleet_management",
+    "files_scanned": 20,
+    "findings": 44,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  }
+]

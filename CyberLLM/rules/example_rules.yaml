@@ -1,0 +1,78 @@
+# Rules / policies catalogue.
+#
+# Inspired by:
+#   - paper 3 (TUM) OCL rules over the topology metamodel,
+#   - paper 1 (UC Berkeley/UCSC) contextual security properties,
+#   - paper 2 (BMW/TUM) attack-path taxonomy (poison + trigger paths),
+#   - paper 5 (Collins) response tiers.
+#
+# Three rule families:
+#   1. code_rules        — patterns the source-code scanner looks for.
+#   2. log_rules         — anomaly signatures the log analyzer looks for.
+#   3. topology_rules    — structural constraints the deployment scanner checks.
+
+code_rules:
+  - id: CODE-001
+    severity: high
+    title: "Command injection sink"
+    pattern: "subprocess\\.(call|run|Popen)\\(.+shell\\s*=\\s*True"
+    asset_category: "Material and Economic Resources"
+    rationale: "Shell execution of untrusted strings is a direct RCE."
+
+  - id: CODE-002
+    severity: medium
+    title: "Weak hash for credentials"
+    pattern: "hashlib\\.(md5|sha1)\\("
+    asset_category: "Privacy and Personal Data"
+    rationale: "MD5/SHA1 are unsuitable for password storage."
+
+  - id: CODE-003
+    severity: critical
+    title: "Hard-coded secret"
+    # Matches assignments like API_KEY="…", AWS_ACCESS_KEY_ID="…",
+    # AWS_SECRET_ACCESS_KEY="…", GATEWAY_API_TOKEN="…", PASSWORD="…".
+    # `\w*` between the keyword and `=` tolerates trailing tokens
+    # like `_ID` or `_ACCESS_KEY`. Value character class includes
+    # `/` and `+` so AWS-style base64-flavoured secrets also match.
+    pattern: "(api[_-]?key|secret|token|access[_-]?key|password|credential)\\w*\\s*=\\s*['\"][A-Za-z0-9_\\-/+]{16,}['\"]"
+    asset_category: "Privacy and Personal Data"
+    rationale: "Hard-coded secrets leak via repo / binary."
+
+log_rules:
+  - id: LOG-AUTH-03
+    severity: medium
+    title: "Brute-force on privileged account"
+    signature: ">=10 failed auth attempts in <60s for root/admin"
+    asset_category: "Privacy and Personal Data"
+
+  - id: LOG-NET-01
+    severity: high
+    title: "Unusual broadcast burst"
+    signature: ">500 pkts/s to .255 within an internal subnet"
+    asset_category: "Material and Economic Resources"
+
+  - id: LOG-CAN-02
+    severity: critical
+    title: "CAN-bus injection from non-gateway ECU"
+    signature: "frames with gateway-only CAN-IDs (0x7E0..0x7EF) from a non-gateway source"
+    asset_category: "Life and Bodily Health"
+
+topology_rules:
+  - id: TOP-001
+    severity: high
+    title: "HPC↔ZoneECU must be Ethernet/IEEE-1722"
+    rule: |
+      For every edge (HighPerformanceComputer -> ZoneECU):
+        edge.transport == 'ethernet'  AND  edge.standard == 'IEEE-1722'
+
+  - id: TOP-002
+    severity: high
+    title: "External actors must not write to long-term memory"
+    rule: |
+      For every edge (actor -> long_term_memory) with primitive 'write':
+        actor.trust_level == 'authenticated'
+
+  - id: TOP-003
+    severity: medium
+    title: "Steering command angle bound"
+    rule: "|steering_angle| <= 15 deg on any Message targeting SteeringActuator"

@@ -1,0 +1,1745 @@
+{
+  "mode": "defense",
+  "scenario": "ota_updater",
+  "inputs": {
+    "code": [
+      "examples\\small\\03_ota_updater.py"
+    ],
+    "log": "examples\\logs\\05_lateral_movement.log",
+    "deployment": "examples\\deployments\\02_misconfigured_cloud.yaml"
+  },
+  "decision": {
+    "summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+    "asset_categories_touched": [
+      "Material and Economic Resources",
+      "Privacy and Personal Data",
+      "Life and Bodily Health"
+    ],
+    "recommended_tier": "moderate",
+    "confidence": 0.72,
+    "justification": "Authenticated scanner agents flagged 6 findings (3 high, 3 medium); trajectory and action alignment hold; source authorization OK. Tier 'moderate' chosen \u2014 confidence above moderate_threshold (0.65) but below hard (0.85)."
+  },
+  "action": {
+    "kind": "alert_only",
+    "target": "engine",
+    "parameters": {
+      "severity": "critical",
+      "summary": "Secrets store is world-readable",
+      "rule_id": "TOP-006"
+    },
+    "plan_id": "55068554-1cae-4584-9791-5a9aaa501167"
+  },
+  "action_report": {
+    "plan_id": "55068554-1cae-4584-9791-5a9aaa501167",
+    "status": "completed",
+    "summary": "[completed] 22 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=network; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
+    "started_at": "2026-06-03T15:21:17.507486",
+    "finished_at": "2026-06-03T15:21:17.507486",
+    "tallies": {
+      "total": 22,
+      "completed": 22,
+      "failed": 0,
+      "refused": 0,
+      "rolled_back": 0,
+      "skipped": 0
+    },
+    "plan": {
+      "plan_id": "55068554-1cae-4584-9791-5a9aaa501167",
+      "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+      "blast_radius": "network",
+      "asset_categories": [
+        "Material and Economic Resources",
+        "Privacy and Personal Data",
+        "Life and Bodily Health"
+      ],
+      "created_at": "2026-06-03T15:21:17.507486",
+      "estimated_duration_s": 660,
+      "steps": [
+        {
+          "rule_id": "TOP-006",
+          "kind": "contain",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "critical",
+            "summary": "Secrets store is world-readable",
+            "rule_id": "TOP-006"
+          },
+          "description": "open a critical incident on the secrets store",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "63fe784a-0a25-4b4a-9614-ca817b34b972",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "critical",
+              "summary": "Secrets store is world-readable",
+              "rule_id": "TOP-006"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-02",
+          "kind": "contain",
+          "tool": "firewall.block_ipv4",
+          "params": {
+            "ipv4": "10.0.5.4",
+            "duration_minutes": 240,
+            "reason": "data exfiltration"
+          },
+          "description": "block the exfiltration peer",
+          "side_effect": "write",
+          "severity_min": "high",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "02bb7e96-afdb-4af6-9294-5c434be4e72b",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "netsh",
+            "params": {
+              "ipv4": "10.0.5.4",
+              "duration_minutes": 240,
+              "reason": "data exfiltration"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "contain",
+          "tool": "firewall.rate_limit",
+          "params": {
+            "ipv4": "0.0.0.0",
+            "rate_per_minute": 6,
+            "duration_minutes": 30
+          },
+          "description": "rate-limit the suspect source IP",
+          "side_effect": "write",
+          "severity_min": "medium",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "e8e7f775-8177-4177-bbff-64d49e566742",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "ipv4": "0.0.0.0",
+              "rate_per_minute": 6,
+              "duration_minutes": 30
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "contain",
+          "tool": "firewall.block_ipv4",
+          "params": {
+            "ipv4": "0.0.0.0",
+            "duration_minutes": 60,
+            "reason": "LOG-AUTH-03"
+          },
+          "description": "block the source IP if attempts continue",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "932f6823-0fb5-487d-b0bc-a0fab9b3249b",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "netsh",
+            "params": {
+              "ipv4": "0.0.0.0",
+              "duration_minutes": 60,
+              "reason": "LOG-AUTH-03"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "observe",
+          "tool": "code.static_scan",
+          "params": {
+            "path": "03_ota_updater.py",
+            "analyser": "auto"
+          },
+          "description": "run a real second-opinion static scanner",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "a94c6d6a-ace6-4f22-8534-7ca39e851905",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "bandit",
+            "params": {
+              "path": "03_ota_updater.py",
+              "analyser": "auto"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "observe",
+          "tool": "observe.log_tail",
+          "params": {
+            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\05_lateral_movement.log",
+            "pattern": "Failed password",
+            "timeout_s": 5
+          },
+          "description": "watch the auth log for 5 s after the rate-limit",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "6ac6df01-7aae-495d-89f1-5f3b5baf785c",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\05_lateral_movement.log",
+              "pattern": "Failed password",
+              "timeout_s": 5
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-006",
+          "kind": "eradicate",
+          "tool": "secrets.rotate",
+          "params": {
+            "secret_id": "primary-api-token"
+          },
+          "description": "rotate every secret that lived in that store",
+          "side_effect": "destructive",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "2785ca96-7882-44e3-801f-f7e259f310c0",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "vault",
+            "params": {
+              "secret_id": "primary-api-token"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-001",
+            "file": "03_ota_updater.py",
+            "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: 03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+            "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+          },
+          "description": "propose a safe-by-construction patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "f44849eb-b4c2-43cd-8adc-e126af2be818",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-001",
+              "file": "03_ota_updater.py",
+              "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: 03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+              "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-02",
+          "kind": "eradicate",
+          "tool": "secrets.rotate",
+          "params": {
+            "secret_id": "primary-api-token",
+            "length": 32
+          },
+          "description": "rotate the credentials likely to have been exposed",
+          "side_effect": "destructive",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "010cfdbd-2fba-498b-88ca-ea5ab5502b3f",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "vault",
+            "params": {
+              "secret_id": "primary-api-token",
+              "length": 32
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-002",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-002",
+            "file": "03_ota_updater.py",
+            "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: 03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "57a4e839-b801-4d13-b2f1-7bee97e3b791",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-002",
+              "file": "03_ota_updater.py",
+              "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: 03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-010",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-010",
+            "file": "03_ota_updater.py",
+            "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-010  (medium)\n# evidence: 03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST\n# remediation: follow the rule's remediation guidance.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "be8d8784-3311-4005-817b-71bc1624446e",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-010",
+              "file": "03_ota_updater.py",
+              "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-010  (medium)\n# evidence: 03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST\n# remediation: follow the rule's remediation guidance.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-001: Command injection sink \u2014 Shell execution of untrusted strings is a direct RCE.",
+            "rule_id": "CODE-001",
+            "evidence": "03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def"
+          },
+          "description": "open a code-vulnerability incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "908b6eb4-4b06-4765-84f5-1f88eb76d5f8",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "CODE-001: Command injection sink \u2014 Shell execution of untrusted strings is a direct RCE.",
+              "rule_id": "CODE-001",
+              "evidence": "03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-EXFIL-02",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "critical",
+            "summary": "Likely data exfiltration",
+            "rule_id": "LOG-EXFIL-02",
+            "evidence": "2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\""
+          },
+          "description": "open a high-severity incident",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "026b206b-80cd-447c-b4df-630f95047bdd",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "critical",
+              "summary": "Likely data exfiltration",
+              "rule_id": "LOG-EXFIL-02",
+              "evidence": "2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\""
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-LATERAL-01",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "LOG-LATERAL-01: log anomaly",
+            "rule_id": "LOG-LATERAL-01",
+            "evidence": "2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s"
+          },
+          "description": "open a log-anomaly incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "8b930e81-29e0-4915-ab7f-fa8fc531c27c",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "LOG-LATERAL-01: log anomaly",
+              "rule_id": "LOG-LATERAL-01",
+              "evidence": "2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-NET-01",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "LOG-NET-01: log anomaly",
+            "rule_id": "LOG-NET-01",
+            "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+          },
+          "description": "open a log-anomaly incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "05933c96-1882-4616-b37a-e9c3d60937e7",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "LOG-NET-01: log anomaly",
+              "rule_id": "LOG-NET-01",
+              "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-002",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-002: External actors must not write to long-term memory",
+            "rule_id": "TOP-002"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "e3e3751d-036c-402f-8525-473d067a3e24",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-002: External actors must not write to long-term memory",
+              "rule_id": "TOP-002"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-004",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-004: topology rule violated",
+            "rule_id": "TOP-004"
+          },
+          "description": "open a topology-violation ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "56eff498-be3e-426c-bc51-7cd3f2ef2299",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-004: topology rule violated",
+              "rule_id": "TOP-004"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-005",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-005: Database bound to 0.0.0.0",
+            "rule_id": "TOP-005"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "4202d2c3-b112-4330-8967-e19fa5515f41",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-005: Database bound to 0.0.0.0",
+              "rule_id": "TOP-005"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-001",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+            "rule_id": "TOP-001"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "42f733e9-f183-4732-b683-be4c57f23254",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+              "rule_id": "TOP-001"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-002",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "CODE-002: Weak hash for credentials \u2014 MD5/SHA1 are unsuitable for password storage.",
+            "rule_id": "CODE-002"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "c308133f-dbb6-4d14-8801-1db039518c4e",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "medium",
+              "summary": "CODE-002: Weak hash for credentials \u2014 MD5/SHA1 are unsuitable for password storage.",
+              "rule_id": "CODE-002"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-010",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "CODE-010: Plain HTTP for software update / sensitive flow",
+            "rule_id": "CODE-010"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "d4ed40cb-12e1-4ae9-8ec0-f161b4cb3835",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "medium",
+              "summary": "CODE-010: Plain HTTP for software update / sensitive flow",
+              "rule_id": "CODE-010"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "Brute-force pattern detected",
+            "rule_id": "LOG-AUTH-03",
+            "evidence": "12 failed auth attempts in 30 s, user='root'"
+          },
+          "description": "open a security-team incident",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "84aa99ee-dd44-47d5-9dc7-5bfaeb2a4c5b",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.507486",
+          "finished_at": "2026-06-03T15:21:17.507486",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "Brute-force pattern detected",
+              "rule_id": "LOG-AUTH-03",
+              "evidence": "12 failed auth attempts in 30 s, user='root'"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        }
+      ]
+    },
+    "audit_log": [
+      {
+        "step_id": "63fe784a-0a25-4b4a-9614-ca817b34b972",
+        "tool": "notify.create_incident",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "02bb7e96-afdb-4af6-9294-5c434be4e72b",
+        "tool": "firewall.block_ipv4",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "e8e7f775-8177-4177-bbff-64d49e566742",
+        "tool": "firewall.rate_limit",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "932f6823-0fb5-487d-b0bc-a0fab9b3249b",
+        "tool": "firewall.block_ipv4",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "a94c6d6a-ace6-4f22-8534-7ca39e851905",
+        "tool": "code.static_scan",
+        "kind": "observe",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "6ac6df01-7aae-495d-89f1-5f3b5baf785c",
+        "tool": "observe.log_tail",
+        "kind": "observe",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "2785ca96-7882-44e3-801f-f7e259f310c0",
+        "tool": "secrets.rotate",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "f44849eb-b4c2-43cd-8adc-e126af2be818",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "010cfdbd-2fba-498b-88ca-ea5ab5502b3f",
+        "tool": "secrets.rotate",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "57a4e839-b801-4d13-b2f1-7bee97e3b791",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "be8d8784-3311-4005-817b-71bc1624446e",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "908b6eb4-4b06-4765-84f5-1f88eb76d5f8",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "026b206b-80cd-447c-b4df-630f95047bdd",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "8b930e81-29e0-4915-ab7f-fa8fc531c27c",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "05933c96-1882-4616-b37a-e9c3d60937e7",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "e3e3751d-036c-402f-8525-473d067a3e24",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "56eff498-be3e-426c-bc51-7cd3f2ef2299",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "4202d2c3-b112-4330-8967-e19fa5515f41",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "42f733e9-f183-4732-b683-be4c57f23254",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "c308133f-dbb6-4d14-8801-1db039518c4e",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "d4ed40cb-12e1-4ae9-8ec0-f161b4cb3835",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "84aa99ee-dd44-47d5-9dc7-5bfaeb2a4c5b",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      }
+    ]
+  },
+  "mcp_audit": [
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "critical",
+        "summary": "Secrets store is world-readable",
+        "rule_id": "TOP-006"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "critical",
+          "summary": "Secrets store is world-readable",
+          "rule_id": "TOP-006"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "firewall.block_ipv4",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "10.0.5.4",
+        "duration_minutes": 240,
+        "reason": "data exfiltration"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "netsh",
+        "params": {
+          "ipv4": "10.0.5.4",
+          "duration_minutes": 240,
+          "reason": "data exfiltration"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "firewall.rate_limit",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "0.0.0.0",
+        "rate_per_minute": 6,
+        "duration_minutes": 30
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "ipv4": "0.0.0.0",
+          "rate_per_minute": 6,
+          "duration_minutes": 30
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "firewall.block_ipv4",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "0.0.0.0",
+        "duration_minutes": 60,
+        "reason": "LOG-AUTH-03"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "netsh",
+        "params": {
+          "ipv4": "0.0.0.0",
+          "duration_minutes": 60,
+          "reason": "LOG-AUTH-03"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "code.static_scan",
+      "side_effect": "read",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "path": "03_ota_updater.py",
+        "analyser": "auto"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "bandit",
+        "params": {
+          "path": "03_ota_updater.py",
+          "analyser": "auto"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "observe.log_tail",
+      "side_effect": "read",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\05_lateral_movement.log",
+        "pattern": "Failed password",
+        "timeout_s": 5
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\05_lateral_movement.log",
+          "pattern": "Failed password",
+          "timeout_s": 5
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "secrets.rotate",
+      "side_effect": "destructive",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "secret_id": "***redacted***"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "vault",
+        "params": {
+          "secret_id": "***redacted***"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-001",
+        "file": "03_ota_updater.py",
+        "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: 03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+        "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-001",
+          "file": "03_ota_updater.py",
+          "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: 03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+          "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "secrets.rotate",
+      "side_effect": "destructive",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "secret_id": "***redacted***",
+        "length": 32
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "vault",
+        "params": {
+          "secret_id": "***redacted***",
+          "length": 32
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-002",
+        "file": "03_ota_updater.py",
+        "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: 03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-002",
+          "file": "03_ota_updater.py",
+          "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: 03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-010",
+        "file": "03_ota_updater.py",
+        "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-010  (medium)\n# evidence: 03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST\n# remediation: follow the rule's remediation guidance.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-010",
+          "file": "03_ota_updater.py",
+          "diff": "--- a/03_ota_updater.py\n+++ b/03_ota_updater.py\n@@ context-of-finding @@\n# rule_id: CODE-010  (medium)\n# evidence: 03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST\n# remediation: follow the rule's remediation guidance.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "CODE-001: Command injection sink \u2014 Shell execution of untrusted strings is a direct RCE.",
+        "rule_id": "CODE-001",
+        "evidence": "03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "CODE-001: Command injection sink \u2014 Shell execution of untrusted strings is a direct RCE.",
+          "rule_id": "CODE-001",
+          "evidence": "03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "critical",
+        "summary": "Likely data exfiltration",
+        "rule_id": "LOG-EXFIL-02",
+        "evidence": "2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\""
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "critical",
+          "summary": "Likely data exfiltration",
+          "rule_id": "LOG-EXFIL-02",
+          "evidence": "2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\""
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "LOG-LATERAL-01: log anomaly",
+        "rule_id": "LOG-LATERAL-01",
+        "evidence": "2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "LOG-LATERAL-01: log anomaly",
+          "rule_id": "LOG-LATERAL-01",
+          "evidence": "2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "LOG-NET-01: log anomaly",
+        "rule_id": "LOG-NET-01",
+        "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "LOG-NET-01: log anomaly",
+          "rule_id": "LOG-NET-01",
+          "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-002: External actors must not write to long-term memory",
+        "rule_id": "TOP-002"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-002: External actors must not write to long-term memory",
+          "rule_id": "TOP-002"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-004: topology rule violated",
+        "rule_id": "TOP-004"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-004: topology rule violated",
+          "rule_id": "TOP-004"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-005: Database bound to 0.0.0.0",
+        "rule_id": "TOP-005"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-005: Database bound to 0.0.0.0",
+          "rule_id": "TOP-005"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+        "rule_id": "TOP-001"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+          "rule_id": "TOP-001"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "medium",
+        "summary": "CODE-002: Weak hash for credentials \u2014 MD5/SHA1 are unsuitable for password storage.",
+        "rule_id": "CODE-002"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "medium",
+          "summary": "CODE-002: Weak hash for credentials \u2014 MD5/SHA1 are unsuitable for password storage.",
+          "rule_id": "CODE-002"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "medium",
+        "summary": "CODE-010: Plain HTTP for software update / sensitive flow",
+        "rule_id": "CODE-010"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "medium",
+          "summary": "CODE-010: Plain HTTP for software update / sensitive flow",
+          "rule_id": "CODE-010"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.507",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "Brute-force pattern detected",
+        "rule_id": "LOG-AUTH-03",
+        "evidence": "12 failed auth attempts in 30 s, user='root'"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "Brute-force pattern detected",
+          "rule_id": "LOG-AUTH-03",
+          "evidence": "12 failed auth attempts in 30 s, user='root'"
+        }
+      },
+      "error": null
+    }
+  ],
+  "guard_verdict": {
+    "allowed": false,
+    "task_alignment": true,
+    "action_alignment": false,
+    "source_authorization": true,
+    "data_isolation": true,
+    "reason": "action 'alert_only' incompatible with objective 'produce defensive action' (expected one of ['produce findings report'])"
+  },
+  "findings": [
+    {
+      "rule_id": "CODE-001",
+      "severity": "high",
+      "evidence": "03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def",
+      "explanation": "Command injection sink \u2014 Shell execution of untrusted strings is a direct RCE.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 51
+    },
+    {
+      "rule_id": "CODE-002",
+      "severity": "medium",
+      "evidence": "03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag",
+      "explanation": "Weak hash for credentials \u2014 MD5/SHA1 are unsuitable for password storage.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Privacy and Personal Data",
+      "line": 42
+    },
+    {
+      "rule_id": "CODE-010",
+      "severity": "medium",
+      "evidence": "03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST",
+      "explanation": "Plain HTTP for software update / sensitive flow",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 27
+    },
+    {
+      "rule_id": "CODE-001",
+      "severity": "high",
+      "evidence": "subprocess.call(user_input, shell=True)",
+      "explanation": "Shell-injection sink fed by untrusted input.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 14
+    },
+    {
+      "rule_id": "CODE-002",
+      "severity": "medium",
+      "evidence": "hashlib.md5(password)",
+      "explanation": "Weak hash algorithm for password storage.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 22
+    },
+    {
+      "rule_id": "LOG-EXFIL-02",
+      "severity": "high",
+      "evidence": "2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\"",
+      "explanation": "Large outbound transfer to a rare destination",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "LOG-LATERAL-01",
+      "severity": "high",
+      "evidence": "2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s",
+      "explanation": "Internal port-scan pattern from a single host",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "LOG-NET-01",
+      "severity": "high",
+      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
+      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "LOG-AUTH-03",
+      "severity": "medium",
+      "evidence": "12 failed auth attempts in 30 s, user='root'",
+      "explanation": "Brute-force pattern on privileged account.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-002",
+      "severity": "high",
+      "evidence": "external actor external_a2a_agent writes to long_term_memory (poison path)",
+      "explanation": "External actors must not write to long-term memory",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-004",
+      "severity": "high",
+      "evidence": "public_internet \u2192 admin_portal: no WAF on admin surface",
+      "explanation": "Admin portal exposed to public internet",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-005",
+      "severity": "high",
+      "evidence": "database postgres binds 0.0.0.0",
+      "explanation": "Database bound to 0.0.0.0",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-006",
+      "severity": "critical",
+      "evidence": "secrets store secrets_store access_policy=world-readable",
+      "explanation": "Secrets store world-readable",
+      "source_agent": "deployment_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": null
+    },
+    {
+      "rule_id": "TOP-001",
+      "severity": "high",
+      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
+      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-002",
+      "severity": "medium",
+      "evidence": "External A2A agent has write-edge to long_term_memory",
+      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    }
+  ],
+  "committed": null
+}

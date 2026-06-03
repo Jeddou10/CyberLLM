@@ -1,0 +1,2687 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "properties": {
+        "id": 148966,
+        "version": "1.0.0",
+        "type": "source code",
+        "status": "deprecated",
+        "submissionDate": "2014-08-01",
+        "language": "c",
+        "author": "Wireshark Foundation",
+        "description": "wireshark-1.8.0",
+        "state": "bad",
+        "application": "cpe:2.3:a:wireshark:wireshark:1.8.0:*:*:*:*:*:*:*",
+        "dependencies": [
+          "wireshark-v1.8.0"
+        ]
+      },
+      "tool": {
+        "driver": {
+          "name": "SARD - SAMATE",
+          "fullName": "Software Assurance Reference Dataset Project",
+          "informationUri": "https://samate.nist.gov/SARD/",
+          "version": "5.0.0",
+          "organization": "NIST",
+          "supportedTaxonomies": [
+            {
+              "name": "CWE",
+              "index": 0
+            }
+          ]
+        }
+      },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-3g-a11.c"
+          },
+          "length": 85974,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "a537aeff75de7dd960df861ef4a0c10b9bd3cb1d0263aa237451c417af9b9ba2"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-acn.c"
+          },
+          "length": 120640,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "3e93c1d53bf1dab05c22df02ebc417cc40605dee7bdf8a759c92d5dc7bf83bad"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-afp.c"
+          },
+          "length": 208615,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "8f4e2ec01660669e3761a9b8778ec43c48e37375f6b3468880387f93f76214b0"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-amqp.c"
+          },
+          "length": 442008,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "f912959ea0c564da90b068c9971d0d526134a19e3ad19698246b60e6f6df2f49"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-assa_r3.c"
+          },
+          "length": 434774,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "8678c7b7a59291c69d4e17759c63cc007eaf15fdc2625e7af420fb43d9b4852d"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-ber.c"
+          },
+          "length": 199939,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "a807230ad6bb70bbcf96baca395766200ed65ba1a5f3a02d72d7ec878986c6df"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-bthci_cmd.c"
+          },
+          "length": 123846,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "83967616a8f1d4ea3ce032777f3f5c13d722961ab3a5f357bcad91d76f73c773"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-btsdp.c"
+          },
+          "length": 33862,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "be0b3088d67b0b6e72638ec9c6f50a716260bde888849878239ba43b43a6743d"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-capwap.c"
+          },
+          "length": 105930,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "2f69b071cdc1d339dc71eb3690b5808295f62b4a9241f45404467ace5e95475f"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-cimd.c"
+          },
+          "length": 38973,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "a23cc52cb25665a42578e50dadfa0dfb839a6b309429077d88f4cb93b1ffcde4"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-cip.c"
+          },
+          "length": 284735,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "0d816e1467d1ce975449181d7cc93d35602929a71204f71b84c39cbc4bde1df2"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-clnp.c"
+          },
+          "length": 24330,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "4438b5caf51bcaa8db1d2b082890c65dd759bc223bc48a6d6c4432a21f8855d7"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-csn1.c"
+          },
+          "length": 56367,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "7ee076bf6b27b7a1fde069f1937b279da7da1cff9defc71b67d7f4caa9ee75e8"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-ctdb.c"
+          },
+          "length": 34595,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "932ce4d54b05f5301362c442896a78dc982d7fb11d2ced8f2341d823ac891848"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-dcp-etsi.c"
+          },
+          "length": 31132,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "130869452751bdd3a9d9369e04c05b98fcba317f93738a35e6172883d6c27874"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-dis-pdus.c"
+          },
+          "length": 64354,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "9cd35f9008dde93607b08c5633df78f0397704f20dfc1223453a27c5bd0d4dc7"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-drda.c"
+          },
+          "length": 39661,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c702d141fa2b8adfcdbc729cb4261d87da73df4529d0f1ed74519f9b156a0aab"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-dtls.c"
+          },
+          "length": 97657,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "71eb990a2d57fd85ae1b3801997d3ec2db43f72e496d7bb2e7dba11f9a2b2845"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-dtn.c"
+          },
+          "length": 121729,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "e41b192f550bab905b7bafe15e5102fa42b1ec547866cb91d3f3977d2213009e"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-dvbci.c"
+          },
+          "length": 207876,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "e02bc106f11bd647d7eb0e2f40fd52d15a87407f28f402958effa26f9981e277"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-eigrp.c"
+          },
+          "length": 130291,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "e590e5c7902ee51112a512b64805a36dacff01f04503b01b2598252bad63bbb8"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-erf.c"
+          },
+          "length": 72148,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "352a678d80f40599d8324b1ae06526b486268d18f003ea2db8e26f9b20dcddb2"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-etch.c"
+          },
+          "length": 26683,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "05c418dbb0d90ae63b13cd0f64abca3d758cee26c58d1a20ac2cb4361bf64d44"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-fcsp.c"
+          },
+          "length": 20728,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "b6e2045e969f7119dee8e8935406aed1cd37fba64addc171099011ec8b053151"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-gmr1_bcch.c"
+          },
+          "length": 48167,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c5f193e33ee54fe813ae469c8e574ef91eb4aaaa501da9f6731631e22dc239c3"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-gsm_a_rr.c"
+          },
+          "length": 504841,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "756383315dea173147e1cdc89535533ca11cf545eba45a36130bc97206be3057"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-gsm_cbch.c"
+          },
+          "length": 22610,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "2591a30c3908dfa3caf0179fc666183b4f05d6fba50e707a2c3867919796f1a9"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-gsm_rlcmac.c"
+          },
+          "length": 551499,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "9ae627caebb1764ec895dbda1359170cf5a319e5535599f4b9586117e2fb800e"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-gsm_rlcmac.h"
+          },
+          "length": 119879,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c8f81bf77f77246f08c25eee302fed742e864f03d5612ca87bc51aa477ea0b2e"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-hartip.c"
+          },
+          "length": 54752,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "02a861436fb5c52617f6b0cbcd4c681dcdd739283900d645f451694e42e81b62"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-hsrp.c"
+          },
+          "length": 37871,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "f499d81602d3c8fa5135eadccd8e24dd9d856a90859af327204bf9f08fee5790"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-http.c"
+          },
+          "length": 85323,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "29e06147ac49e8c8e28aa8e13e21c87991819a3017984c8093af2f86d46c2a81"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-icmpv6.c"
+          },
+          "length": 243762,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "1c4b20aadb499e9a9e25324a4a533f6ff3d7451de023f6941fddbf9db9aa1227"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-isakmp.c"
+          },
+          "length": 236026,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "bc3a03a69b724ba9c68f7b0198d5ba28102f585d8b16d3cf701e0cb5b9462aaa"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-iscsi.c"
+          },
+          "length": 127677,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "5a20d7a4b99821216d24ed9ad96e9b2c15b4629f7cb5e96c4d3a7f21c33c0c3a"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-ldp.c"
+          },
+          "length": 169648,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "3d3dd42f147753822bd706e54ed40b0bb46111c5413492e9e6230ff88df1fe58"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-mongo.c"
+          },
+          "length": 38817,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "3e6b061540cf7f7eed79dd42b5052ef589b592af0d03dcf745f0c4fabaee6b13"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-mount.c"
+          },
+          "length": 33909,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "41d51baba66819e720e2df5977f1d9033ebbae0d15a5a2f119c0308f0fa4fcf5"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-mpeg-dsmcc.c"
+          },
+          "length": 31870,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "bd90d3eceef1211ec5cfca7752b0f162d22f440f94ead12dfdc5ba3a81ee92eb"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-mpls-echo.c"
+          },
+          "length": 104702,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "a0ce23341f5a0a2f929f9d4825d89ee02d4324de12c2016be0089102d6b04546"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-ms-mms.c"
+          },
+          "length": 63648,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "459dddd7f1f968e0833898b597d55e8d47ac10fc8f22659bd7702d4ce7f221b4"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-mysql.c"
+          },
+          "length": 86318,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "6b52adac348af783c5b22c539a29e70193644c143a609a7fdb457fba3d87e917"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-nbap.c"
+          },
+          "length": 3726940,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "5de73292fc53ad8e115a03b90f09c7a4a5adba1f3a0e06b9d1e4af79631b2d28"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-nfs.c"
+          },
+          "length": 382877,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c8fe64417629189d383a9c3cf52bfac4cbdf72837ae9dac29811b44392757a3d"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-ntlmssp.c"
+          },
+          "length": 126089,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "854fc88421427e4cbfba1035bd729026fadb1baa83af9b8fdbff4d808616f383"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-per.c"
+          },
+          "length": 83420,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "5f450d511d3445003ee4f197b2d1c705b359804a2aaf9ea89bbb6fe6f4b74f69"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-ppp.c"
+          },
+          "length": 247991,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "65c335e2848d5ba5b73c4ef99bee028a2af6bace53df8cca178e7b311ecdd47e"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-pw-eth.c"
+          },
+          "length": 7883,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c6cfab8c8f6c31054ffe0cf5b340ca78fb23491aa6d12f87ffc03d4ed5faf6fe"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-rdp.c"
+          },
+          "length": 102110,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "0685b890803c5cd0a436b1f9441289df076c54009a4051c16acfe055d6bebc81"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-reload-framing.c"
+          },
+          "length": 18216,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "eb406ad54501502710c97d96011e54ad2ddbb1d323513c68977d86c9312e6ec9"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-reload.c"
+          },
+          "length": 235191,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "0bd5c25950bd298cf6c658422e6be7063f00dfc21927b8432beda56156d00278"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-rohc.c"
+          },
+          "length": 95781,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "0c4a73f6c589f888be14443ed5c1ccd1016e3ba8ebfba306b8ad768c47f84e70"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-rtcp.c"
+          },
+          "length": 168480,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "4d7188ac81067fb9bf71900a28db33cc19fc4efe6266d125dc215788e08d0aa7"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-rtps.c"
+          },
+          "length": 246016,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "8a601bfc5ab59eac51f4db1c5e7fd2ebb98d607cfb407e0b40c7a2c38d4a046e"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-rtps2.c"
+          },
+          "length": 364777,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "71268087b56b7ce7d69f0a4df52d2783d0bf370d2d11831d771e0099bff37aaf"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-sccp.c"
+          },
+          "length": 148458,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "ce01ae406503b44a29b45b915a36e9ce04a44e6041dfeeac19b0c3093013912d"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-sctp.c"
+          },
+          "length": 216947,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "9ae1ba2c24a43d51c107408142f763826fb0bd89536154a0d7aa492a7c41737a"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-sdp.c"
+          },
+          "length": 81333,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "21279a7179e5ec1a1561c44521128b5ac43da7ffa31ac8d8fd77f6b88598be1b"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-sflow.c"
+          },
+          "length": 145467,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "79bc827d8d98a13288e2e6c7877992792e2a80f8d05083bb58be766d7c46d356"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-sip.c"
+          },
+          "length": 172257,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "1b4b6ee6f48cbda3c7bb3c6b7eb6f5868f9decc672858b016436e053f4960505"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-slowprotocols.c"
+          },
+          "length": 127767,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "e69623a0a1b5a5c35cf3d83d9dfdf9490b848fb0710dcc0a2e1e64e643e26412"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-stun.c"
+          },
+          "length": 42006,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "b2591c5038a3c0019681ad82fef6ddb0d1977bbf3b6c76f02281b0e84d16f370"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-sua.c"
+          },
+          "length": 130846,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c8149c70684b1612f9bc56b85e936ccac425d060bdd14c443d4210938dd4aedb"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-tcp.c"
+          },
+          "length": 224980,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "9e52bd8ab9aed476c231e427ed48d10152b8d4326ffe40244027f14ca4640bda"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-usb.c"
+          },
+          "length": 119494,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "0e0cd9b1db02e98f23724d4e766d4b0e49628551fbf92487caf5fd40b6b3a609"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-websocket.c"
+          },
+          "length": 18172,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "511d0777e5c3e0c7c8f497700e68a31af3278a5a89c0be66f131fcc402946292"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-wtp.c"
+          },
+          "length": 33794,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "0a07061f2716789010acc9b5c4d5715d5dcb94825160be83f0aafd7f63153a5d"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-xmcp.c"
+          },
+          "length": 52687,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c1a917aef0b5b9f7a6f8507fb5ea7e4ecb7f834af915a28aa2530e952f34cbad"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/dissectors/packet-xtp.c"
+          },
+          "length": 40328,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "8224c52a2961bd853bd4e935326b7fd68f851f65230b5f4e7feaab03faba3c04"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/emem.c"
+          },
+          "length": 56317,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "272f3d643037c8eec0c8a3b0194de5708c22c32c177b65bed5fdaa1e1c41e617"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/gcp.c"
+          },
+          "length": 23539,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "6fb1794a4c653e6a21bf9c7b5c929a8409598cf265281efd06d0aa20958e4c0a"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/packet.c"
+          },
+          "length": 57421,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "c62de994b8d3e4b53dbd12d43798279bfa0113b0ea04c19cc754bfda6823a3c2"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/proto.c"
+          },
+          "length": 208329,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "e433807616c8e96e663fbaa7f65f0ca5326a4e72ec9061244e00ccc8cea0d34a"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/reassemble.c"
+          },
+          "length": 60390,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "0fd7fbcf9b82ad43cb2dda3ce0abc83a3af1bbd50a9ee54ecf0cbea9e939c0a7"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/strutil.c"
+          },
+          "length": 24114,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "96307f1d12f1dcc9f19439097e2604959996979545e6587e0c34b4b4bd000d44"
+          }
+        },
+        {
+          "location": {
+            "uri": "epan/tvbuff.c"
+          },
+          "length": 94263,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "02de2b722fbe8cfec19a21e1b8fdfe96277fcffed81ca404d941456358d35600"
+          }
+        },
+        {
+          "location": {
+            "uri": "plugins/docsis/packet-cmstatus.c"
+          },
+          "length": 10150,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "4ba5940b813fd6f7fb62527614aa8bb31ced09a2e36faa6cbfcf182ac965434a"
+          }
+        },
+        {
+          "location": {
+            "uri": "plugins/ethercat/packet-ecatmb.c"
+          },
+          "length": 87030,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "9ec8b95cf84dc9c7621122cea2b3d254289834e77e1e6293953c6d6af6e5a376"
+          }
+        },
+        {
+          "location": {
+            "uri": "wiretap/file_access.c"
+          },
+          "length": 41237,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "008fe22fd1e0980e82c3a2f3d915be8340ab642b4f75d5db9cec41572db9ccb2"
+          }
+        },
+        {
+          "location": {
+            "uri": "wiretap/netmon.c"
+          },
+          "length": 38907,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "d1e5cafbf330974302695fbe0af39262e4631ff5aa5ae59a186d7dac384f1d93"
+          }
+        },
+        {
+          "location": {
+            "uri": "wiretap/pcapng.c"
+          },
+          "length": 170433,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "461ea7ff04e4f93725e1943cff09766779513059d1cc79813e21403b52b8e062"
+          }
+        },
+        {
+          "location": {
+            "uri": "wiretap/vwr.c"
+          },
+          "length": 102348,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "e2e70e644f00f05eaffa33a8d758bd7a332e9ee7b9fd64017a0a2b7ba134a154"
+          }
+        },
+        {
+          "location": {
+            "uri": "wiretap/wtap.c"
+          },
+          "length": 22112,
+          "sourceLanguage": "c",
+          "hashes": {
+            "sha-256": "f1871c08d1230caea4e92b9f4be1ba496cf65847afdd6b695c0ba7a544cc5f5d"
+          }
+        }
+      ],
+      "taxonomies": [
+        {
+          "name": "CWE",
+          "version": "4.6",
+          "informationUri": "https://cwe.mitre.org/data/published/cwe_v4.6.pdf",
+          "downloadUri": "https://cwe.mitre.org/data/xml/cwec_v4.6.xml.zip",
+          "organization": "MITRE",
+          "shortDescription": {
+            "text": "The MITRE Common Weakness Enumeration"
+          },
+          "isComprehensive": false,
+          "taxa": [
+            {
+              "id": "119",
+              "name": "Improper Restriction of Operations within the Bounds of a Memory Buffer"
+            },
+            {
+              "id": "121",
+              "name": "Stack-based Buffer Overflow"
+            },
+            {
+              "id": "122",
+              "name": "Heap-based Buffer Overflow"
+            },
+            {
+              "id": "125",
+              "name": "Out-of-bounds Read"
+            },
+            {
+              "id": "130",
+              "name": "Improper Handling of Length Parameter Inconsistency"
+            },
+            {
+              "id": "134",
+              "name": "Use of Externally-Controlled Format String"
+            },
+            {
+              "id": "170",
+              "name": "Improper Null Termination"
+            },
+            {
+              "id": "369",
+              "name": "Divide By Zero"
+            },
+            {
+              "id": "457",
+              "name": "Use of Uninitialized Variable"
+            },
+            {
+              "id": "466",
+              "name": "Return of Pointer Value Outside of Expected Range"
+            },
+            {
+              "id": "476",
+              "name": "NULL Pointer Dereference"
+            },
+            {
+              "id": "606",
+              "name": "Unchecked Input for Loop Condition"
+            },
+            {
+              "id": "617",
+              "name": "Reachable Assertion"
+            },
+            {
+              "id": "674",
+              "name": "Uncontrolled Recursion"
+            },
+            {
+              "id": "680",
+              "name": "Integer Overflow to Buffer Overflow"
+            },
+            {
+              "id": "754",
+              "name": "Improper Check for Unusual or Exceptional Conditions"
+            },
+            {
+              "id": "763",
+              "name": "Release of Invalid Pointer or Reference"
+            },
+            {
+              "id": "787",
+              "name": "Out-of-bounds Write"
+            },
+            {
+              "id": "788",
+              "name": "Access of Memory Location After End of Buffer"
+            },
+            {
+              "id": "789",
+              "name": "Memory Allocation with Excessive Size Value"
+            },
+            {
+              "id": "823",
+              "name": "Use of Out-of-range Pointer Offset"
+            },
+            {
+              "id": "834",
+              "name": "Excessive Iteration"
+            },
+            {
+              "id": "835",
+              "name": "Loop with Unreachable Exit Condition ('Infinite Loop')"
+            },
+            {
+              "id": "839",
+              "name": "Numeric Range Comparison Without Minimum Check"
+            },
+            {
+              "id": "843",
+              "name": "Access of Resource Using Incompatible Type ('Type Confusion')"
+            }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "CWE-457",
+          "message": {
+            "text": "Use of Uninitialized Variable."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 45
+                },
+                "region": {
+                  "startLine": 333
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 45
+                },
+                "region": {
+                  "startLine": 364
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 45
+                },
+                "region": {
+                  "startLine": 1857
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 45
+                },
+                "region": {
+                  "startLine": 1868
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-per.c",
+                  "index": 45
+                },
+                "region": {
+                  "startLine": 1872
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "457",
+              "index": 8
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-125",
+          "message": {
+            "text": "Out-of-bounds Read."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/reassemble.c",
+                  "index": 73
+                },
+                "region": {
+                  "startLine": 721
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/reassemble.c",
+                  "index": 73
+                },
+                "region": {
+                  "startLine": 961
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/reassemble.c",
+                  "index": 73
+                },
+                "region": {
+                  "startLine": 980
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "125",
+              "index": 3
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-680",
+          "message": {
+            "text": "Integer Overflow to Buffer Overflow."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/strutil.c",
+                  "index": 74
+                },
+                "region": {
+                  "startLine": 158
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/strutil.c",
+                  "index": 74
+                },
+                "region": {
+                  "startLine": 172
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/strutil.c",
+                  "index": 74
+                },
+                "region": {
+                  "startLine": 188
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "680",
+              "index": 14
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-674",
+          "message": {
+            "text": "Uncontrolled Recursion."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/packet.c",
+                  "index": 71
+                },
+                "region": {
+                  "startLine": 419
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/packet.c",
+                  "index": 71
+                },
+                "region": {
+                  "startLine": 510
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/packet.c",
+                  "index": 71
+                },
+                "region": {
+                  "startLine": 935
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/packet.c",
+                  "index": 71
+                },
+                "region": {
+                  "startLine": 961
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "674",
+              "index": 13
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-122",
+          "message": {
+            "text": "Heap-based Buffer Overflow."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ntlmssp.c",
+                  "index": 44
+                },
+                "region": {
+                  "startLine": 2302
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ntlmssp.c",
+                  "index": 44
+                },
+                "region": {
+                  "startLine": 2471
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ntlmssp.c",
+                  "index": 44
+                },
+                "region": {
+                  "startLine": 2514
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "122",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-170",
+          "message": {
+            "text": "Improper Null Termination."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ppp.c",
+                  "index": 46
+                },
+                "region": {
+                  "startLine": 3140
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ppp.c",
+                  "index": 46
+                },
+                "region": {
+                  "startLine": 3149
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "170",
+              "index": 6
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-823",
+          "message": {
+            "text": "Use of Out-of-range Pointer Offset."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 865
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 1034
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 1039
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 1302
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 1523
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 1528
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 2304
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dtn.c",
+                  "index": 18
+                },
+                "region": {
+                  "startLine": 2322
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "823",
+              "index": 20
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-119",
+          "message": {
+            "text": "Improper Restriction of Operations within the Bounds of a Memory Buffer."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-erf.c",
+                  "index": 21
+                },
+                "region": {
+                  "startLine": 46
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-erf.c",
+                  "index": 21
+                },
+                "region": {
+                  "startLine": 99
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-erf.c",
+                  "index": 21
+                },
+                "region": {
+                  "startLine": 716
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-erf.c",
+                  "index": 21
+                },
+                "region": {
+                  "startLine": 732
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-erf.c",
+                  "index": 21
+                },
+                "region": {
+                  "startLine": 801,
+                  "endLine": 802
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-erf.c",
+                  "index": 21
+                },
+                "region": {
+                  "startLine": 805
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "119",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-763",
+          "message": {
+            "text": "Release of Invalid Pointer or Reference."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 209
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 264,
+                  "endLine": 265
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 268
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 331
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 338
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 358
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 362
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 373
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 908
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/netmon.c",
+                  "index": 79
+                },
+                "region": {
+                  "startLine": 910
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "763",
+              "index": 16
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-789",
+          "message": {
+            "text": "Memory Allocation with Excessive Size Value."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-websocket.c",
+                  "index": 65
+                },
+                "region": {
+                  "startLine": 127
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-websocket.c",
+                  "index": 65
+                },
+                "region": {
+                  "startLine": 129
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-websocket.c",
+                  "index": 65
+                },
+                "region": {
+                  "startLine": 151
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-websocket.c",
+                  "index": 65
+                },
+                "region": {
+                  "startLine": 162
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-websocket.c",
+                  "index": 65
+                },
+                "region": {
+                  "startLine": 305
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-websocket.c",
+                  "index": 65
+                },
+                "region": {
+                  "startLine": 332
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "789",
+              "index": 19
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-466",
+          "message": {
+            "text": "Return of Pointer Value Outside of Expected Range."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dcp-etsi.c",
+                  "index": 14
+                },
+                "region": {
+                  "startLine": 291
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dcp-etsi.c",
+                  "index": 14
+                },
+                "region": {
+                  "startLine": 294,
+                  "endLine": 295
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dcp-etsi.c",
+                  "index": 14
+                },
+                "region": {
+                  "startLine": 297
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "466",
+              "index": 9
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-843",
+          "message": {
+            "text": "Access of Resource Using Incompatible Type ('Type Confusion')."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 106
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 116
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 180
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 191
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 269
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 278
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 282
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 302
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 304
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/gcp.c",
+                  "index": 70
+                },
+                "region": {
+                  "startLine": 315
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "843",
+              "index": 24
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-134",
+          "message": {
+            "text": "Use of Externally-Controlled Format String."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-mpeg-dsmcc.c",
+                  "index": 38
+                },
+                "region": {
+                  "startLine": 538
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "134",
+              "index": 5
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-834",
+          "message": {
+            "text": "Excessive Iteration."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-pw-eth.c",
+                  "index": 47
+                },
+                "region": {
+                  "startLine": 160
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-pw-eth.c",
+                  "index": 47
+                },
+                "region": {
+                  "startLine": 162
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-pw-eth.c",
+                  "index": 47
+                },
+                "region": {
+                  "startLine": 166
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "834",
+              "index": 21
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-606",
+          "message": {
+            "text": "Unchecked Input for Loop Condition."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-mongo.c",
+                  "index": 36
+                },
+                "region": {
+                  "startLine": 250
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-mongo.c",
+                  "index": 36
+                },
+                "region": {
+                  "startLine": 263
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-mongo.c",
+                  "index": 36
+                },
+                "region": {
+                  "startLine": 269
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-mongo.c",
+                  "index": 36
+                },
+                "region": {
+                  "startLine": 378
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-mongo.c",
+                  "index": 36
+                },
+                "region": {
+                  "startLine": 380
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-mongo.c",
+                  "index": 36
+                },
+                "region": {
+                  "startLine": 462,
+                  "endLine": 463
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "606",
+              "index": 11
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-369",
+          "message": {
+            "text": "Divide By Zero."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dcp-etsi.c",
+                  "index": 14
+                },
+                "region": {
+                  "startLine": 273
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-dcp-etsi.c",
+                  "index": 14
+                },
+                "region": {
+                  "startLine": 512
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "369",
+              "index": 7
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-839",
+          "message": {
+            "text": "Numeric Range Comparison Without Minimum Check."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/vwr.c",
+                  "index": 81
+                },
+                "region": {
+                  "startLine": 1613
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/vwr.c",
+                  "index": 81
+                },
+                "region": {
+                  "startLine": 1639
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/vwr.c",
+                  "index": 81
+                },
+                "region": {
+                  "startLine": 1834
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/vwr.c",
+                  "index": 81
+                },
+                "region": {
+                  "startLine": 1837
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wiretap/vwr.c",
+                  "index": 81
+                },
+                "region": {
+                  "startLine": 1840
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "839",
+              "index": 23
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-476",
+          "message": {
+            "text": "NULL Pointer Dereference."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-tcp.c",
+                  "index": 63
+                },
+                "region": {
+                  "startLine": 3870
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "476",
+              "index": 10
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-754",
+          "message": {
+            "text": "Improper Check for Unusual or Exceptional Conditions."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-rohc.c",
+                  "index": 51
+                },
+                "region": {
+                  "startLine": 1331
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-rohc.c",
+                  "index": 51
+                },
+                "region": {
+                  "startLine": 1390
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-rohc.c",
+                  "index": 51
+                },
+                "region": {
+                  "startLine": 1413
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-rohc.c",
+                  "index": 51
+                },
+                "region": {
+                  "startLine": 1418
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "754",
+              "index": 15
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-130",
+          "message": {
+            "text": "Improper Handling of Length Parameter Inconsistency."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/reassemble.c",
+                  "index": 73
+                },
+                "region": {
+                  "startLine": 711
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/reassemble.c",
+                  "index": 73
+                },
+                "region": {
+                  "startLine": 716
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/reassemble.c",
+                  "index": 73
+                },
+                "region": {
+                  "startLine": 859
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "130",
+              "index": 4
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-835",
+          "message": {
+            "text": "Loop with Unreachable Exit Condition ('Infinite Loop')."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-amqp.c",
+                  "index": 3
+                },
+                "region": {
+                  "startLine": 57
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-amqp.c",
+                  "index": 3
+                },
+                "region": {
+                  "startLine": 5707,
+                  "endLine": 5709
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-amqp.c",
+                  "index": 3
+                },
+                "region": {
+                  "startLine": 5716
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "835",
+              "index": 22
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-617",
+          "message": {
+            "text": "Reachable Assertion."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "plugins/ethercat/packet-ecatmb.c",
+                  "index": 77
+                },
+                "region": {
+                  "startLine": 1147
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "plugins/ethercat/packet-ecatmb.c",
+                  "index": 77
+                },
+                "region": {
+                  "startLine": 1492
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "617",
+              "index": 12
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-787",
+          "message": {
+            "text": "Out-of-bounds Write."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 380
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 408
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 411,
+                  "endLine": 413
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 434
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 438
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 445
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 452
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 455
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 458
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 460
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 588
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 591
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 719,
+                  "endLine": 720
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-cimd.c",
+                  "index": 9
+                },
+                "region": {
+                  "startLine": 730
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "787",
+              "index": 17
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-121",
+          "message": {
+            "text": "Stack-based Buffer Overflow."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-rtps.c",
+                  "index": 53
+                },
+                "region": {
+                  "startLine": 2020
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-rtps.c",
+                  "index": 53
+                },
+                "region": {
+                  "startLine": 2034
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-rtps.c",
+                  "index": 53
+                },
+                "region": {
+                  "startLine": 2246
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "121",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "ruleId": "CWE-788",
+          "message": {
+            "text": "Access of Memory Location After End of Buffer."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ldp.c",
+                  "index": 35
+                },
+                "region": {
+                  "startLine": 2429
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ldp.c",
+                  "index": 35
+                },
+                "region": {
+                  "startLine": 2477
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "epan/dissectors/packet-ldp.c",
+                  "index": 35
+                },
+                "region": {
+                  "startLine": 2873
+                }
+              }
+            }
+          ],
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "index": 0
+              },
+              "id": "788",
+              "index": 18
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

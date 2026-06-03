@@ -1,0 +1,74 @@
+[
+  {
+    "name": "clean_auth",
+    "files_scanned": 1,
+    "findings": 6,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "can_gateway",
+    "files_scanned": 1,
+    "findings": 6,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "ota_updater",
+    "files_scanned": 1,
+    "findings": 6,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "telemetry_uploader",
+    "files_scanned": 1,
+    "findings": 6,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "mqtt_handler",
+    "files_scanned": 1,
+    "findings": 6,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "ev_charging_api",
+    "files_scanned": 5,
+    "findings": 14,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "adas_decision",
+    "files_scanned": 4,
+    "findings": 12,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  },
+  {
+    "name": "fleet_management",
+    "files_scanned": 20,
+    "findings": 44,
+    "tier": "moderate",
+    "confidence": 0.72,
+    "guard": "PASS",
+    "action": "block_ip"
+  }
+]

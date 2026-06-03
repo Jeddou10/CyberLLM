@@ -1,0 +1,982 @@
+{
+  "mode": "defense",
+  "scenario": "clean_auth",
+  "inputs": {
+    "code": [
+      "examples\\small\\01_clean_auth.py"
+    ],
+    "log": "examples\\logs\\01_clean_baseline.log",
+    "deployment": "examples\\deployments\\01_clean_minimal.yaml"
+  },
+  "decision": {
+    "summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+    "asset_categories_touched": [
+      "Material and Economic Resources",
+      "Privacy and Personal Data",
+      "Life and Bodily Health"
+    ],
+    "recommended_tier": "moderate",
+    "confidence": 0.72,
+    "justification": "Authenticated scanner agents flagged 6 findings (3 high, 3 medium); trajectory and action alignment hold; source authorization OK. Tier 'moderate' chosen \u2014 confidence above moderate_threshold (0.65) but below hard (0.85)."
+  },
+  "action": {
+    "kind": "rate_limit",
+    "target": "0.0.0.0",
+    "parameters": {
+      "ipv4": "0.0.0.0",
+      "rate_per_minute": 6,
+      "duration_minutes": 30
+    },
+    "plan_id": "f6f29e6b-54ba-4c17-99d1-e9e10d122fa0"
+  },
+  "action_report": {
+    "plan_id": "f6f29e6b-54ba-4c17-99d1-e9e10d122fa0",
+    "status": "completed",
+    "summary": "[completed] 12 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=service; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
+    "started_at": "2026-06-03T15:21:17.394950",
+    "finished_at": "2026-06-03T15:21:17.395957",
+    "tallies": {
+      "total": 12,
+      "completed": 12,
+      "failed": 0,
+      "refused": 0,
+      "rolled_back": 0,
+      "skipped": 0
+    },
+    "plan": {
+      "plan_id": "f6f29e6b-54ba-4c17-99d1-e9e10d122fa0",
+      "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
+      "blast_radius": "service",
+      "asset_categories": [
+        "Material and Economic Resources",
+        "Privacy and Personal Data",
+        "Life and Bodily Health"
+      ],
+      "created_at": "2026-06-03T15:21:17.394950",
+      "estimated_duration_s": 360,
+      "steps": [
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "contain",
+          "tool": "firewall.rate_limit",
+          "params": {
+            "ipv4": "0.0.0.0",
+            "rate_per_minute": 6,
+            "duration_minutes": 30
+          },
+          "description": "rate-limit the suspect source IP",
+          "side_effect": "write",
+          "severity_min": "medium",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "8d409ea9-89fa-476f-b734-171af97ea738",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.394950",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "ipv4": "0.0.0.0",
+              "rate_per_minute": 6,
+              "duration_minutes": 30
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "contain",
+          "tool": "firewall.block_ipv4",
+          "params": {
+            "ipv4": "0.0.0.0",
+            "duration_minutes": 60,
+            "reason": "LOG-AUTH-03"
+          },
+          "description": "block the source IP if attempts continue",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "ad204afa-6c44-49f4-b8ad-bc7cdb3a20c7",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.394950",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "netsh",
+            "params": {
+              "ipv4": "0.0.0.0",
+              "duration_minutes": 60,
+              "reason": "LOG-AUTH-03"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "observe",
+          "tool": "code.static_scan",
+          "params": {
+            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+            "analyser": "auto"
+          },
+          "description": "run a real second-opinion static scanner",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "2ec0bb53-3ecc-4020-b630-9b21010d8374",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.394950",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "bandit",
+            "params": {
+              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+              "analyser": "auto"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "observe",
+          "tool": "observe.log_tail",
+          "params": {
+            "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\01_clean_baseline.log",
+            "pattern": "Failed password",
+            "timeout_s": 5
+          },
+          "description": "watch the auth log for 5 s after the rate-limit",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "8fc432f3-6d4c-4a15-b84b-e2658d45ef68",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.394950",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\01_clean_baseline.log",
+              "pattern": "Failed password",
+              "timeout_s": 5
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-001",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+            "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+          },
+          "description": "propose a safe-by-construction patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "3cf856b3-3e87-497b-a9f4-8029b7286ac1",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.394950",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-001",
+              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+              "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-002",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-002",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "df615f0d-89c7-4c71-a52a-b6f21eedea2d",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.394950",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-002",
+              "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+              "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-001",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+            "rule_id": "CODE-001",
+            "evidence": "subprocess.call(user_input, shell=True)"
+          },
+          "description": "open a code-vulnerability incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "c33658dc-ea85-4ae7-992d-c227386a194f",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.394950",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+              "rule_id": "CODE-001",
+              "evidence": "subprocess.call(user_input, shell=True)"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-NET-01",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "LOG-NET-01: log anomaly",
+            "rule_id": "LOG-NET-01",
+            "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+          },
+          "description": "open a log-anomaly incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "bffe97ee-27f8-4852-9ca6-b8072e761d4a",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.394950",
+          "finished_at": "2026-06-03T15:21:17.395957",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "LOG-NET-01: log anomaly",
+              "rule_id": "LOG-NET-01",
+              "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-001",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+            "rule_id": "TOP-001"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "2641895d-f192-4f01-b054-5174446b3050",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.395957",
+          "finished_at": "2026-06-03T15:21:17.395957",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+              "rule_id": "TOP-001"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-002",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "CODE-002: Weak hash algorithm for password storage.",
+            "rule_id": "CODE-002"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "db25061d-607f-4e9f-a2a3-e5c4e7493b8f",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.395957",
+          "finished_at": "2026-06-03T15:21:17.395957",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "medium",
+              "summary": "CODE-002: Weak hash algorithm for password storage.",
+              "rule_id": "CODE-002"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LOG-AUTH-03",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "Brute-force pattern detected",
+            "rule_id": "LOG-AUTH-03",
+            "evidence": "12 failed auth attempts in 30 s, user='root'"
+          },
+          "description": "open a security-team incident",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "d0cc69a5-105e-4b66-aa2f-6f196f176c5b",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.395957",
+          "finished_at": "2026-06-03T15:21:17.395957",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "Brute-force pattern detected",
+              "rule_id": "LOG-AUTH-03",
+              "evidence": "12 failed auth attempts in 30 s, user='root'"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "TOP-002",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "medium",
+            "summary": "TOP-002: Datasource is writable by an unauthenticated actor (poison path).",
+            "rule_id": "TOP-002"
+          },
+          "description": "raise an architecture-review ticket",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "ef6771b9-2616-4917-87de-5b0759b5e572",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-06-03T15:21:17.395957",
+          "finished_at": "2026-06-03T15:21:17.395957",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "medium",
+              "summary": "TOP-002: Datasource is writable by an unauthenticated actor (poison path).",
+              "rule_id": "TOP-002"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        }
+      ]
+    },
+    "audit_log": [
+      {
+        "step_id": "8d409ea9-89fa-476f-b734-171af97ea738",
+        "tool": "firewall.rate_limit",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "ad204afa-6c44-49f4-b8ad-bc7cdb3a20c7",
+        "tool": "firewall.block_ipv4",
+        "kind": "contain",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "2ec0bb53-3ecc-4020-b630-9b21010d8374",
+        "tool": "code.static_scan",
+        "kind": "observe",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "8fc432f3-6d4c-4a15-b84b-e2658d45ef68",
+        "tool": "observe.log_tail",
+        "kind": "observe",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "3cf856b3-3e87-497b-a9f4-8029b7286ac1",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "df615f0d-89c7-4c71-a52a-b6f21eedea2d",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "c33658dc-ea85-4ae7-992d-c227386a194f",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "bffe97ee-27f8-4852-9ca6-b8072e761d4a",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "2641895d-f192-4f01-b054-5174446b3050",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "db25061d-607f-4e9f-a2a3-e5c4e7493b8f",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "d0cc69a5-105e-4b66-aa2f-6f196f176c5b",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "ef6771b9-2616-4917-87de-5b0759b5e572",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      }
+    ]
+  },
+  "mcp_audit": [
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "firewall.rate_limit",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "0.0.0.0",
+        "rate_per_minute": 6,
+        "duration_minutes": 30
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "ipv4": "0.0.0.0",
+          "rate_per_minute": 6,
+          "duration_minutes": 30
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "firewall.block_ipv4",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "ipv4": "0.0.0.0",
+        "duration_minutes": 60,
+        "reason": "LOG-AUTH-03"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "netsh",
+        "params": {
+          "ipv4": "0.0.0.0",
+          "duration_minutes": 60,
+          "reason": "LOG-AUTH-03"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "code.static_scan",
+      "side_effect": "read",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+        "analyser": "auto"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "bandit",
+        "params": {
+          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+          "analyser": "auto"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "observe.log_tail",
+      "side_effect": "read",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\01_clean_baseline.log",
+        "pattern": "Failed password",
+        "timeout_s": 5
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "path": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\logs\\01_clean_baseline.log",
+          "pattern": "Failed password",
+          "timeout_s": 5
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-001",
+        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+        "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-001",
+          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-001  (high)\n# evidence: subprocess.call(user_input, shell=True)\n# remediation: replace `subprocess.call(x, shell=True)` with\n    `subprocess.run(shlex.split(x), check=True)`\n    and validate `x` against an allow-list.\n",
+          "rationale": "Replace the dangerous construct with the safe equivalent recommended in the rule."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-002",
+        "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+        "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-002",
+          "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\Praktikum\\CyberLLM\\examples\\small\\01_clean_auth.py",
+          "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-002  (medium)\n# evidence: hashlib.md5(password)\n# remediation: replace `hashlib.md5(p)` with `argon2.PasswordHasher().hash(p)`.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+        "rule_id": "CODE-001",
+        "evidence": "subprocess.call(user_input, shell=True)"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "CODE-001: Shell-injection sink fed by untrusted input.",
+          "rule_id": "CODE-001",
+          "evidence": "subprocess.call(user_input, shell=True)"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.394",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "LOG-NET-01: log anomaly",
+        "rule_id": "LOG-NET-01",
+        "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "LOG-NET-01: log anomaly",
+          "rule_id": "LOG-NET-01",
+          "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.395",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+        "rule_id": "TOP-001"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "TOP-001: Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+          "rule_id": "TOP-001"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.395",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "medium",
+        "summary": "CODE-002: Weak hash algorithm for password storage.",
+        "rule_id": "CODE-002"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "medium",
+          "summary": "CODE-002: Weak hash algorithm for password storage.",
+          "rule_id": "CODE-002"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.395",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "Brute-force pattern detected",
+        "rule_id": "LOG-AUTH-03",
+        "evidence": "12 failed auth attempts in 30 s, user='root'"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "Brute-force pattern detected",
+          "rule_id": "LOG-AUTH-03",
+          "evidence": "12 failed auth attempts in 30 s, user='root'"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-06-03T15:21:17.395",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "medium",
+        "summary": "TOP-002: Datasource is writable by an unauthenticated actor (poison path).",
+        "rule_id": "TOP-002"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "medium",
+          "summary": "TOP-002: Datasource is writable by an unauthenticated actor (poison path).",
+          "rule_id": "TOP-002"
+        }
+      },
+      "error": null
+    }
+  ],
+  "guard_verdict": {
+    "allowed": true,
+    "task_alignment": true,
+    "action_alignment": true,
+    "source_authorization": true,
+    "data_isolation": true,
+    "reason": "all four properties satisfied"
+  },
+  "findings": [
+    {
+      "rule_id": "CODE-001",
+      "severity": "high",
+      "evidence": "subprocess.call(user_input, shell=True)",
+      "explanation": "Shell-injection sink fed by untrusted input.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": 14
+    },
+    {
+      "rule_id": "CODE-002",
+      "severity": "medium",
+      "evidence": "hashlib.md5(password)",
+      "explanation": "Weak hash algorithm for password storage.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 22
+    },
+    {
+      "rule_id": "LOG-NET-01",
+      "severity": "high",
+      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
+      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
+      "source_agent": "log_analyzer",
+      "asset_category": "Material and Economic Resources",
+      "line": null
+    },
+    {
+      "rule_id": "LOG-AUTH-03",
+      "severity": "medium",
+      "evidence": "12 failed auth attempts in 30 s, user='root'",
+      "explanation": "Brute-force pattern on privileged account.",
+      "source_agent": "log_analyzer",
+      "asset_category": null,
+      "line": null
+    },
+    {
+      "rule_id": "TOP-001",
+      "severity": "high",
+      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
+      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
+      "source_agent": "deployment_scanner",
+      "asset_category": "Material and Economic Resources",
+      "line": null
+    },
+    {
+      "rule_id": "TOP-002",
+      "severity": "medium",
+      "evidence": "External A2A agent has write-edge to long_term_memory",
+      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
+      "source_agent": "deployment_scanner",
+      "asset_category": null,
+      "line": null
+    }
+  ],
+  "committed": {
+    "action": "rate_limit",
+    "target": "0.0.0.0",
+    "parameters": {
+      "ipv4": "0.0.0.0",
+      "rate_per_minute": 6,
+      "duration_minutes": 30
+    }
+  }
+}

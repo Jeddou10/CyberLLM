@@ -1,0 +1,70 @@
+{
+  "defense": [],
+  "attack": [
+    {
+      "name": "clean_auth",
+      "files_scanned": 1,
+      "chosen": [
+        "CODE-002",
+        "TOP-002",
+        "CODE-001"
+      ],
+      "target_asset": "Privacy and Personal Data",
+      "confidence": 0.0,
+      "ethics": "PASS",
+      "scripts": 3
+    },
+    {
+      "name": "can_gateway",
+      "files_scanned": 1,
+      "chosen": [
+        "CODE-002",
+        "TOP-002",
+        "CODE-006"
+      ],
+      "target_asset": "Privacy and Personal Data",
+      "confidence": 0.0,
+      "ethics": "PASS",
+      "scripts": 3
+    },
+    {
+      "name": "ota_updater",
+      "files_scanned": 1,
+      "chosen": [
+        "CODE-002",
+        "CODE-010",
+        "CODE-002"
+      ],
+      "target_asset": "Privacy and Personal Data",
+      "confidence": 0.0,
+      "ethics": "PASS",
+      "scripts": 3
+    },
+    {
+      "name": "telemetry_uploader",
+      "files_scanned": 1,
+      "chosen": [
+        "CODE-008",
+        "CODE-008",
+        "CODE-008"
+      ],
+      "target_asset": "Privacy and Personal Data",
+      "confidence": 0.0,
+      "ethics": "PASS",
+      "scripts": 3
+    },
+    {
+      "name": "mqtt_handler",
+      "files_scanned": 1,
+      "chosen": [
+        "CODE-014",
+        "CODE-014",
+        "CODE-002"
+      ],
+      "target_asset": "Privacy and Personal Data",
+      "confidence": 0.0,
+      "ethics": "PASS",
+      "scripts": 3
+    }
+  ]
+}

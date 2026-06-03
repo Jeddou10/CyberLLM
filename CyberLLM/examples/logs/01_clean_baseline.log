@@ -1,0 +1,12 @@
+2026-05-19T08:00:01Z auth sshd[1019]: Accepted publickey for ops from 10.0.1.7 port 49231 ssh2: RSA SHA256:abc...
+2026-05-19T08:00:14Z api  POST /vehicles/W0L0XCF6884012345/history 200 12ms operator=fleet-ops-1
+2026-05-19T08:00:15Z api  GET  /vehicles/W0L0XCF6884012345/history 200 9ms  operator=fleet-ops-1
+2026-05-19T08:00:21Z can0 frame arb=0x100 dlc=8 src=GatewayECU bus_load=14%
+2026-05-19T08:00:21Z can0 frame arb=0x101 dlc=4 src=GatewayECU bus_load=14%
+2026-05-19T08:01:00Z app  health-check ok db=ok kafka=ok storage=ok
+2026-05-19T08:01:05Z auth sshd[1023]: Disconnected from 10.0.1.7 port 49231 [preauth]
+2026-05-19T08:01:30Z api  POST /telemetry/ingest 200 18ms vin=W0L0XCF6884012345 batch=64
+2026-05-19T08:02:11Z can0 frame arb=0x205 dlc=8 src=DriveECU   bus_load=17%
+2026-05-19T08:02:11Z app  decision_agent recommended_tier=none confidence=0.91 reason="all healthy"
+2026-05-19T08:03:00Z api  POST /telemetry/ingest 200 14ms vin=W0L0XCF6884012345 batch=64
+2026-05-19T08:04:00Z api  POST /telemetry/ingest 200 17ms vin=W0L0XCF6884012345 batch=64
