@@ -51,7 +51,7 @@ for _stream in (sys.stdout, sys.stderr):
 
 # ---- defense agents -------------------------------------------------------
 from agents.action_engine import GuardAdapter, legacy_kind
-from agents.action_generator import Action, ActionGenerator
+from agents.action_generator import ActionGenerator
 from agents.base_agent import Input
 from agents.decision_agent import DecisionAgent
 from agents.deployment_scanner import DeploymentScannerAgent
@@ -149,42 +149,31 @@ def _writer_identity(cfg: dict) -> str:
     return (cfg.get("memory", {}) or {}).get("writer_identity", "rules_engine")
 
 
-# Map a step's legacy kind to the objective + guard-vocabulary destination
-# the SecurityGuard reasons about. This is the translation layer between
-# the action-engine's concrete tool params and the guard's abstract
-# four-property model — it is what lets the paper-1 guard run per step.
+# Map a step's legacy kind to the objective the SecurityGuard checks it
+# against. (The destination / privilege is now read from the step itself by
+# `SecurityGuard.check_step`, so no destination-translation table is needed.)
 _STEP_KIND_OBJECTIVE = {
     "patch_code": "auto-correct insecure code",
     "alert_only": "produce findings report",
     "noop": "produce findings report",
 }
-_STEP_KIND_DESTINATION = {
-    "rate_limit": "suspect_source_ip",
-    "block_ip": "suspect_source_ip",
-    "isolate_node": "affected_ECU",
-    "patch_code": "vulnerable_file",
-    "alert_only": "security_team",
-    "noop": "audit_log",
-}
 
 
 def build_step_guard(security_guard: SecurityGuard,
-                     inputs: list[Input]) -> GuardAdapter:
+                     inputs: list[Input],
+                     decision_summary: str = "") -> GuardAdapter:
     """Adapt the SecurityGuard into a per-step `GuardAdapter` (C.4).
 
-    The executor calls this on *every* MCP tool call, so paper 1's four
-    properties — and the H_a judge — are enforced per action, not just on
-    the final aggregate action (paper 1 §7: security is per-step, not
-    one-shot)."""
+    The executor calls this on *every* MCP tool call. We use the new
+    `check_step` so the guard sees the **real step shape** (its tool,
+    side-effect, requires_authorization) and feeds the H_a judge the full
+    context — the step description plus the decision's threat summary — so
+    the judge reasons with the actual threat picture, not a thin stub."""
     def check(step) -> tuple[bool, str]:
         kind = legacy_kind(step)
         objective = _STEP_KIND_OBJECTIVE.get(kind, "produce defensive action")
-        dest = _STEP_KIND_DESTINATION.get(kind, "internal")
-        action = Action(kind=kind, target=dest,
-                        parameters={"destination": dest},
-                        rationale=f"per-step guard for {getattr(step, 'tool', '?')}",
-                        originating_decision=None)
-        verdict = security_guard.check(action, objective, inputs)
+        verdict = security_guard.check_step(step, objective, inputs,
+                                            decision_summary=decision_summary)
         return verdict.allowed, verdict.reason
     return GuardAdapter(fn=check)
 
@@ -336,36 +325,8 @@ def run_defense_pipeline(
     log_result = _run_scanner("log analyzer", 2, log_agent, "log")
     dep_result = _run_scanner("deployment scanner", 3, dep_agent, "deployment")
 
-    decision_cfg = dict(cfg["agent_configs"]["decision_agent"],
-                        response_tiers=cfg["response_tiers"],
-                        recall_k=int((cfg.get("memory", {}) or {}).get("recall_k", 5)))
-    decision_agent = DecisionAgent(
-        "decision_agent", decision_cfg, llms[decision_cfg["llm"]],
-        memory=memory)
-    con.info(f"[4/6] decision agent "
-             f"(recalled {len(decision_agent.consulted_memory)} past incident(s))")
-    with con.timed("decision agent"):
-        decision = decision_agent.run([code_result, log_result, dep_result],
-                                      scenario_name=scenario_name)
-    rlog.log_agent("decision_agent",
-                   decision_agent.last_prompt, decision_agent.last_response,
-                   findings=None)
-    rlog.log_decision(decision)
-    if decision_agent.consulted_memory:
-        rlog.trace(f"memory: consulted {len(decision_agent.consulted_memory)} "
-                   f"similar past incident(s)")
-        con.detail("recalled: " + ", ".join(
-            f"{i.scenario}(sim={i.similarity},tier={i.tier})"
-            for i in decision_agent.consulted_memory))
-    con.kv("decision", f"tier={decision.recommended_tier} "
-           f"conf={decision.confidence:.2f}")
-    con.kv("assets", ", ".join(decision.asset_categories_touched) or "(none)")
-    con.detail(f"justification: {decision.justification}")
-    con.blob("decision prompt", decision_agent.last_prompt)
-    con.blob("decision response", decision_agent.last_response)
-
-    # ---- SecurityGuard (paper 1) — built up-front so it can also gate
-    #      every action-engine step (C.4) and host the H_a judge (F.1).
+    # ---- SecurityGuard (paper 1) — built once; its H_a judge cache and
+    #      the decision agent persist across re-planning rounds.
     guard_cfg = cfg.get("guard", {}) or {}
     ha_judge = (HaJudge(llms.get("reasoning") or llms["default"])
                 if guard_cfg.get("ha_judge_enabled", True) else None)
@@ -375,24 +336,26 @@ def run_defense_pipeline(
         trusted_destinations=cfg["security"]["trusted_destinations"],
         ha_judge=ha_judge,
     )
-    step_guard = (build_step_guard(guard, inputs)
-                  if guard_cfg.get("per_step_enabled", True) else None)
-    con.detail(f"guard: H_a judge {'on' if ha_judge else 'off'}, "
-               f"per-step {'on' if step_guard else 'off'}")
+    per_step = guard_cfg.get("per_step_enabled", True)
 
+    decision_cfg = dict(cfg["agent_configs"]["decision_agent"],
+                        response_tiers=cfg["response_tiers"],
+                        recall_k=int((cfg.get("memory", {}) or {}).get("recall_k", 5)))
+    decision_agent = DecisionAgent(
+        "decision_agent", decision_cfg, llms[decision_cfg["llm"]],
+        memory=memory)
+
+    ae_cfg = cfg.get("action_engine", {}) or {}
     action_cfg = dict(
         cfg["agent_configs"]["action_generator"],
-        dry_run=cfg.get("action_engine", {}).get("dry_run", True),
-        work_dir=str(HERE / cfg.get("action_engine", {}).get(
-            "work_dir", "mcp_workspace")),
+        dry_run=ae_cfg.get("dry_run", True),
+        work_dir=str(HERE / ae_cfg.get("work_dir", "mcp_workspace")),
         repo_path=str(HERE),
         log_path=str(log_path),
         default_file=(str(code_paths[0]) if code_paths else "unknown.py"),
         max_prompt_tokens=int(guard_cfg.get("max_prompt_tokens", 4096)),
+        llm_tool_selection=bool(ae_cfg.get("llm_tool_selection", True)),
     )
-    action_agent = ActionGenerator(
-        "action_generator", action_cfg, llms[action_cfg["llm"]],
-        guard=step_guard)
     vulnerable_code = ""
     for p in code_paths:
         if p.suffix.lower() == ".py":
@@ -400,48 +363,122 @@ def run_defense_pipeline(
             break
     if not vulnerable_code and code_paths:
         vulnerable_code = code_paths[0].read_text(encoding="utf-8", errors="replace")
-    con.info("[5/6] action engine")
-    with con.timed("action engine"):
-        action = action_agent.generate(decision, vulnerable_code=vulnerable_code)
-    if action_agent.last_prompt:
-        rlog.log_agent("action_generator",
-                       action_agent.last_prompt, action_agent.last_response,
-                       findings=None)
-    rlog.log_action(action)
-    if action_agent.last_plan is not None:
-        rlog.log_action_plan(action_agent.last_plan, action_agent.last_report)
-    con.kv("action", f"kind={action.kind} target={action.target}")
-    if action_agent.last_report is not None:
-        con.kv("plan", action_agent.last_report.summary)
-    if action_agent.last_plan is not None:
-        for s in action_agent.last_plan.steps:
-            con.detail(f"step {s.kind.value:9} {s.tool:26} -> {s.status.value}")
 
-    objective = ("auto-correct insecure code" if action.kind == "patch_code"
-                 else "produce defensive action")
-    verdict = guard.check(action, objective, inputs)
-    rlog.log_guard(verdict)
+    # ===================================================================
+    # ADAPTIVE RE-PLANNING LOOP (paper 5).
+    # The decision agent proposes a tier; the action engine realises it and
+    # *executes*; if the response did not resolve (plan failed / guard
+    # refused), the outcome is fed back and the decision agent escalates —
+    # closing the detect → decide → act → observe → re-decide loop.
+    # ===================================================================
+    max_rounds = int(ae_cfg.get("max_replan_rounds", 2))
+    feedback: dict | None = None
+    replan_history: list[dict] = []
+    decision = action = verdict = trajectory = None
+    action_agent = None
+    final_plan_status, final_success = "completed", True
+    con.info(f"[4-6/6] adaptive loop (decision → action → guard, "
+             f"max {max_rounds} round(s))")
 
-    # ---- F.3/F.4: trajectory-level compositional + temporal check ------
-    trajectory = None
-    if action_agent.last_plan is not None:
-        traj = guard.check_trajectory(action_agent.last_plan.steps, inputs)
-        trajectory = asdict(traj)
-        rlog.trace(f"trajectory: compositional_ok={traj.compositional_ok} "
-                   f"temporal_ok={traj.temporal_ok} "
-                   f"violations={len(traj.violations)}")
-    con.info(f"[6/6] security guard")
+    for round_idx in range(1, max_rounds + 1):
+        # ---- decision (sees prior-round feedback + memory) -------------
+        with con.timed(f"round {round_idx} decision"):
+            decision = decision_agent.run(
+                [code_result, log_result, dep_result],
+                scenario_name=scenario_name, feedback=feedback)
+        rlog.log_agent("decision_agent", decision_agent.last_prompt,
+                       decision_agent.last_response, findings=None)
+        rlog.log_decision(decision)
+        if round_idx == 1:
+            if decision_agent.consulted_memory:
+                con.detail("recalled: " + ", ".join(
+                    f"{i.scenario}(sim={i.similarity},outcome="
+                    f"{'worked' if i.remediation_ok else i.plan_status})"
+                    for i in decision_agent.consulted_memory))
+            if decision_agent.memory_recommendation:
+                con.detail("memory recommends tier="
+                           f"{decision_agent.memory_recommendation['tier']} "
+                           f"(worked on {decision_agent.memory_recommendation['scenario']})")
+        con.kv(f"round {round_idx} decision",
+               f"tier={decision.recommended_tier} conf={decision.confidence:.2f}")
+
+        # ---- action engine (per-step guard sees this round's threat) ---
+        step_guard = (build_step_guard(guard, inputs, decision.summary)
+                      if per_step else None)
+        action_agent = ActionGenerator(
+            "action_generator", action_cfg, llms[action_cfg["llm"]],
+            guard=step_guard)
+        with con.timed(f"round {round_idx} action engine"):
+            action = action_agent.generate(decision, vulnerable_code=vulnerable_code)
+        if action_agent.last_prompt:
+            rlog.log_agent("action_generator", action_agent.last_prompt,
+                           action_agent.last_response, findings=None)
+        rlog.log_action(action)
+        report = action_agent.last_report
+        if action_agent.last_plan is not None:
+            rlog.log_action_plan(action_agent.last_plan, report)
+            for s in action_agent.last_plan.steps:
+                con.detail(f"step {s.kind.value:9} {s.tool:26} -> {s.status.value}")
+        con.kv(f"round {round_idx} action",
+               f"kind={action.kind} plan={report.summary if report else 'n/a'}")
+
+        # ---- final guard + trajectory (rich context for H_a) -----------
+        # Derive the objective from the action kind so it matches the
+        # guard's action-alignment map (an `alert_only` primary serves a
+        # reporting objective, not a "defensive action" one).
+        objective = {
+            "patch_code": "auto-correct insecure code",
+            "alert_only": "produce findings report",
+            "noop": "produce findings report",
+        }.get(action.kind, "produce defensive action")
+        verdict = guard.check(action, objective, inputs, context=decision.summary)
+        rlog.log_guard(verdict)
+        trajectory = None
+        if action_agent.last_plan is not None:
+            traj = guard.check_trajectory(action_agent.last_plan.steps, inputs)
+            trajectory = asdict(traj)
+            for v in traj.violations:
+                con.warn(f"trajectory: {v}")
+
+        # ---- did the response resolve? ---------------------------------
+        n_steps = len(action_agent.last_plan.steps) if action_agent.last_plan else 0
+        final_plan_status = report.status.value if report is not None else "completed"
+        plan_ok = final_plan_status in ("completed", "partial_success")
+        # Nothing to remediate (no steps) is terminal, not a failure.
+        final_success = (n_steps == 0) or (verdict.allowed and plan_ok)
+        replan_history.append({
+            "round": round_idx,
+            "tier": decision.recommended_tier,
+            "plan_status": final_plan_status,
+            "steps": n_steps,
+            "guard_allowed": verdict.allowed,
+            "guard_reason": verdict.reason,
+            "success": final_success,
+        })
+        con.kv(f"round {round_idx} result",
+               f"plan={final_plan_status} steps={n_steps} "
+               f"guard={'PASS' if verdict.allowed else 'REFUSED'}")
+
+        if final_success or round_idx == max_rounds:
+            break
+        # Escalate: feed the failure back so the decision agent re-plans.
+        feedback = {
+            "prior_tier": decision.recommended_tier,
+            "plan_status": final_plan_status,
+            "guard_allowed": verdict.allowed,
+            "reason": (verdict.reason if not verdict.allowed
+                       else f"plan {final_plan_status}"),
+        }
+        con.warn(f"round {round_idx} did not resolve "
+                 f"({feedback['reason'][:70]}); re-planning…")
+
+    con.kv("decision", f"tier={decision.recommended_tier} "
+           f"conf={decision.confidence:.2f}")
     con.kv("guard", f"allowed={verdict.allowed} ({verdict.reason})")
-    con.detail(f"task={verdict.task_alignment} action={verdict.action_alignment} "
-               f"source={verdict.source_authorization} "
-               f"isolation={verdict.data_isolation}")
-    if trajectory is not None:
-        con.kv("trajectory", f"compositional_ok={traj.compositional_ok} "
-               f"temporal_ok={traj.temporal_ok}")
-        for v in traj.violations:
-            con.warn(f"trajectory: {v}")
+    con.kv("replanning", f"{len(replan_history)} round(s), "
+           f"final={'RESOLVED' if final_success else 'UNRESOLVED'}")
     if not verdict.allowed:
-        con.warn(f"action REFUSED: {verdict.reason}")
+        con.warn(f"final action REFUSED: {verdict.reason}")
 
     record = {
         "mode": "defense",
@@ -466,11 +503,18 @@ def run_defense_pipeline(
                        if hasattr(action_agent, "registry") else []),
         "guard_verdict": asdict(verdict),
         "trajectory_verdict": trajectory,
+        "replanning": {
+            "rounds": len(replan_history),
+            "resolved": final_success,
+            "history": replan_history,
+        },
+        "memory_recommendation": decision_agent.memory_recommendation,
         "findings": [asdict(f) for f in decision.findings],
         "consulted_memory": [
             {"scenario": i.scenario, "similarity": i.similarity,
              "rule_ids": i.rule_ids, "tier": i.tier,
-             "guard_allowed": i.guard_allowed}
+             "guard_allowed": i.guard_allowed,
+             "remediation_ok": i.remediation_ok}
             for i in decision_agent.consulted_memory
         ],
         "committed": ({"action": action.kind, "target": action.target,
@@ -478,16 +522,18 @@ def run_defense_pipeline(
                       if verdict.allowed else None),
     }
 
-    # ---- E.2/E.3: record this outcome into the signed memory store -----
+    # ---- E.2/E.3: record this outcome (incl. whether it WORKED) --------
     rule_ids = sorted({getattr(f, "rule_id", "?") for f in decision.findings})
     record["memory_recorded"] = _record_incident(
         memory, cfg, mode="defense", scenario=scenario_name,
         rule_ids=rule_ids,
         asset_categories=decision.asset_categories_touched,
         tier=decision.recommended_tier, confidence=decision.confidence,
-        action_kind=action.kind, guard_allowed=verdict.allowed)
+        action_kind=action.kind, guard_allowed=verdict.allowed,
+        plan_status=final_plan_status, remediation_ok=final_success)
 
-    con.kv("memory", f"recorded={record['memory_recorded']}")
+    con.kv("memory", f"recorded={record['memory_recorded']} "
+           f"(outcome={'worked' if final_success else final_plan_status})")
 
     mem_dir = HERE / cfg["paths"]["memory_dir"]
     mem_dir.mkdir(parents=True, exist_ok=True)
@@ -509,8 +555,10 @@ def _record_incident(memory: MemoryStore | None, cfg: dict, *, mode: str,
                      scenario: str, rule_ids: list[str],
                      asset_categories: list[str], tier: str,
                      confidence: float, action_kind: str,
-                     guard_allowed: bool) -> bool:
-    """Persist one outcome to the signed store. Never crashes the run —
+                     guard_allowed: bool, plan_status: str = "",
+                     remediation_ok: bool = False) -> bool:
+    """Persist one outcome to the signed store, **including whether the
+    remediation worked** (cross-session learning). Never crashes the run —
     a memory failure is logged via the return flag, not an exception."""
     if memory is None:
         return False
@@ -520,6 +568,7 @@ def _record_incident(memory: MemoryStore | None, cfg: dict, *, mode: str,
             asset_categories=list(asset_categories or []),
             tier=tier or "", confidence=float(confidence or 0.0),
             action_kind=action_kind or "", guard_allowed=bool(guard_allowed),
+            plan_status=plan_status or "", remediation_ok=bool(remediation_ok),
             source=_writer_identity(cfg)))
         return True
     except MemoryAuthError:

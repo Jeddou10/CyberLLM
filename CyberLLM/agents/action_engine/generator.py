@@ -29,7 +29,8 @@ from .mcp_registry import MCPRegistry
 from .mcp_tools import default_toolset
 from .playbooks import build_plan
 from .types import (
-    ActionPlan, ActionReport, ActionStep, PlanStatus, SideEffect, StepStatus,
+    ActionPlan, ActionReport, ActionStep, PlanStatus, SideEffect, StepKind,
+    StepStatus, kind_priority,
 )
 
 
@@ -81,6 +82,25 @@ class ActionGenerator(BaseAgent):
     # public
     # ------------------------------------------------------------------
 
+    # Prompt that exposes the MCP tool catalogue to the LLM and lets it
+    # *propose* extra steps. The deterministic playbook is the floor; the
+    # LLM can only ADD tools, every one of which is schema-validated and
+    # then gated by the same per-step SecurityGuard as the playbook steps.
+    TOOL_SELECT_PROMPT = (
+        "You are the response planner for a defensive security action "
+        "engine. A deterministic playbook has already chosen the core "
+        "steps. You may propose ADDITIONAL tool calls that strengthen the "
+        "response — prefer read-only / observe / verify tools that gather "
+        "evidence or confirm the fix. Do NOT invent destructive actions.\n\n"
+        "Decision summary: [summary] (tier=[tier], assets=[assets]).\n"
+        "Findings: [findings]\n\n"
+        "Available MCP tools (name [domain/side_effect]: description):\n"
+        "[catalogue]\n\n"
+        "Return strict JSON: {\"tools\": [{\"tool\": \"<name>\", "
+        "\"kind\": \"observe|audit|notify|contain\", \"params\": {...}, "
+        "\"why\": \"...\"}]}. Return an empty list if the playbook suffices."
+    )
+
     def plan(self, decision, ctx: dict | None = None) -> ActionPlan:
         return build_plan(decision, ctx or self._default_ctx())
 
@@ -95,8 +115,79 @@ class ActionGenerator(BaseAgent):
         if vulnerable_code:
             ctx["vulnerable_code"] = vulnerable_code
         plan = self.plan(decision, ctx)
+        # LLM-as-tool-selector: append any extra, validated, guarded steps.
+        if self.cfg.get("llm_tool_selection"):
+            extra = self._llm_select_tools(decision)
+            if extra:
+                plan.steps.extend(extra)
+                plan.steps.sort(key=lambda s: kind_priority(s.kind))
         report = self.execute(plan)
         return self._wrap_as_action(decision, plan, report)
+
+    # ------------------------------------------------------------------
+    # LLM tool selection (first-class participant; deterministic floor)
+    # ------------------------------------------------------------------
+
+    def _llm_select_tools(self, decision) -> list[ActionStep]:
+        """Ask the LLM to propose extra MCP tool calls, then keep only the
+        picks that name a real tool and pass that tool's schema
+        validation. Returns them as ActionSteps (the executor still runs
+        the per-step guard on each, so the LLM cannot bypass safety)."""
+        schemas = self.registry.schemas()
+        catalogue = "\n".join(
+            f"- {n} [{d['domain']}/{d['side_effect']}]: {d['description']}"
+            for n, d in sorted(schemas.items()))
+        self.data["summary"] = getattr(decision, "summary", "") or ""
+        self.data["tier"] = getattr(decision, "recommended_tier", "") or ""
+        self.data["assets"] = ", ".join(
+            getattr(decision, "asset_categories_touched", []) or [])
+        self.data["findings"] = ", ".join(sorted({
+            getattr(f, "rule_id", "?")
+            for f in getattr(decision, "findings", [])})) or "(none)"
+        self.data["catalogue"] = catalogue
+        try:
+            resp = self.call_llm(self.template(self.TOOL_SELECT_PROMPT))
+            picks = self._parse_tool_picks(resp.text)
+        except Exception:        # noqa: BLE001 — selection is best-effort
+            return []
+
+        out: list[ActionStep] = []
+        for p in picks:
+            tool = p.get("tool")
+            if not tool or not self.registry.has(tool):
+                continue
+            params = p.get("params") or {}
+            if not isinstance(params, dict):
+                continue
+            mcp = self.registry.get(tool)
+            if mcp.validate(params):           # schema errors → skip
+                continue
+            try:
+                kind = StepKind(p.get("kind", "observe"))
+            except ValueError:
+                kind = StepKind.OBSERVE
+            out.append(ActionStep(
+                rule_id="LLM-SELECTED",
+                kind=kind,
+                tool=tool,
+                params=params,
+                description=f"LLM-selected: {str(p.get('why', ''))[:80]}",
+                side_effect=mcp.side_effect,
+                requires_authorization=mcp.requires_authorization,
+            ))
+        return out
+
+    @staticmethod
+    def _parse_tool_picks(text: str) -> list[dict]:
+        import json
+        import re
+        cleaned = re.sub(r"```(?:json)?", "", text or "").strip("`\n ")
+        try:
+            obj = json.loads(cleaned)
+        except (json.JSONDecodeError, AttributeError):
+            return []
+        tools = obj.get("tools", []) if isinstance(obj, dict) else []
+        return [t for t in tools if isinstance(t, dict)]
 
     # ------------------------------------------------------------------
     # internals

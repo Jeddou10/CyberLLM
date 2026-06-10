@@ -16,12 +16,31 @@ The four checks (paper 1):
 from __future__ import annotations
 from dataclasses import dataclass, field
 
+from .action_engine import legacy_kind
 from .action_generator import Action
 from .base_agent import Input
 
 
 @dataclass
 class GuardVerdict:
+    allowed: bool
+    task_alignment: bool
+    action_alignment: bool
+    source_authorization: bool
+    data_isolation: bool
+    reason: str
+
+
+@dataclass
+class StepVerdict:
+    """Per-step contextual verdict (roadmap C.4, "new step shape").
+
+    Unlike `GuardVerdict` (which reasons about a translated legacy
+    `Action`), this evaluates a real action-engine `ActionStep`: it uses
+    the step's declared `side_effect` and `requires_authorization` to
+    decide whether the step is privileged, and feeds the H_a judge the
+    step's full context (tool, rule_id, description, decision summary).
+    """
     allowed: bool
     task_alignment: bool
     action_alignment: bool
@@ -137,6 +156,83 @@ class SecurityGuard:
             source_authorization=source_ok,
             data_isolation=isolation_ok,
             reason="; ".join(reasons) or "all four properties satisfied",
+        )
+
+    # ------------------------------------------------------------------
+    # Per-step contextual check on the real ActionStep shape (C.4)
+    # ------------------------------------------------------------------
+
+    def check_step(self, step, objective: str, inputs: list[Input],
+                   decision_summary: str = "") -> StepVerdict:
+        """Evaluate a single action-engine `ActionStep` in context.
+
+        This is the "new step shape" check: privilege is read from the
+        step's declared `side_effect` / `requires_authorization` (not a
+        hard-coded kind list), and the H_a judge is given the step's tool,
+        rule-id, description and the decision summary so it can reason with
+        the real threat picture — not a thin `destination=internal` stub.
+        """
+        reasons: list[str] = []
+        kind = legacy_kind(step)
+        tool = getattr(step, "tool", "?")
+        side_effect = getattr(getattr(step, "side_effect", None), "value",
+                              str(getattr(step, "side_effect", "read")))
+        requires_auth = bool(getattr(step, "requires_authorization", False))
+
+        # 1. Task alignment — objective must be in the allowed set O.
+        task_ok = objective in self.allowed_objectives
+        if not task_ok:
+            reasons.append(f"objective '{objective}' is not in allowed set O")
+
+        # 2. Action alignment — static map is the floor; H_a tightens it,
+        #    now with the *full* step context.
+        compatible = _ACTION_OBJECTIVES.get(kind, set())
+        static_action_ok = bool(compatible & {objective})
+        action_ok = static_action_ok
+        if not static_action_ok:
+            reasons.append(
+                f"step tool '{tool}' (kind '{kind}') incompatible with "
+                f"objective '{objective}'")
+        elif self.ha_judge is not None:
+            ctx = (f"tool={tool}; rule_id={getattr(step, 'rule_id', '?')}; "
+                   f"side_effect={side_effect}; "
+                   f"step={getattr(step, 'description', '')}; "
+                   f"threat={decision_summary}")
+            serves, ha_reason = self.ha_judge.judges(kind, objective, context=ctx)
+            if not serves:
+                action_ok = False
+                reasons.append(f"H_a judge refused step '{tool}': {ha_reason}")
+
+        # 3. Source authorization — a *privileged* step (declares a
+        #    destructive side-effect or explicit authorization) requires an
+        #    authenticated source among the inputs.
+        privileged = side_effect == "destructive" or requires_auth
+        has_auth = any(i.trust_level == "authenticated" for i in inputs)
+        source_ok = (not privileged) or has_auth
+        if not source_ok:
+            reasons.append(
+                f"privileged step '{tool}' (side_effect={side_effect}) with no "
+                f"authenticated source among inputs")
+
+        # 4. Data isolation — operational tools write to internal systems;
+        #    genuine external egress is caught by the trajectory check. Flag
+        #    only an explicit untrusted `destination` param here.
+        dest = (getattr(step, "params", {}) or {}).get("destination")
+        isolation_ok = (dest is None or dest in self.trusted_destinations
+                        or dest in {"internal", "suspect_source_ip",
+                                    "affected_ECU", "vulnerable_file",
+                                    "security_team", "audit_log"})
+        if not isolation_ok:
+            reasons.append(f"step destination '{dest}' is not in the trusted set")
+
+        allowed = task_ok and action_ok and source_ok and isolation_ok
+        return StepVerdict(
+            allowed=allowed,
+            task_alignment=task_ok,
+            action_alignment=action_ok,
+            source_authorization=source_ok,
+            data_isolation=isolation_ok,
+            reason="; ".join(reasons) or "step satisfies all four properties",
         )
 
     # ------------------------------------------------------------------

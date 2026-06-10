@@ -25,14 +25,14 @@
     "parameters": {
       "target": "TESTBENCH-01"
     },
-    "plan_id": "5719ea02-43a5-4fbc-8c4f-161db497a266"
+    "plan_id": "f4e0668e-0e4e-42e5-8ae2-971bdc4c1b87"
   },
   "action_report": {
-    "plan_id": "5719ea02-43a5-4fbc-8c4f-161db497a266",
+    "plan_id": "f4e0668e-0e4e-42e5-8ae2-971bdc4c1b87",
     "status": "completed",
     "summary": "[completed] 26 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=node; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-03T19:11:40.307722",
-    "finished_at": "2026-06-03T19:11:40.309728",
+    "started_at": "2026-06-10T15:47:16.254577",
+    "finished_at": "2026-06-10T15:47:16.255568",
     "tallies": {
       "total": 26,
       "completed": 26,
@@ -42,7 +42,7 @@
       "skipped": 0
     },
     "plan": {
-      "plan_id": "5719ea02-43a5-4fbc-8c4f-161db497a266",
+      "plan_id": "f4e0668e-0e4e-42e5-8ae2-971bdc4c1b87",
       "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
       "blast_radius": "node",
       "asset_categories": [
@@ -50,7 +50,7 @@
         "Privacy and Personal Data",
         "Life and Bodily Health"
       ],
-      "created_at": "2026-06-03T19:11:40.307722",
+      "created_at": "2026-06-10T15:47:16.213545",
       "estimated_duration_s": 780,
       "steps": [
         {
@@ -69,11 +69,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "9a6ca19c-5022-4a1f-90fb-a583b08076c5",
+          "step_id": "34626295-9842-44c4-a6b0-39b347e967af",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -103,11 +103,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "43260077-657d-44b8-a58b-b5fa7e9b2f83",
+          "step_id": "0694192b-0ade-4eef-bdd6-6c0abd0749c6",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -139,11 +139,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "5f026e35-8e3f-4ffd-871c-d00b3311e60e",
+          "step_id": "dbc2197c-2d0c-4803-8acf-8988e97488e8",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -176,11 +176,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "6ed2ff67-b83c-48d3-84c3-64a280167511",
+          "step_id": "2ef5403f-fb48-43c1-80fe-9c177c823405",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -212,11 +212,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "8707fbee-ed62-495e-b04e-03b9b23ab54e",
+          "step_id": "f41777f6-4893-429e-b969-1bc895fd4b10",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -247,11 +247,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "89db2eee-3547-410e-9932-8ccca1abe2f3",
+          "step_id": "d1de787b-89a7-4a1e-9bdc-a8dc87c1172e",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -283,11 +283,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "8596dda4-54db-4b9b-bf47-7f71332c5bfa",
+          "step_id": "31ede285-2809-4e2b-ad20-de1f53261009",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -318,11 +318,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "08cbdf79-a278-45ae-8e48-bdaab2703a68",
+          "step_id": "844d7b53-0def-4651-b01a-3d8bcff0313d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -354,11 +354,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e7715f5e-6fe3-4103-a137-fe17f259902f",
+          "step_id": "ae12a23e-8774-4f8b-add1-b7944194db85",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.254577",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -393,11 +393,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "1c8c499f-7fc0-42f5-9488-946329c1e889",
+          "step_id": "d2348c0e-fd52-4c10-ae78-0abb9a0a4b79",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.254577",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -432,11 +432,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "11ab9fd3-21ee-4ea3-a719-ab13fd998a85",
+          "step_id": "79d9f1cb-d254-4fbd-bb30-d714c1b92108",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -471,11 +471,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "0f42d36a-9724-4cba-8fc4-410392df8fd3",
+          "step_id": "8638d58f-aaad-4411-81c0-82d87d45d12d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -510,11 +510,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "0f803bbc-d60f-4255-b2ac-186b3163d2d7",
+          "step_id": "d1e633af-c3f2-483b-bce3-ab4f3df63f6e",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -549,11 +549,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9faeb213-e2ba-49b3-8b0c-4193b1390d48",
+          "step_id": "7bdf3aff-f8a6-4eeb-a9b2-184b1db88859",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -588,11 +588,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "88aaf7a2-8eec-4a45-8d1a-a8a508dd3648",
+          "step_id": "5d4faf94-3ab5-4413-8314-2698786a3661",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -626,11 +626,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "af0e98fc-06f9-4b66-a8ed-dd145bd66a0b",
+          "step_id": "b66b5c1a-9908-4307-b3e6-79b93bb8ad6f",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -663,11 +663,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c5451393-1ad0-4e9b-a21a-f790a560eac9",
+          "step_id": "0f4f3fa8-ef98-4f26-8c68-37d9d729888b",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -701,11 +701,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "880b9a8d-73dc-4462-ad5f-9ecf704b1e96",
+          "step_id": "cc0c4001-e30b-4c42-8c0f-74bade18dfd0",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -740,11 +740,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "6b48a7ea-398c-4daf-8818-65eec6d85f0f",
+          "step_id": "60b88bc1-1324-49c7-8c07-eddda2700b45",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -778,11 +778,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b3dde130-8fe4-4331-9dca-b99fc9948ac8",
+          "step_id": "183c9dc1-7c64-487a-89c9-22cf557a0ea6",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -815,11 +815,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "da7e6e4e-0643-44bc-b363-e13cdd2b81d5",
+          "step_id": "ffbaec2c-b48c-4b15-99f9-a0b073dcf8fd",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -852,11 +852,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "433548d6-ac97-4a46-a99a-dee641485f1e",
+          "step_id": "9b441b2e-d4c9-4a52-80f6-4c2b11f76ca9",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.308726",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -889,11 +889,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "41b053b4-be0f-47b6-baec-117363ef299c",
+          "step_id": "e19f3db6-3c34-46b0-9982-d2a9b7c1bcfc",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.308726",
-          "finished_at": "2026-06-03T19:11:40.309728",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -927,11 +927,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "5b3be747-2b3c-4e11-a4b1-c94161fd791e",
+          "step_id": "74df430b-a116-47f3-86b6-a538d4d8e6fc",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.309728",
-          "finished_at": "2026-06-03T19:11:40.309728",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -964,11 +964,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "dde64dff-2590-45e0-a0db-2063146480da",
+          "step_id": "0eb9e59f-59b0-4680-a1b5-96d61aa7cb48",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.309728",
-          "finished_at": "2026-06-03T19:11:40.309728",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "git",
@@ -999,11 +999,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f582d8a4-f867-4177-8721-c173213f1862",
+          "step_id": "cbb39c81-4e59-48c8-a438-89fd31fc9ea7",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-03T19:11:40.309728",
-          "finished_at": "2026-06-03T19:11:40.309728",
+          "started_at": "2026-06-10T15:47:16.255568",
+          "finished_at": "2026-06-10T15:47:16.255568",
           "output": {
             "dry_run": true,
             "would_invoke": "tar",
@@ -1021,7 +1021,7 @@
     },
     "audit_log": [
       {
-        "step_id": "9a6ca19c-5022-4a1f-90fb-a583b08076c5",
+        "step_id": "34626295-9842-44c4-a6b0-39b347e967af",
         "tool": "runtime.safe_mode",
         "kind": "contain",
         "status": "completed",
@@ -1029,7 +1029,7 @@
         "attempts": 1
       },
       {
-        "step_id": "43260077-657d-44b8-a58b-b5fa7e9b2f83",
+        "step_id": "0694192b-0ade-4eef-bdd6-6c0abd0749c6",
         "tool": "network.isolate_node",
         "kind": "contain",
         "status": "completed",
@@ -1037,7 +1037,7 @@
         "attempts": 1
       },
       {
-        "step_id": "5f026e35-8e3f-4ffd-871c-d00b3311e60e",
+        "step_id": "dbc2197c-2d0c-4803-8acf-8988e97488e8",
         "tool": "firewall.rate_limit",
         "kind": "contain",
         "status": "completed",
@@ -1045,7 +1045,7 @@
         "attempts": 1
       },
       {
-        "step_id": "6ed2ff67-b83c-48d3-84c3-64a280167511",
+        "step_id": "2ef5403f-fb48-43c1-80fe-9c177c823405",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -1053,7 +1053,7 @@
         "attempts": 1
       },
       {
-        "step_id": "8707fbee-ed62-495e-b04e-03b9b23ab54e",
+        "step_id": "f41777f6-4893-429e-b969-1bc895fd4b10",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -1061,7 +1061,7 @@
         "attempts": 1
       },
       {
-        "step_id": "89db2eee-3547-410e-9932-8ccca1abe2f3",
+        "step_id": "d1de787b-89a7-4a1e-9bdc-a8dc87c1172e",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -1069,7 +1069,7 @@
         "attempts": 1
       },
       {
-        "step_id": "8596dda4-54db-4b9b-bf47-7f71332c5bfa",
+        "step_id": "31ede285-2809-4e2b-ad20-de1f53261009",
         "tool": "observe.log_tail",
         "kind": "observe",
         "status": "completed",
@@ -1077,7 +1077,7 @@
         "attempts": 1
       },
       {
-        "step_id": "08cbdf79-a278-45ae-8e48-bdaab2703a68",
+        "step_id": "844d7b53-0def-4651-b01a-3d8bcff0313d",
         "tool": "secrets.rotate",
         "kind": "eradicate",
         "status": "completed",
@@ -1085,7 +1085,7 @@
         "attempts": 1
       },
       {
-        "step_id": "e7715f5e-6fe3-4103-a137-fe17f259902f",
+        "step_id": "ae12a23e-8774-4f8b-add1-b7944194db85",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1093,7 +1093,7 @@
         "attempts": 1
       },
       {
-        "step_id": "1c8c499f-7fc0-42f5-9488-946329c1e889",
+        "step_id": "d2348c0e-fd52-4c10-ae78-0abb9a0a4b79",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1101,7 +1101,7 @@
         "attempts": 1
       },
       {
-        "step_id": "11ab9fd3-21ee-4ea3-a719-ab13fd998a85",
+        "step_id": "79d9f1cb-d254-4fbd-bb30-d714c1b92108",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1109,7 +1109,7 @@
         "attempts": 1
       },
       {
-        "step_id": "0f42d36a-9724-4cba-8fc4-410392df8fd3",
+        "step_id": "8638d58f-aaad-4411-81c0-82d87d45d12d",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1117,7 +1117,7 @@
         "attempts": 1
       },
       {
-        "step_id": "0f803bbc-d60f-4255-b2ac-186b3163d2d7",
+        "step_id": "d1e633af-c3f2-483b-bce3-ab4f3df63f6e",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1125,7 +1125,7 @@
         "attempts": 1
       },
       {
-        "step_id": "9faeb213-e2ba-49b3-8b0c-4193b1390d48",
+        "step_id": "7bdf3aff-f8a6-4eeb-a9b2-184b1db88859",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1133,7 +1133,7 @@
         "attempts": 1
       },
       {
-        "step_id": "88aaf7a2-8eec-4a45-8d1a-a8a508dd3648",
+        "step_id": "5d4faf94-3ab5-4413-8314-2698786a3661",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1141,7 +1141,7 @@
         "attempts": 1
       },
       {
-        "step_id": "af0e98fc-06f9-4b66-a8ed-dd145bd66a0b",
+        "step_id": "b66b5c1a-9908-4307-b3e6-79b93bb8ad6f",
         "tool": "notify.driver",
         "kind": "notify",
         "status": "completed",
@@ -1149,7 +1149,7 @@
         "attempts": 1
       },
       {
-        "step_id": "c5451393-1ad0-4e9b-a21a-f790a560eac9",
+        "step_id": "0f4f3fa8-ef98-4f26-8c68-37d9d729888b",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1157,7 +1157,7 @@
         "attempts": 1
       },
       {
-        "step_id": "880b9a8d-73dc-4462-ad5f-9ecf704b1e96",
+        "step_id": "cc0c4001-e30b-4c42-8c0f-74bade18dfd0",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1165,7 +1165,7 @@
         "attempts": 1
       },
       {
-        "step_id": "6b48a7ea-398c-4daf-8818-65eec6d85f0f",
+        "step_id": "60b88bc1-1324-49c7-8c07-eddda2700b45",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1173,7 +1173,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b3dde130-8fe4-4331-9dca-b99fc9948ac8",
+        "step_id": "183c9dc1-7c64-487a-89c9-22cf557a0ea6",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1181,7 +1181,7 @@
         "attempts": 1
       },
       {
-        "step_id": "da7e6e4e-0643-44bc-b363-e13cdd2b81d5",
+        "step_id": "ffbaec2c-b48c-4b15-99f9-a0b073dcf8fd",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1189,7 +1189,7 @@
         "attempts": 1
       },
       {
-        "step_id": "433548d6-ac97-4a46-a99a-dee641485f1e",
+        "step_id": "9b441b2e-d4c9-4a52-80f6-4c2b11f76ca9",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1197,7 +1197,7 @@
         "attempts": 1
       },
       {
-        "step_id": "41b053b4-be0f-47b6-baec-117363ef299c",
+        "step_id": "e19f3db6-3c34-46b0-9982-d2a9b7c1bcfc",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1205,7 +1205,7 @@
         "attempts": 1
       },
       {
-        "step_id": "5b3be747-2b3c-4e11-a4b1-c94161fd791e",
+        "step_id": "74df430b-a116-47f3-86b6-a538d4d8e6fc",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1213,7 +1213,7 @@
         "attempts": 1
       },
       {
-        "step_id": "dde64dff-2590-45e0-a0db-2063146480da",
+        "step_id": "0eb9e59f-59b0-4680-a1b5-96d61aa7cb48",
         "tool": "code.scrub_git_history",
         "kind": "audit",
         "status": "completed",
@@ -1221,7 +1221,7 @@
         "attempts": 1
       },
       {
-        "step_id": "f582d8a4-f867-4177-8721-c173213f1862",
+        "step_id": "cbb39c81-4e59-48c8-a438-89fd31fc9ea7",
         "tool": "runtime.snapshot",
         "kind": "audit",
         "status": "completed",
@@ -1232,7 +1232,7 @@
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "runtime.safe_mode",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1252,7 +1252,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "network.isolate_node",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1274,7 +1274,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "firewall.rate_limit",
       "side_effect": "write",
       "real_invoked": false,
@@ -1298,7 +1298,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1322,7 +1322,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -1344,7 +1344,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -1366,7 +1366,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "observe.log_tail",
       "side_effect": "read",
       "real_invoked": false,
@@ -1390,7 +1390,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1410,7 +1410,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1436,7 +1436,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.254",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1462,7 +1462,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1488,7 +1488,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1514,7 +1514,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1540,7 +1540,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1566,7 +1566,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1592,7 +1592,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.driver",
       "side_effect": "write",
       "real_invoked": false,
@@ -1616,7 +1616,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1640,7 +1640,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1666,7 +1666,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1692,7 +1692,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1716,7 +1716,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1740,7 +1740,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1764,7 +1764,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.308",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1788,7 +1788,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.309",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1814,7 +1814,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.309",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "code.scrub_git_history",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1836,7 +1836,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-03T19:11:40.309",
+      "ts": "2026-06-10T15:47:16.255",
       "tool": "runtime.snapshot",
       "side_effect": "write",
       "real_invoked": false,
@@ -1871,6 +1871,29 @@
     "compositional_ok": true,
     "temporal_ok": true,
     "violations": []
+  },
+  "replanning": {
+    "rounds": 1,
+    "resolved": true,
+    "history": [
+      {
+        "round": 1,
+        "tier": "moderate",
+        "plan_status": "completed",
+        "steps": 26,
+        "guard_allowed": true,
+        "guard_reason": "all four properties satisfied",
+        "success": true
+      }
+    ]
+  },
+  "memory_recommendation": {
+    "scenario": "can_gateway",
+    "similarity": 1.0,
+    "tier": "moderate",
+    "action_kind": "isolate_node",
+    "plan_status": "completed",
+    "seen_at": "2026-06-10T15:47:12"
   },
   "findings": [
     {
@@ -2027,7 +2050,8 @@
         "TOP-007"
       ],
       "tier": "moderate",
-      "guard_allowed": true
+      "guard_allowed": true,
+      "remediation_ok": true
     },
     {
       "scenario": "clean_auth",
@@ -2041,7 +2065,8 @@
         "TOP-002"
       ],
       "tier": "moderate",
-      "guard_allowed": true
+      "guard_allowed": true,
+      "remediation_ok": true
     },
     {
       "scenario": "mqtt_handler",
@@ -2060,7 +2085,8 @@
         "TOP-007"
       ],
       "tier": "moderate",
-      "guard_allowed": true
+      "guard_allowed": true,
+      "remediation_ok": true
     },
     {
       "scenario": "telemetry_uploader",
@@ -2083,7 +2109,8 @@
         "TOP-006"
       ],
       "tier": "moderate",
-      "guard_allowed": false
+      "guard_allowed": true,
+      "remediation_ok": true
     },
     {
       "scenario": "ota_updater",
@@ -2103,7 +2130,8 @@
         "TOP-006"
       ],
       "tier": "moderate",
-      "guard_allowed": false
+      "guard_allowed": true,
+      "remediation_ok": true
     }
   ],
   "committed": {

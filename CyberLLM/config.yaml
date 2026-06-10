@@ -100,8 +100,15 @@ memory:
 # ---- Security-guard hardening (paper 1 oracles, roadmap F) ----------------
 guard:
   ha_judge_enabled: true             # F.1 — separate LLM 0/1 "does action serve objective?"
-  per_step_enabled: true             # C.4 — run the guard on every action-engine step
+  per_step_enabled: true             # C.4 — per-step contextual check on the real step shape
   max_prompt_tokens: 4096            # A.4 — warn when an agent prompt exceeds this
+
+# ---- Action engine (planner + executor; paper 5 adaptive loop) ------------
+action_engine:
+  dry_run: true                      # never run a destructive command unless false
+  work_dir: mcp_workspace            # scratch dir for patches/snapshots/secret store
+  max_replan_rounds: 2               # decision↔action re-planning rounds (escalate on failure)
+  llm_tool_selection: true           # let the LLM propose extra MCP tools (validated + guarded)
 
 # ---- Attack-side ethics / scope policy ------------------------------------
 # The EthicsGuard blocks attack scripts whose scenario or target is not in

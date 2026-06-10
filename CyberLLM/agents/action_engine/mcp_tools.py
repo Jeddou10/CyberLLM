@@ -774,6 +774,113 @@ class KBLookupCVE(MCPTool):
 
 
 # ===========================================================================
+# network.port_scan  — real active recon (paper C.1)
+# ===========================================================================
+
+class NetworkPortScan(MCPTool):
+    name = "network.port_scan"
+    description = ("Active TCP port scan of a host (nmap if installed, else a "
+                    "bounded pure-Python connect scan).")
+    domain = "network"
+    side_effect = SideEffect.READ
+    requires_authorization = True          # active scanning needs a go-ahead
+    schema = [
+        MCPSchemaField("target", "string", description="host or IPv4 (CIDR is reduced to the host)"),
+        MCPSchemaField("ports", "string", required=False,
+                        description="nmap port spec, e.g. '1-1024' or '22,80,443'"),
+    ]
+    real_binary = "nmap"
+
+    # A socket scan is always possible, so the tool is "available" even
+    # without nmap — dry-run remains the safety gate.
+    def real_available(self) -> bool:
+        return True
+
+    _COMMON_PORTS = [21, 22, 23, 25, 53, 80, 110, 143, 443, 445, 3306,
+                     3389, 5432, 6379, 8080, 8443, 11434]
+
+    def _do_call(self, params: dict) -> ToolResult:
+        target = params["target"]
+        ports = str(params.get("ports", "1-1024"))
+        if shutil.which("nmap"):
+            rc, out, err = _run(
+                ["nmap", "-sT", "-Pn", "--open", "-p", ports, "-oG", "-", target],
+                timeout=90)
+            open_ports = sorted({int(m) for m in re.findall(r"(\d+)/open", out)})
+            return ToolResult(status="ok", tool=self.name,
+                              payload={"backend": "nmap", "target": target,
+                                       "open_ports": open_ports})
+        # Pure-Python fallback: connect-scan a bounded set of common ports
+        # on the single host (CIDR reduced to the host part).
+        host = target.split("/")[0]
+        open_ports = []
+        for p in self._COMMON_PORTS:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(0.5)
+            try:
+                if s.connect_ex((host, p)) == 0:
+                    open_ports.append(p)
+            except Exception:           # noqa: BLE001 — unreachable host port
+                pass
+            finally:
+                s.close()
+        return ToolResult(status="ok", tool=self.name,
+                          payload={"backend": "socket", "target": host,
+                                   "open_ports": open_ports})
+
+
+# ===========================================================================
+# observe.packet_capture  — real traffic / CAN capture (paper C.3)
+# ===========================================================================
+
+class ObservePacketCapture(MCPTool):
+    name = "observe.packet_capture"
+    description = ("Capture a bounded burst of packets / CAN frames "
+                    "(tshark → tcpdump → candump, whichever is present).")
+    domain = "observe"
+    side_effect = SideEffect.READ
+    requires_authorization = True
+    schema = [
+        MCPSchemaField("interface", "string", required=False,
+                        description="e.g. 'eth0', 'any', or 'can0' for CAN"),
+        MCPSchemaField("count", "int", required=False),
+        MCPSchemaField("timeout_s", "int", required=False),
+    ]
+    real_binary = "tshark"
+
+    def real_available(self) -> bool:
+        return any(shutil.which(b) for b in ("tshark", "tcpdump", "candump"))
+
+    def _do_call(self, params: dict) -> ToolResult:
+        iface = params.get("interface", "any")
+        count = int(params.get("count", 50))
+        timeout_s = min(int(params.get("timeout_s", 10)), 30)   # hard cap
+        if shutil.which("tshark"):
+            rc, out, _ = _run(["tshark", "-i", iface, "-a", f"duration:{timeout_s}",
+                               "-c", str(count), "-n"], timeout=timeout_s + 15)
+            lines = [ln for ln in out.splitlines() if ln.strip()]
+            return ToolResult(status="ok", tool=self.name,
+                              payload={"backend": "tshark", "interface": iface,
+                                       "packets": len(lines), "sample": lines[:20]})
+        if shutil.which("tcpdump"):
+            rc, out, _ = _run(["tcpdump", "-i", iface, "-c", str(count), "-nn", "-tt"],
+                              timeout=timeout_s + 15)
+            lines = [ln for ln in out.splitlines() if ln.strip()]
+            return ToolResult(status="ok", tool=self.name,
+                              payload={"backend": "tcpdump", "interface": iface,
+                                       "packets": len(lines), "sample": lines[:20]})
+        if shutil.which("candump"):
+            rc, out, _ = _run(["candump", "-n", str(count), iface],
+                              timeout=timeout_s + 5)
+            frames = [ln for ln in out.splitlines() if ln.strip()]
+            return ToolResult(status="ok", tool=self.name,
+                              payload={"backend": "candump", "interface": iface,
+                                       "frames": len(frames), "sample": frames[:20]})
+        return ToolResult(status="failed", tool=self.name,
+                          error="no packet-capture backend (tshark/tcpdump/candump)")
+
+
+# ===========================================================================
 # Factory
 # ===========================================================================
 
@@ -783,6 +890,7 @@ def default_toolset() -> list[MCPTool]:
         FirewallRateLimit(),
         FirewallListRules(),
         NetworkIsolateNode(),
+        NetworkPortScan(),
         SecretsRotate(),
         SecretsRevoke(),
         CodeStaticScan(),
@@ -798,6 +906,7 @@ def default_toolset() -> list[MCPTool]:
         ObserveEndpoint(),
         ObserveLogTail(),
         ObservePortClosed(),
+        ObservePacketCapture(),
         KBLookupCVE(),
     ]
 
