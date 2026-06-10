@@ -1,0 +1,301 @@
+{
+  "description": "Expected security findings for each blind test file. Use this to score the CyberLLM pipeline's detection accuracy.",
+  "scoring": {
+    "detection_rate": "matched_findings / total_expected",
+    "false_positive_rate": "unexpected_findings / total_reported",
+    "perfect_score": "detection_rate=1.0 AND false_positive_rate=0.0"
+  },
+  "files": {
+    "01_fleet_db_service.py": {
+      "expected_findings": [
+        {
+          "rule_id": "CODE-004",
+          "severity": "critical",
+          "title": "SQL injection via string concatenation",
+          "location": "get_vehicle_by_vin()",
+          "line": 11,
+          "detail": "cursor.execute uses %-formatting to interpolate user-supplied 'vin' directly into SQL string"
+        },
+        {
+          "rule_id": "CODE-012",
+          "severity": "critical",
+          "title": "Raw SQL with f-string interpolation",
+          "location": "search_vehicles()",
+          "line": 19,
+          "detail": "f-string builds SQL with unsanitized 'owner_name' and 'status' parameters"
+        },
+        {
+          "rule_id": "CODE-012",
+          "severity": "critical",
+          "title": "Raw SQL with f-string interpolation",
+          "location": "delete_maintenance_record()",
+          "line": 27,
+          "detail": "f-string builds DELETE query with unsanitized 'record_id' — allows arbitrary deletion or SQL injection"
+        }
+      ],
+      "expected_count": 3,
+      "false_positives_expected": 0
+    },
+
+    "02_firmware_api.py": {
+      "expected_findings": [
+        {
+          "rule_id": "CODE-007",
+          "severity": "high",
+          "title": "Path traversal",
+          "location": "read_firmware_file()",
+          "line": 14,
+          "detail": "User-controlled 'filename' from request.args concatenated to base path without sanitization; attacker uses ../../etc/passwd"
+        },
+        {
+          "rule_id": "CODE-026",
+          "severity": "high",
+          "title": "Server-Side Request Forgery (SSRF)",
+          "location": "fetch_remote_firmware()",
+          "line": 22,
+          "detail": "User-supplied URL passed directly to urlopen without allow-list or schema/host validation"
+        },
+        {
+          "rule_id": "CODE-007",
+          "severity": "high",
+          "title": "Path traversal",
+          "location": "view_log()",
+          "line": 30,
+          "detail": "User-controlled 'file' parameter from request.args used in f-string path to open(); allows directory traversal"
+        }
+      ],
+      "expected_count": 3,
+      "false_positives_expected": 0
+    },
+
+    "03_telemetry_service.py": {
+      "expected_findings": [
+        {
+          "rule_id": "CODE-003",
+          "severity": "critical",
+          "title": "Hard-coded secret",
+          "location": "module-level CLOUD_API_KEY",
+          "line": 8,
+          "detail": "API key 'sk_prod_4f8a9c2b1d6e3f7a0b5c8d2e1a9f4c6b' embedded directly in source code"
+        },
+        {
+          "rule_id": "CODE-030",
+          "severity": "high",
+          "title": "Hard-coded credential in connection string",
+          "location": "module-level DATABASE_URL",
+          "line": 10,
+          "detail": "PostgreSQL connection string contains username:password in plaintext"
+        },
+        {
+          "rule_id": "CODE-003",
+          "severity": "critical",
+          "title": "Hard-coded secret",
+          "location": "module-level MQTT_ACCESS_TOKEN",
+          "line": 12,
+          "detail": "JWT access token embedded in source code"
+        },
+        {
+          "rule_id": "CODE-002",
+          "severity": "medium",
+          "title": "Weak hash for credentials",
+          "location": "hash_device_password()",
+          "line": 16,
+          "detail": "hashlib.md5 used for password hashing — trivially crackable, no salt"
+        },
+        {
+          "rule_id": "CODE-008",
+          "severity": "medium",
+          "title": "Non-cryptographic randomness for security",
+          "location": "generate_session_token()",
+          "line": 21,
+          "detail": "random.choice (Mersenne Twister) used for session tokens — state is predictable"
+        },
+        {
+          "rule_id": "CODE-008",
+          "severity": "medium",
+          "title": "Non-cryptographic randomness for security",
+          "location": "generate_otp()",
+          "line": 25,
+          "detail": "random.randint for OTP generation — attacker can predict next values"
+        }
+      ],
+      "expected_count": 6,
+      "false_positives_expected": 0
+    },
+
+    "04_diagnostic_processor.py": {
+      "expected_findings": [
+        {
+          "rule_id": "CODE-005",
+          "severity": "critical",
+          "title": "Unsafe deserialization (pickle)",
+          "location": "process_diagnostic_payload()",
+          "line": 10,
+          "detail": "pickle.loads on untrusted input — attacker crafts payload to execute arbitrary code during deserialization"
+        },
+        {
+          "rule_id": "CODE-005",
+          "severity": "critical",
+          "title": "Unsafe deserialization (yaml.load)",
+          "location": "load_vehicle_config()",
+          "line": 14,
+          "detail": "yaml.load with yaml.Loader allows !!python/object tags to instantiate arbitrary classes"
+        },
+        {
+          "rule_id": "CODE-005",
+          "severity": "critical",
+          "title": "Unsafe deserialization (eval)",
+          "location": "execute_remote_command()",
+          "line": 19,
+          "detail": "eval() on base64-decoded user input — arbitrary code execution"
+        },
+        {
+          "rule_id": "CODE-038",
+          "severity": "critical",
+          "title": "eval() of decoded payload",
+          "location": "execute_remote_command()",
+          "line": 19,
+          "detail": "eval(base64.b64decode(...)) pattern — classic RCE vector"
+        },
+        {
+          "rule_id": "CODE-001",
+          "severity": "high",
+          "title": "Command injection sink",
+          "location": "run_diagnostic_tool()",
+          "line": 24,
+          "detail": "subprocess.check_output with shell=True and user-controlled f-string command"
+        },
+        {
+          "rule_id": "CODE-005",
+          "severity": "critical",
+          "title": "Unsafe deserialization (eval)",
+          "location": "dynamic_formula_eval()",
+          "line": 28,
+          "detail": "eval() on user-supplied formula string — even with restricted builtins, bypass is trivial"
+        }
+      ],
+      "expected_count": 6,
+      "false_positives_expected": 0
+    },
+
+    "05_fleet_api.py": {
+      "expected_findings": [
+        {
+          "rule_id": "CODE-020",
+          "severity": "critical",
+          "title": "JWT algorithm 'none' accepted",
+          "location": "decode_token()",
+          "line": 12,
+          "detail": "algorithms list includes 'none' — attacker removes signature and forges any token payload"
+        },
+        {
+          "rule_id": "CODE-033",
+          "severity": "critical",
+          "title": "Authorization trusts client-supplied role header",
+          "location": "get_user_role()",
+          "line": 16,
+          "detail": "Server reads role from X-User-Role header set by client — attacker sends 'admin' to bypass authorization"
+        },
+        {
+          "rule_id": "CODE-036",
+          "severity": "high",
+          "title": "IDOR — ownership check missing",
+          "location": "get_vehicle_location()",
+          "line": 20,
+          "detail": "Any authenticated user can query any vehicle_id without ownership verification"
+        },
+        {
+          "rule_id": "CODE-040",
+          "severity": "high",
+          "title": "Sensitive endpoint without authentication",
+          "location": "dump_database()",
+          "line": 35,
+          "detail": "/debug/dump-db exposes entire database with no auth check at all"
+        },
+        {
+          "rule_id": "CODE-006",
+          "severity": "high",
+          "title": "TLS certificate verification disabled",
+          "location": "fetch_partner_api()",
+          "line": 45,
+          "detail": "verify=False disables certificate validation — enables MITM attacks"
+        }
+      ],
+      "expected_count": 5,
+      "false_positives_expected": 0
+    },
+
+    "06_ecu_can_handler.c": {
+      "expected_findings": [
+        {
+          "rule_id": "CODE-013",
+          "severity": "high",
+          "title": "Unsafe C string operation (strcpy)",
+          "location": "process_can_message()",
+          "line": 14,
+          "detail": "strcpy into fixed-size buffer with no bounds check — stack buffer overflow"
+        },
+        {
+          "rule_id": "CODE-013",
+          "severity": "high",
+          "title": "Unsafe C string operation (sprintf)",
+          "location": "format_vin_response()",
+          "line": 20,
+          "detail": "sprintf into fixed-size buffer — overlong vin causes overflow"
+        },
+        {
+          "rule_id": "CODE-015",
+          "severity": "high",
+          "title": "Format-string vulnerability",
+          "location": "log_diagnostic()",
+          "line": 25,
+          "detail": "printf(user_msg) without format specifier — attacker injects %x/%n to read/write memory"
+        },
+        {
+          "rule_id": "CODE-013",
+          "severity": "high",
+          "title": "Unsafe C string operation (gets)",
+          "location": "read_serial_command()",
+          "line": 30,
+          "detail": "gets() has no bounds checking — can never be used safely, deprecated in C11"
+        },
+        {
+          "rule_id": "CODE-014",
+          "severity": "medium",
+          "title": "Non-constant-time secret comparison",
+          "location": "authenticate()",
+          "line": 35,
+          "detail": "strcmp for token comparison leaks length via timing side-channel"
+        },
+        {
+          "rule_id": "CODE-015",
+          "severity": "high",
+          "title": "Format-string vulnerability",
+          "location": "display_error()",
+          "line": 42,
+          "detail": "sprintf(log_buf, error_from_network) — user-controlled format string"
+        }
+      ],
+      "expected_count": 6,
+      "false_positives_expected": 0
+    },
+
+    "07_vehicle_utils.py": {
+      "expected_findings": [],
+      "expected_count": 0,
+      "false_positives_expected": 0,
+      "note": "NEGATIVE CONTROL — this file is intentionally clean. All operations (hashing, subprocess, SQL, file I/O, HTTP) are done correctly. Any finding reported here is a FALSE POSITIVE."
+    }
+  },
+
+  "total_expected_findings": 29,
+  "summary": {
+    "01": "3 SQL injections (%-format + f-strings)",
+    "02": "2 path traversals + 1 SSRF",
+    "03": "3 hard-coded secrets + 1 weak hash + 2 weak randomness",
+    "04": "4 unsafe deserialization/eval + 1 command injection",
+    "05": "1 JWT none + 1 role header trust + 1 IDOR + 1 no-auth endpoint + 1 TLS disabled",
+    "06": "2 strcpy/sprintf/gets + 2 format-string + 1 timing-unsafe strcmp",
+    "07": "0 — negative control (false positive test)"
+  }
+}
