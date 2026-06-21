@@ -25,14 +25,14 @@
     "parameters": {
       "secret_id": "ops-sudo-token"
     },
-    "plan_id": "75f13379-2926-46e2-b18a-80fd0e9e213c"
+    "plan_id": "a52961ea-bedb-4cd7-9a30-7a8f8de74ccc"
   },
   "action_report": {
-    "plan_id": "75f13379-2926-46e2-b18a-80fd0e9e213c",
+    "plan_id": "a52961ea-bedb-4cd7-9a30-7a8f8de74ccc",
     "status": "completed",
     "summary": "[completed] 21 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=node; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-10T15:47:12.632200",
-    "finished_at": "2026-06-10T15:47:12.632200",
+    "started_at": "2026-06-21T19:22:27.841680",
+    "finished_at": "2026-06-21T19:22:27.842687",
     "tallies": {
       "total": 21,
       "completed": 21,
@@ -42,7 +42,7 @@
       "skipped": 0
     },
     "plan": {
-      "plan_id": "75f13379-2926-46e2-b18a-80fd0e9e213c",
+      "plan_id": "a52961ea-bedb-4cd7-9a30-7a8f8de74ccc",
       "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
       "blast_radius": "node",
       "asset_categories": [
@@ -50,7 +50,7 @@
         "Privacy and Personal Data",
         "Life and Bodily Health"
       ],
-      "created_at": "2026-06-10T15:47:12.567825",
+      "created_at": "2026-06-21T19:22:27.794573",
       "estimated_duration_s": 630,
       "steps": [
         {
@@ -69,11 +69,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "487c15d6-c26d-4e7a-87c0-6eeae4f6b1ff",
+          "step_id": "9d09fbda-4bf9-4c40-8e3c-03679aa90372",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -104,11 +104,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "21d3790c-53ac-49fb-a18f-3c8f08d070b3",
+          "step_id": "b203bac9-cd9a-47ac-b141-54ca33aa9e40",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -141,11 +141,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "add19509-244f-4f25-b820-4d997c35f1ea",
+          "step_id": "b7b7c22e-4bce-4f5b-b2e9-06e689d2b123",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -177,11 +177,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b4baf963-0821-4c5a-a636-2ae05145bc35",
+          "step_id": "6c327e00-0409-427d-8443-419cb8d76568",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -213,11 +213,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "d39de9bd-f69c-4f45-835f-c869448d17f8",
+          "step_id": "b57cb67a-113c-461f-a698-ba60c0993726",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -251,11 +251,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "7b032591-e3a4-44c8-a7da-84760f1ccf41",
+          "step_id": "a84fff81-01d5-4ff2-8168-c1c7a386b1e6",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -290,11 +290,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "1d954c96-03be-40c5-ab97-dfbcd0ffbcd0",
+          "step_id": "f49e95f2-5be3-4e81-9924-718c853335e3",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -329,11 +329,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b433163d-45b7-4f22-a5bb-d35d0369664d",
+          "step_id": "501f155c-cb59-40ef-91ab-95f669ba0360",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -368,11 +368,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4b1c6af1-67a1-4625-bd00-213f77ee6ba8",
+          "step_id": "9fa8ffca-fb22-4be6-af83-51416e8c9cc0",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -407,11 +407,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "11a9c86a-72c1-437a-98ac-df34883352e4",
+          "step_id": "d6e006bf-568b-4dc0-84ed-183a461f593f",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -445,11 +445,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "72a623ef-8d16-42b5-96ae-445afd135d40",
+          "step_id": "ba58c98e-9749-4d9c-a906-9010b163e926",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.841680",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -482,11 +482,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "799dea43-a3e7-4671-94f2-c63867162492",
+          "step_id": "d0d95d02-4a89-4abf-a866-e3f8e52c1eec",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.841680",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -519,11 +519,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4fd91a0f-9b96-4fdf-98cc-752bbe483163",
+          "step_id": "f6c87c84-6d02-4f95-9f40-4c4d7c7d9970",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -557,11 +557,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b26c11b8-1213-4450-a6f3-b191c37240ad",
+          "step_id": "885c7e9d-f177-4f7f-923d-ff368e6e41f1",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -596,11 +596,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "6e9af165-997b-4226-bb4e-885c4c5ae415",
+          "step_id": "1e4d654a-b366-412b-b754-954ddd55d866",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -634,11 +634,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "231ddf65-574c-43ee-b96f-3f379c46108b",
+          "step_id": "603e277c-e2a3-43e1-957b-61c56358d197",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -671,11 +671,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ef3b4875-01c4-417d-b09f-e82e4edc1912",
+          "step_id": "8fac4bbe-f41b-413c-ae61-659d71268854",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -708,11 +708,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "16646bed-45fd-43d4-be1d-2453c220b395",
+          "step_id": "23e7c898-4826-4f46-a3dd-8b730dd472fd",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -745,11 +745,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f83470cd-99d1-4d85-a7a0-e3d8ba9e4e2d",
+          "step_id": "f7c91f15-11bc-4d91-8431-54ae4aba635d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -782,11 +782,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "36d6a43d-e63c-49d1-bdfb-65b318d99683",
+          "step_id": "c4eb1d40-d8ba-4e6c-83d9-f39932ba913a",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -820,11 +820,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "26472311-1d29-4bfa-9b25-be22d8cdb29a",
+          "step_id": "c8a3ea3b-2d87-4485-ba2d-7bc8fdaaaf9a",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.632200",
-          "finished_at": "2026-06-10T15:47:12.632200",
+          "started_at": "2026-06-21T19:22:27.842687",
+          "finished_at": "2026-06-21T19:22:27.842687",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -844,7 +844,7 @@
     },
     "audit_log": [
       {
-        "step_id": "487c15d6-c26d-4e7a-87c0-6eeae4f6b1ff",
+        "step_id": "9d09fbda-4bf9-4c40-8e3c-03679aa90372",
         "tool": "secrets.rotate",
         "kind": "contain",
         "status": "completed",
@@ -852,7 +852,7 @@
         "attempts": 1
       },
       {
-        "step_id": "21d3790c-53ac-49fb-a18f-3c8f08d070b3",
+        "step_id": "b203bac9-cd9a-47ac-b141-54ca33aa9e40",
         "tool": "firewall.rate_limit",
         "kind": "contain",
         "status": "completed",
@@ -860,7 +860,7 @@
         "attempts": 1
       },
       {
-        "step_id": "add19509-244f-4f25-b820-4d997c35f1ea",
+        "step_id": "b7b7c22e-4bce-4f5b-b2e9-06e689d2b123",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -868,7 +868,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b4baf963-0821-4c5a-a636-2ae05145bc35",
+        "step_id": "6c327e00-0409-427d-8443-419cb8d76568",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -876,7 +876,7 @@
         "attempts": 1
       },
       {
-        "step_id": "d39de9bd-f69c-4f45-835f-c869448d17f8",
+        "step_id": "b57cb67a-113c-461f-a698-ba60c0993726",
         "tool": "observe.log_tail",
         "kind": "observe",
         "status": "completed",
@@ -884,7 +884,7 @@
         "attempts": 1
       },
       {
-        "step_id": "7b032591-e3a4-44c8-a7da-84760f1ccf41",
+        "step_id": "a84fff81-01d5-4ff2-8168-c1c7a386b1e6",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -892,7 +892,7 @@
         "attempts": 1
       },
       {
-        "step_id": "1d954c96-03be-40c5-ab97-dfbcd0ffbcd0",
+        "step_id": "f49e95f2-5be3-4e81-9924-718c853335e3",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -900,7 +900,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b433163d-45b7-4f22-a5bb-d35d0369664d",
+        "step_id": "501f155c-cb59-40ef-91ab-95f669ba0360",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -908,7 +908,7 @@
         "attempts": 1
       },
       {
-        "step_id": "4b1c6af1-67a1-4625-bd00-213f77ee6ba8",
+        "step_id": "9fa8ffca-fb22-4be6-af83-51416e8c9cc0",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -916,7 +916,7 @@
         "attempts": 1
       },
       {
-        "step_id": "11a9c86a-72c1-437a-98ac-df34883352e4",
+        "step_id": "d6e006bf-568b-4dc0-84ed-183a461f593f",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -924,7 +924,7 @@
         "attempts": 1
       },
       {
-        "step_id": "72a623ef-8d16-42b5-96ae-445afd135d40",
+        "step_id": "ba58c98e-9749-4d9c-a906-9010b163e926",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -932,7 +932,7 @@
         "attempts": 1
       },
       {
-        "step_id": "799dea43-a3e7-4671-94f2-c63867162492",
+        "step_id": "d0d95d02-4a89-4abf-a866-e3f8e52c1eec",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -940,7 +940,7 @@
         "attempts": 1
       },
       {
-        "step_id": "4fd91a0f-9b96-4fdf-98cc-752bbe483163",
+        "step_id": "f6c87c84-6d02-4f95-9f40-4c4d7c7d9970",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -948,7 +948,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b26c11b8-1213-4450-a6f3-b191c37240ad",
+        "step_id": "885c7e9d-f177-4f7f-923d-ff368e6e41f1",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -956,7 +956,7 @@
         "attempts": 1
       },
       {
-        "step_id": "6e9af165-997b-4226-bb4e-885c4c5ae415",
+        "step_id": "1e4d654a-b366-412b-b754-954ddd55d866",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -964,7 +964,7 @@
         "attempts": 1
       },
       {
-        "step_id": "231ddf65-574c-43ee-b96f-3f379c46108b",
+        "step_id": "603e277c-e2a3-43e1-957b-61c56358d197",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -972,7 +972,7 @@
         "attempts": 1
       },
       {
-        "step_id": "ef3b4875-01c4-417d-b09f-e82e4edc1912",
+        "step_id": "8fac4bbe-f41b-413c-ae61-659d71268854",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -980,7 +980,7 @@
         "attempts": 1
       },
       {
-        "step_id": "16646bed-45fd-43d4-be1d-2453c220b395",
+        "step_id": "23e7c898-4826-4f46-a3dd-8b730dd472fd",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -988,7 +988,7 @@
         "attempts": 1
       },
       {
-        "step_id": "f83470cd-99d1-4d85-a7a0-e3d8ba9e4e2d",
+        "step_id": "f7c91f15-11bc-4d91-8431-54ae4aba635d",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -996,7 +996,7 @@
         "attempts": 1
       },
       {
-        "step_id": "36d6a43d-e63c-49d1-bdfb-65b318d99683",
+        "step_id": "c4eb1d40-d8ba-4e6c-83d9-f39932ba913a",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1004,7 +1004,7 @@
         "attempts": 1
       },
       {
-        "step_id": "26472311-1d29-4bfa-9b25-be22d8cdb29a",
+        "step_id": "c8a3ea3b-2d87-4485-ba2d-7bc8fdaaaf9a",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1015,7 +1015,7 @@
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1035,7 +1035,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "firewall.rate_limit",
       "side_effect": "write",
       "real_invoked": false,
@@ -1059,7 +1059,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1083,7 +1083,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -1105,7 +1105,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "observe.log_tail",
       "side_effect": "read",
       "real_invoked": false,
@@ -1129,7 +1129,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1155,7 +1155,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1181,7 +1181,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1207,7 +1207,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1233,7 +1233,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1259,7 +1259,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1283,7 +1283,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.841",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1307,7 +1307,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1331,7 +1331,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1357,7 +1357,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1383,7 +1383,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1407,7 +1407,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1431,7 +1431,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1455,7 +1455,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1479,7 +1479,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1503,7 +1503,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.632",
+      "ts": "2026-06-21T19:22:27.842",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1564,206 +1564,217 @@
     "tier": "moderate",
     "action_kind": "rate_limit",
     "plan_status": "completed",
-    "seen_at": "2026-06-10T15:47:12"
+    "seen_at": "2026-06-21T19:22:27"
   },
   "findings": [
     {
       "rule_id": "CODE-013",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: either copy. */     strcpy(cmd, payload);     s",
-      "explanation": "Unsafe C string operation (strcpy / sprintf / gets)",
-      "source_agent": "source_code_scanner",
+      "title": "Unsafe C string operation (strcpy / sprintf / gets)",
+      "location": "on_message()",
+      "line": 30,
+      "detail": "Unsafe C string operation (strcpy / sprintf / gets) \u2014 matched: either copy. */     strcpy(cmd, payload);     s",
       "asset_category": "Material and Economic Resources",
-      "line": 30
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: either copy. */     strcpy(cmd, payload);     s"
     },
     {
       "rule_id": "CODE-013",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: (cmd, payload);     sprintf(log_line, \"received",
-      "explanation": "Unsafe C string operation (strcpy / sprintf / gets)",
-      "source_agent": "source_code_scanner",
+      "title": "Unsafe C string operation (strcpy / sprintf / gets)",
+      "location": "on_message()",
+      "line": 31,
+      "detail": "Unsafe C string operation (strcpy / sprintf / gets) \u2014 matched: (cmd, payload);     sprintf(log_line, \"received",
       "asset_category": "Material and Economic Resources",
-      "line": 31
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: (cmd, payload);     sprintf(log_line, \"received"
     },
     {
       "rule_id": "CODE-013",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: har shell[256];     sprintf(shell, \"/usr/bin/ivi",
-      "explanation": "Unsafe C string operation (strcpy / sprintf / gets)",
-      "source_agent": "source_code_scanner",
+      "title": "Unsafe C string operation (strcpy / sprintf / gets)",
+      "location": "on_message()",
+      "line": 40,
+      "detail": "Unsafe C string operation (strcpy / sprintf / gets) \u2014 matched: har shell[256];     sprintf(shell, \"/usr/bin/ivi",
       "asset_category": "Life and Bodily Health",
-      "line": 40
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: har shell[256];     sprintf(shell, \"/usr/bin/ivi"
     },
     {
       "rule_id": "CODE-014",
       "severity": "medium",
-      "evidence": "05_mqtt_handler.c: nt.  *  - CODE-014: strcmp(secret, recv) NOT constant time \u2192 secret leak.  *  - CODE-01",
-      "explanation": "Non-constant-time secret comparison",
-      "source_agent": "source_code_scanner",
+      "title": "Non-constant-time secret comparison",
+      "location": "module level",
+      "line": 8,
+      "detail": "Non-constant-time secret comparison \u2014 matched: nt.  *  - CODE-014: strcmp(secret, recv) NOT constant time \u2192 secret leak.  *  - CODE-01",
       "asset_category": "Privacy and Personal Data",
-      "line": 8
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: nt.  *  - CODE-014: strcmp(secret, recv) NOT constant time \u2192 secret leak.  *  - CODE-01"
     },
     {
       "rule_id": "CODE-014",
       "severity": "medium",
-      "evidence": "05_mqtt_handler.c: ming. */     return strcmp(SHARED_SECRET, given) == 0; }  vo",
-      "explanation": "Non-constant-time secret comparison",
-      "source_agent": "source_code_scanner",
+      "title": "Non-constant-time secret comparison",
+      "location": "verify_secret()",
+      "line": 22,
+      "detail": "Non-constant-time secret comparison \u2014 matched: ming. */     return strcmp(SHARED_SECRET, given) == 0; }  vo",
       "asset_category": "Privacy and Personal Data",
-      "line": 22
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: ming. */     return strcmp(SHARED_SECRET, given) == 0; }  vo"
     },
     {
       "rule_id": "CODE-015",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: ng vulnerability in printf(topic).  *  - CODE-01",
-      "explanation": "Format-string vulnerability",
-      "source_agent": "source_code_scanner",
+      "title": "Format-string vulnerability",
+      "location": "module level",
+      "line": 9,
+      "detail": "Format-string vulnerability \u2014 matched: ng vulnerability in printf(topic).  *  - CODE-01",
       "asset_category": "Life and Bodily Health",
-      "line": 9
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: ng vulnerability in printf(topic).  *  - CODE-01"
     },
     {
       "rule_id": "CODE-015",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: cmd, payload);     sprintf(log_line, \"received o",
-      "explanation": "Format-string vulnerability",
-      "source_agent": "source_code_scanner",
+      "title": "Format-string vulnerability",
+      "location": "on_message()",
+      "line": 31,
+      "detail": "Format-string vulnerability \u2014 matched: cmd, payload);     sprintf(log_line, \"received o",
       "asset_category": "Life and Bodily Health",
-      "line": 31
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: cmd, payload);     sprintf(log_line, \"received o"
     },
     {
       "rule_id": "CODE-015",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: g of printf. */     printf(topic);     printf(\"\\",
-      "explanation": "Format-string vulnerability",
-      "source_agent": "source_code_scanner",
+      "title": "Format-string vulnerability",
+      "location": "on_message()",
+      "line": 35,
+      "detail": "Format-string vulnerability \u2014 matched: g of printf. */     printf(topic);     printf(\"\\",
       "asset_category": "Life and Bodily Health",
-      "line": 35
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: g of printf. */     printf(topic);     printf(\"\\"
     },
     {
       "rule_id": "CODE-015",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: ar shell[256];     sprintf(shell, \"/usr/bin/ivi-",
-      "explanation": "Format-string vulnerability",
-      "source_agent": "source_code_scanner",
+      "title": "Format-string vulnerability",
+      "location": "on_message()",
+      "line": 40,
+      "detail": "Format-string vulnerability \u2014 matched: ar shell[256];     sprintf(shell, \"/usr/bin/ivi-",
       "asset_category": "Life and Bodily Health",
-      "line": 40
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: ar shell[256];     sprintf(shell, \"/usr/bin/ivi-"
     },
     {
       "rule_id": "CODE-015",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: gc != 3) {         fprintf(stderr, \"usage: %s <t",
-      "explanation": "Format-string vulnerability",
-      "source_agent": "source_code_scanner",
+      "title": "Format-string vulnerability",
+      "location": "main()",
+      "line": 54,
+      "detail": "Format-string vulnerability \u2014 matched: gc != 3) {         fprintf(stderr, \"usage: %s <t",
       "asset_category": "Life and Bodily Health",
-      "line": 54
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: gc != 3) {         fprintf(stderr, \"usage: %s <t"
     },
     {
       "rule_id": "CODE-015",
       "severity": "high",
-      "evidence": "05_mqtt_handler.c: ) : \"\")) {         fprintf(stderr, \"auth failed\\",
-      "explanation": "Format-string vulnerability",
-      "source_agent": "source_code_scanner",
+      "title": "Format-string vulnerability",
+      "location": "main()",
+      "line": 58,
+      "detail": "Format-string vulnerability \u2014 matched: ) : \"\")) {         fprintf(stderr, \"auth failed\\",
       "asset_category": "Life and Bodily Health",
-      "line": 58
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: ) : \"\")) {         fprintf(stderr, \"auth failed\\"
     },
     {
       "rule_id": "CODE-001",
       "severity": "high",
-      "evidence": "subprocess.call(user_input, shell=True)",
-      "explanation": "Shell-injection sink fed by untrusted input.",
-      "source_agent": "source_code_scanner",
+      "title": "Command injection sink",
+      "location": "module level",
+      "line": 14,
+      "detail": "Shell-injection sink fed by untrusted input. \u2014 matched: subprocess.call(user_input, shell=True)",
       "asset_category": null,
-      "line": 14
+      "source_agent": "source_code_scanner",
+      "evidence": "subprocess.call(user_input, shell=True)"
     },
     {
       "rule_id": "CODE-002",
       "severity": "medium",
-      "evidence": "hashlib.md5(password)",
-      "explanation": "Weak hash algorithm for password storage.",
-      "source_agent": "source_code_scanner",
+      "title": "Weak hash for credentials",
+      "location": "verify_secret()",
+      "line": 22,
+      "detail": "Weak hash algorithm for password storage. \u2014 matched: hashlib.md5(password)",
       "asset_category": null,
-      "line": 22
+      "source_agent": "source_code_scanner",
+      "evidence": "hashlib.md5(password)"
     },
     {
       "rule_id": "LOG-AUTH-03",
       "severity": "medium",
-      "evidence": "13 failed auth attempts in 12s",
-      "explanation": "Brute-force on privileged account",
-      "source_agent": "log_analyzer",
+      "title": "Brute-force on privileged account",
+      "location": "log stream",
+      "line": null,
+      "detail": "Brute-force on privileged account \u2014 matched: 13 failed auth attempts in 12s",
       "asset_category": "Privacy and Personal Data",
-      "line": null
+      "source_agent": "log_analyzer",
+      "evidence": "13 failed auth attempts in 12s"
     },
     {
       "rule_id": "LOG-PRIV-01",
       "severity": "critical",
-      "evidence": "2026-05-19T10:11:19Z auth sudo: fleet : TTY=pts/2 ; PWD=/home/fleet ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow",
-      "explanation": "Privileged read of /etc/shadow or equivalent",
-      "source_agent": "log_analyzer",
+      "title": "Privileged read of /etc/shadow or equivalent",
+      "location": "log stream",
+      "line": null,
+      "detail": "Privileged read of /etc/shadow or equivalent \u2014 matched: 2026-05-19T10:11:19Z auth sudo: fleet : TTY=pts/2 ; PWD=/home/fleet ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow",
       "asset_category": "Material and Economic Resources",
-      "line": null
+      "source_agent": "log_analyzer",
+      "evidence": "2026-05-19T10:11:19Z auth sudo: fleet : TTY=pts/2 ; PWD=/home/fleet ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow"
     },
     {
       "rule_id": "LOG-NET-01",
       "severity": "high",
-      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
-      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
-      "source_agent": "log_analyzer",
+      "title": "Unusual broadcast burst",
+      "location": "log stream",
+      "line": null,
+      "detail": "Sudden internal broadcast burst \u2014 possible reconnaissance. \u2014 matched: 10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
       "asset_category": null,
-      "line": null
-    },
-    {
-      "rule_id": "LOG-AUTH-03",
-      "severity": "medium",
-      "evidence": "12 failed auth attempts in 30 s, user='root'",
-      "explanation": "Brute-force pattern on privileged account.",
       "source_agent": "log_analyzer",
-      "asset_category": null,
-      "line": null
+      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
     },
     {
       "rule_id": "TOP-001",
       "severity": "high",
-      "evidence": "hpc \u2192 zone_ecu_front on transport=can_fd standard=vendor_specific",
-      "explanation": "HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
-      "source_agent": "deployment_scanner",
+      "title": "HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "HPC\u2194ZoneECU must be Ethernet/IEEE-1722 \u2014 matched: hpc \u2192 zone_ecu_front on transport=can_fd standard=vendor_specific",
       "asset_category": null,
-      "line": null
+      "source_agent": "deployment_scanner",
+      "evidence": "hpc \u2192 zone_ecu_front on transport=can_fd standard=vendor_specific"
     },
     {
       "rule_id": "TOP-002",
       "severity": "high",
-      "evidence": "external actor ext_assistant writes to long_term_memory (poison path)",
-      "explanation": "External actors must not write to long-term memory",
-      "source_agent": "deployment_scanner",
+      "title": "External actors must not write to long-term memory",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "External actors must not write to long-term memory \u2014 matched: external actor ext_assistant writes to long_term_memory (poison path)",
       "asset_category": null,
-      "line": null
+      "source_agent": "deployment_scanner",
+      "evidence": "external actor ext_assistant writes to long_term_memory (poison path)"
     },
     {
       "rule_id": "TOP-007",
       "severity": "high",
-      "evidence": "safety actuator brake_ecu commanded by non-safety actor zone_ecu_front",
-      "explanation": "Brake ECU receives commands from non-brake source",
-      "source_agent": "deployment_scanner",
+      "title": "Brake ECU receives commands from non-brake source",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "Brake ECU receives commands from non-brake source \u2014 matched: safety actuator brake_ecu commanded by non-safety actor zone_ecu_front",
       "asset_category": "Life and Bodily Health",
-      "line": null
-    },
-    {
-      "rule_id": "TOP-001",
-      "severity": "high",
-      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
-      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
       "source_agent": "deployment_scanner",
-      "asset_category": null,
-      "line": null
-    },
-    {
-      "rule_id": "TOP-002",
-      "severity": "medium",
-      "evidence": "External A2A agent has write-edge to long_term_memory",
-      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
-      "source_agent": "deployment_scanner",
-      "asset_category": null,
-      "line": null
+      "evidence": "safety actuator brake_ecu commanded by non-safety actor zone_ecu_front"
     }
   ],
   "consulted_memory": [
@@ -1783,65 +1794,60 @@
       "remediation_ok": true
     },
     {
-      "scenario": "can_gateway",
-      "similarity": 0.467,
+      "scenario": "clean_auth",
+      "similarity": 0.545,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
-        "CODE-003",
-        "CODE-005",
-        "CODE-006",
         "LOG-AUTH-03",
-        "LOG-CAN-02",
         "LOG-NET-01",
         "TOP-001",
-        "TOP-002",
-        "TOP-007"
+        "TOP-002"
       ],
       "tier": "moderate",
       "guard_allowed": true,
       "remediation_ok": true
     },
     {
-      "scenario": "ota_updater",
-      "similarity": 0.353,
+      "scenario": "clean_auth",
+      "similarity": 0.545,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
-        "CODE-010",
         "LOG-AUTH-03",
-        "LOG-EXFIL-02",
-        "LOG-LATERAL-01",
         "LOG-NET-01",
         "TOP-001",
-        "TOP-002",
-        "TOP-004",
-        "TOP-005",
-        "TOP-006"
+        "TOP-002"
       ],
       "tier": "moderate",
       "guard_allowed": true,
       "remediation_ok": true
     },
     {
-      "scenario": "telemetry_uploader",
-      "similarity": 0.3,
+      "scenario": "clean_auth",
+      "similarity": 0.545,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
-        "CODE-003",
-        "CODE-006",
-        "CODE-008",
-        "CODE-012",
         "LOG-AUTH-03",
-        "LOG-EXFIL-01",
-        "LOG-EXFIL-02",
         "LOG-NET-01",
         "TOP-001",
-        "TOP-002",
-        "TOP-004",
-        "TOP-005",
-        "TOP-006"
+        "TOP-002"
+      ],
+      "tier": "moderate",
+      "guard_allowed": true,
+      "remediation_ok": true
+    },
+    {
+      "scenario": "clean_auth",
+      "similarity": 0.545,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-002",
+        "LOG-AUTH-03",
+        "LOG-NET-01",
+        "TOP-001",
+        "TOP-002"
       ],
       "tier": "moderate",
       "guard_allowed": true,

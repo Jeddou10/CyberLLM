@@ -27,10 +27,13 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 # This is an *offline* plumbing smoke test: it checks the pipeline wiring,
-# not LLM quality. Force the deterministic stub so it stays fast and works
-# with no network / token, even though config.yaml selects gpt-4o. Set the
-# env var yourself before running to exercise the real model instead.
+# not LLM quality and not real tool execution. Force the deterministic stub
+# AND dry-run so it stays fast and side-effect-free, even though config.yaml
+# selects gpt-4o and live tools. Unset these yourself to exercise the real
+# model / real tools instead.
 os.environ.setdefault("CYBERLLM_FORCE_STUB", "1")
+os.environ.setdefault("CYBERLLM_FORCE_DRY_RUN", "1")
+os.environ.setdefault("CYBERLLM_NO_EXTERNAL_STATIC", "1")
 
 
 CHECKS = []

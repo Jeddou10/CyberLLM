@@ -175,9 +175,11 @@ python pipeline.py -q --example small     # quiet: only the summary tables
 python pipeline.py -v --code … 2>run.log  # capture the debug trace to a file
 ```
 
-The default LLM is **gpt-4o via GitHub Models** (`config.yaml`); set
-`GITHUB_TOKEN` in `.env` to activate it, otherwise it falls back to the
-offline stub. `CYBERLLM_FORCE_STUB=1` forces the stub regardless.
+The default LLM is **Azure OpenAI gpt-4o** (`config.yaml` → `llm_configs`);
+set the Azure variables in `.env` (`AZURE_OPENAI_API_KEY`,
+`AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_DEPLOYMENT`, `AZURE_OPENAI_API_VERSION`)
+to activate it, otherwise it falls back to the offline stub.
+`CYBERLLM_FORCE_STUB=1` forces the stub regardless.
 
 Output:
 
@@ -191,6 +193,41 @@ Output:
   `_trace.log`. See [`run_logs/README.md`](run_logs/README.md) for the
   full layout. `_latest_defense.txt` / `_latest_attack.txt` always
   point at the newest run.
+
+### 2.1 Web UI (local server)
+
+A polished single-page UI runs the **same defense pipeline** on code you
+paste in the browser — no extra dependencies (stdlib `http.server` only):
+
+```bash
+python server.py                 # → http://127.0.0.1:8000
+python server.py --port 9000 --host 0.0.0.0
+```
+
+Then open the URL, paste code (or pick a bundled example), and press
+**Scan**. You get:
+
+- **Findings** in the `rule_id / severity / title / location / line / detail`
+  format, severity-colour-coded and sorted worst-first.
+- An **annotated source view** — flagged lines are highlighted by severity;
+  click any finding to jump to its line.
+- The **decision · action · guard** panel (recommended tier, justification,
+  the dry-run action plan, the four-property guard verdict, MCP tool calls).
+- The full raw JSON record.
+
+Two modes:
+
+- **Fast** (default) — the deterministic `regex + bandit/semgrep` layers,
+  offline and instant.
+- **Deep (AI)** — adds the LLM refinement pass (Azure gpt-4o) on top, used
+  **only** when real LLM credentials are present; otherwise it transparently
+  falls back to Fast (the offline stub's canned findings are never shown on
+  real code). Install bandit for a much stronger Python static layer:
+  `pip install bandit` (the server auto-detects it, even via `python -m`).
+
+**Safety:** browser-initiated runs force **dry-run** actions — no real OS
+command is ever executed from the UI. Detection is real; remediation is
+simulated. Each scan runs in an isolated temp workspace and is stateless.
 
 ---
 
@@ -507,6 +544,9 @@ entering the generated artifacts".
 ```
 CyberLLM/
 ├── pipeline.py                  # entry point — defense / attack / both
+├── server.py                    # local web UI server (stdlib http.server, zero deps)
+├── webapp/
+│   └── index.html               # single-page UI (findings, annotated code, decision/guard)
 ├── evaluate.py                  # static eval harness (D.4/D.5/G.4) — recall, FP, scoreboard
 ├── config.yaml                  # LLM, agent, security, memory, guard, example_sets
 ├── llm_client.py                # provider abstraction (+ A.2 credential fallback to stub)

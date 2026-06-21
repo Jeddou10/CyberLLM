@@ -28,49 +28,51 @@
     "deployment": "examples\\deployments\\02_misconfigured_cloud.yaml"
   },
   "decision": {
-    "summary": "The findings indicate multiple critical vulnerabilities affecting privacy, personal data, and material resources, with potential for remote code execution, data exfiltration, and unauthorized access.",
+    "summary": "The system is facing multiple high and critical vulnerabilities, including command injection, SQL injection, unsafe deserialization, and data exfiltration attempts. These issues impact privacy, personal data, and material resources, necessitating immediate action.",
     "asset_categories_touched": [
       "Privacy and Personal Data",
       "Material and Economic Resources",
       "Reputation and Dignity"
     ],
     "recommended_tier": "hard",
-    "confidence": 0.95,
-    "justification": "The presence of critical vulnerabilities such as remote code execution (CODE-005, CODE-038), SQL injection (CODE-012), and data exfiltration (LOG-EXFIL-01, LOG-EXFIL-02) directly impact privacy and personal data, as well as material resources. Past incidents with similar rules have consistently led to a hard response tier, indicating a high confidence in the need for immediate and comprehensive action, including patching code and implementing security measures to prevent exploitation."
+    "confidence": 0.9,
+    "justification": "The vulnerabilities identified pose significant risks to privacy and data security, with potential for unauthorized access and data exfiltration. Past incidents with similar vulnerabilities have failed with softer responses, indicating the need for a hard-tier response. The presence of critical issues like SQL injection, command injection, and unsafe deserialization, combined with evidence of data exfiltration, supports a high-confidence recommendation for immediate isolation and remediation actions."
   },
   "action": {
-    "kind": "patch_code",
+    "kind": "alert_only",
     "target": "engine",
     "parameters": {
-      "secret_id": "ops-sudo-token"
+      "severity": "critical",
+      "summary": "Secrets store is world-readable",
+      "rule_id": "TOP-006"
     },
-    "plan_id": "c2d432e0-9886-46ae-af19-abbbcf9ff833"
+    "plan_id": "99c35f8c-02a0-492e-bf22-70dbaf359eb9"
   },
   "action_report": {
-    "plan_id": "c2d432e0-9886-46ae-af19-abbbcf9ff833",
+    "plan_id": "99c35f8c-02a0-492e-bf22-70dbaf359eb9",
     "status": "failed",
-    "summary": "[failed] 1 completed \u00b7 0 failed \u00b7 1 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=network; assets=['Privacy and Personal Data', 'Material and Economic Resources', 'Reputation and Dignity'].",
-    "started_at": "2026-06-03T19:47:20.458014",
-    "finished_at": "2026-06-03T19:47:22.743125",
+    "summary": "[failed] 0 completed \u00b7 0 failed \u00b7 1 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=network; assets=['Privacy and Personal Data', 'Material and Economic Resources', 'Reputation and Dignity'].",
+    "started_at": "2026-06-10T15:55:22.113437",
+    "finished_at": "2026-06-10T15:55:23.338981",
     "tallies": {
-      "total": 65,
-      "completed": 1,
+      "total": 69,
+      "completed": 0,
       "failed": 0,
       "refused": 1,
       "rolled_back": 0,
       "skipped": 0
     },
     "plan": {
-      "plan_id": "c2d432e0-9886-46ae-af19-abbbcf9ff833",
-      "decision_summary": "The findings indicate multiple critical vulnerabilities affecting privacy, personal data, and material resources, with potential for remote code execution, data exfiltration, and unauthorized access.",
+      "plan_id": "99c35f8c-02a0-492e-bf22-70dbaf359eb9",
+      "decision_summary": "The system is facing multiple high and critical vulnerabilities, including command injection, SQL injection, unsafe deserialization, and data exfiltration attempts. These issues impact privacy, personal data, and material resources, necessitating immediate action.",
       "blast_radius": "network",
       "asset_categories": [
         "Privacy and Personal Data",
         "Material and Economic Resources",
         "Reputation and Dignity"
       ],
-      "created_at": "2026-06-03T19:47:20.458014",
-      "estimated_duration_s": 1950,
+      "created_at": "2026-06-10T15:55:19.126807",
+      "estimated_duration_s": 2070,
       "steps": [
         {
           "rule_id": "LOG-PRIV-01",
@@ -88,22 +90,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "f6fef8d7-b53c-490a-a15c-8dce3d856f15",
-          "status": "completed",
-          "attempts": 1,
-          "started_at": "2026-06-03T19:47:21.442264",
-          "finished_at": "2026-06-03T19:47:21.442264",
-          "output": {
-            "dry_run": true,
-            "would_invoke": "vault",
-            "params": {
-              "secret_id": "ops-sudo-token"
-            },
-            "_status": "would-execute",
-            "_real": false
-          },
+          "step_id": "33a88673-397d-4758-bdc5-60d533507457",
+          "status": "refused",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
           "error": null,
-          "refusal_reason": null
+          "refusal_reason": "H_a judge refused step 'secrets.rotate': The action 'patch_code' does not directly serve the objective 'auto-correct insecure code' in the given context. The context involves rotating the sudoer's credentials immediately due to high and critical vulnerabilities, which is a privileged change. The action should focus on addressing the vulnerabilities directly, such as fixing command injection, SQL injection, unsafe deserialization, and data exfiltration issues, rather than patching code in a way that may not directly address these specific threats."
         },
         {
           "rule_id": "TOP-006",
@@ -123,14 +117,14 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "112f8691-b6e8-4d68-98e6-1a889e2a5eb3",
-          "status": "refused",
+          "step_id": "847b96b2-76aa-4d11-bdc8-867d3e43e6fb",
+          "status": "pending",
           "attempts": 0,
           "started_at": null,
           "finished_at": null,
           "output": null,
           "error": null,
-          "refusal_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. The objective requires the creation of a document or summary of findings, which 'alert_only' does not accomplish."
+          "refusal_reason": null
         },
         {
           "rule_id": "LOG-EXFIL-01",
@@ -150,7 +144,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "a8c361e3-4ca3-4e09-9bf7-deb5f2ba10fd",
+          "step_id": "bc8fb3dd-0ad3-46f2-ba04-f071d9ad1b90",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -177,7 +171,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "602e7b34-14b3-4779-8aa1-74f231a24146",
+          "step_id": "ab7bf16f-29a0-47bc-8c53-b6aef37c578d",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -203,7 +197,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "acb18412-4d74-4ce6-8086-1767b32afc08",
+          "step_id": "43b0eb60-54ec-44e3-b27c-4dfb274e3185",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -229,7 +223,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9bf988ee-674e-4032-bdd6-5a5fb875189e",
+          "step_id": "f96b901d-f371-4598-a398-34fc955bef83",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -255,7 +249,58 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c73e8ca3-e039-4016-9bca-318b85d20e29",
+          "step_id": "81ab19c6-0418-4d61-bf9f-8bb3c1c61099",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LLM-SELECTED",
+          "kind": "observe",
+          "tool": "observe.packet_capture",
+          "params": {
+            "interface": "eth0",
+            "duration": 60
+          },
+          "description": "LLM-selected: To capture network traffic and verify if there are any suspicious packets indica",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": true,
+          "step_id": "fc205857-9e6e-4bfb-90d4-6516591355e3",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LLM-SELECTED",
+          "kind": "observe",
+          "tool": "observe.endpoint",
+          "params": {
+            "url": "http://affected-service.local"
+          },
+          "description": "LLM-selected: To confirm that the affected service is responding correctly and has not been co",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "cd44dd5d-9e33-4d0c-8532-9a26f80a7c4c",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -283,7 +328,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c3e2916e-6ac4-4ef7-8d3d-3dce7e3af366",
+          "step_id": "d2eb3031-3c3b-4374-99b0-6eb438bbae51",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -311,7 +356,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e55c1ed4-cd61-4761-a199-c9f28c4107b7",
+          "step_id": "138cddf1-1790-4241-8016-6319029650e2",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -327,7 +372,7 @@
           "params": {
             "rule_id": "CODE-033",
             "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-033  (critical)\n# evidence: effective = request.headers.get('X-Effective-Role', claims.get('role', ''))\n# remediation: follow the rule's remediation guidance.\n",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-033  (critical)\n# evidence: effective = request.headers.get(\"X-Effective-Role\", claims.get(\"role\", \"\"))\n# remediation: follow the rule's remediation guidance.\n",
             "rationale": "Auto-generated remediation proposal."
           },
           "description": "propose a remediation patch",
@@ -339,7 +384,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "2a208348-50f5-471c-a25d-2e25a4274b3a",
+          "step_id": "80c8d1b1-27e2-4ada-b277-1c2b1faab7c5",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -367,7 +412,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "7d5f5f81-9b59-439b-abdb-d12d2c360840",
+          "step_id": "82951b89-a9b0-4259-954c-0cad3c9ac1cc",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -392,7 +437,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "c7ae8276-6099-487d-8c1a-34d69f547fd6",
+          "step_id": "1b6a0b51-70cb-467c-b50e-011b5c9fe1b4",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -420,63 +465,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "251c3f44-7eb0-4749-ae1c-d2f3cd627716",
-          "status": "pending",
-          "attempts": 0,
-          "started_at": null,
-          "finished_at": null,
-          "output": null,
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "CODE-026",
-          "kind": "eradicate",
-          "tool": "code.propose_patch",
-          "params": {
-            "rule_id": "CODE-026",
-            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-026  (high)\n# evidence: requests.get(url, timeout=5, verify=False)\n# remediation: follow the rule's remediation guidance.\n",
-            "rationale": "Auto-generated remediation proposal."
-          },
-          "description": "propose a remediation patch",
-          "side_effect": "write",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": false,
-          "step_id": "c1fcb007-1563-4d3b-8b08-42cb445a84d6",
-          "status": "pending",
-          "attempts": 0,
-          "started_at": null,
-          "finished_at": null,
-          "output": null,
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "CODE-037",
-          "kind": "eradicate",
-          "tool": "code.propose_patch",
-          "params": {
-            "rule_id": "CODE-037",
-            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-037  (high)\n# evidence: full = Path(\"/var/log/fleet\") / path\n# remediation: follow the rule's remediation guidance.\n",
-            "rationale": "Auto-generated remediation proposal."
-          },
-          "description": "propose a remediation patch",
-          "side_effect": "write",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": false,
-          "step_id": "ea1d14d4-4c27-44d6-8d70-8e7c24fa91d2",
+          "step_id": "2ec18049-56a0-428e-aa6a-990c6ff06c1f",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -504,7 +493,63 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4c77122e-a4bd-479a-b9c6-3368b0c62447",
+          "step_id": "d1a544ce-b354-4801-9e0a-630868df617c",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-026",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-026",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-026  (high)\n# evidence: requests.get(url, timeout=5, verify=False)\n# remediation: follow the rule's remediation guidance.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "44d250cd-1e61-4883-afb5-0d61b1e270e1",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-037",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-037",
+            "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-037  (high)\n# evidence: full = Path(\"/var/log/fleet\") / path\n# remediation: follow the rule's remediation guidance.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "e597e0b9-8b8d-469d-9ea8-a77e1297d934",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -532,7 +577,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "37ff0a83-0a22-46b2-aca2-b78fd6c82e64",
+          "step_id": "357617ab-4715-4620-a559-d236645d54b1",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -560,7 +605,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "51cf101d-a6ad-45e7-a0f5-485f8e6e4ec3",
+          "step_id": "06b080d9-f458-430a-b358-44398e6055ff",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -588,7 +633,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "abf0546f-fd73-4a23-82af-edc5dea5f191",
+          "step_id": "9692c972-4bf3-4af6-a08a-49493457f7b4",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -616,7 +661,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9283ff75-7aba-4610-b396-2370e6a153ef",
+          "step_id": "ca35507f-6941-4683-96c5-c39a8fb2f0ff",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -632,7 +677,7 @@
           "params": {
             "rule_id": "CODE-044",
             "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-044  (high)\n# evidence: KafkaConsumer(..., bootstrap_servers=settings.kafka_brokers)\n# remediation: follow the rule's remediation guidance.\n",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-044  (high)\n# evidence: KafkaConsumer(... value_deserializer=lambda b: json.loads(b.decode(\"utf-8\")), ...)\n# remediation: follow the rule's remediation guidance.\n",
             "rationale": "Auto-generated remediation proposal."
           },
           "description": "propose a remediation patch",
@@ -644,7 +689,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "97898779-6c98-4730-a6c3-9c0ae92201d4",
+          "step_id": "068649ad-357a-492c-bf08-003490b3b138",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -672,7 +717,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e19bc4db-765b-4021-8917-abef916aba86",
+          "step_id": "c8ae5ccd-e91c-4c99-a7bd-2c2789029492",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -698,7 +743,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "d4c414d0-5bd7-4ee2-baf2-9b06e52ca2be",
+          "step_id": "a6e329a0-01e7-42da-a654-ae480b11b28c",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -714,7 +759,7 @@
           "params": {
             "rule_id": "CODE-018",
             "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-018  (medium)\n# evidence: @router.post(\"/exec\")\n# remediation: follow the rule's remediation guidance.\n",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-018  (medium)\n# evidence: async def exec_command(request: Request, cmd: str)\n# remediation: follow the rule's remediation guidance.\n",
             "rationale": "Auto-generated remediation proposal."
           },
           "description": "propose a remediation patch",
@@ -726,7 +771,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "73a23be6-b9e6-4238-80fa-0dd49cbcbbdb",
+          "step_id": "5c1ba32f-efe0-415e-9e87-ebff65982ea8",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -754,7 +799,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "d2659bf3-d299-401d-b470-573e1dd9724b",
+          "step_id": "85e0d308-6023-45b6-9e5b-e61c477fdc03",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -782,7 +827,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f4da97f9-ff22-4602-bf55-884c7d1db564",
+          "step_id": "9acb29c9-38c4-4ca1-be14-0aa75c4e99da",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -810,7 +855,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c162dd04-0f4e-4013-a846-15e87cd1924b",
+          "step_id": "fe68343e-40e4-490b-a980-6325364a7d68",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -838,7 +883,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "2362fd65-4df9-4bc9-a357-066d0abb9364",
+          "step_id": "e30c1e3b-5081-4ca5-be04-81f04b06cdf6",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -866,7 +911,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4bc1b5b3-1715-49c8-b539-b08131bd77c2",
+          "step_id": "4b5c72ae-da5b-439b-820a-a660625f6d59",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -882,7 +927,7 @@
           "params": {
             "rule_id": "CODE-022",
             "file": "C:\\Users\\Oussama_Jeddou\\OneDrive\\Bureau\\Master\\CyberLLM\\CyberLLM\\examples\\large\\fleet_management\\__init__.py",
-            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-022  (medium)\n# evidence: login function lacks rate limiting\n# remediation: follow the rule's remediation guidance.\n",
+            "diff": "--- a/unknown.py\n+++ b/unknown.py\n@@ context-of-finding @@\n# rule_id: CODE-022  (medium)\n# evidence: def login(username: str, password: str) -> dict:\n# remediation: follow the rule's remediation guidance.\n",
             "rationale": "Auto-generated remediation proposal."
           },
           "description": "propose a remediation patch",
@@ -894,7 +939,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "331f3dfe-8982-4fc3-bcac-4804d69655dd",
+          "step_id": "2a7c54d6-00c8-4718-a02c-5a4baeb4aceb",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -922,7 +967,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ca4fb8b1-d6fa-4953-a8ff-a67bdc010513",
+          "step_id": "9673c1ec-668e-4de2-afbb-870c4b544f30",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -950,7 +995,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "eb30b858-2706-4a11-9b3e-548a144e80dd",
+          "step_id": "02873408-30c2-4127-8988-43b3e5ca3344",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -978,7 +1023,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4b666dd5-89c2-4fe5-8c96-f6ac5d1b4d1a",
+          "step_id": "991bacc5-c437-47ee-a60d-d4df0e0f2791",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1006,7 +1051,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b661deb0-e696-479c-a1a2-f5a2788a950d",
+          "step_id": "06ef1229-99e8-4f71-b900-d6328d1b8eee",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1034,7 +1079,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e96b8bf6-7b1b-4812-8a62-cd49770e63ed",
+          "step_id": "b3a377f6-28d8-4834-8f4f-e6ec6405c4fb",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1049,7 +1094,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "critical",
-            "summary": "CODE-038: Using eval on decoded input is highly dangerous as it can execute arbitrary code",
+            "summary": "CODE-038: Using eval on decoded signature material can lead to arbitrary code execution if",
             "rule_id": "CODE-038",
             "evidence": "eval(decoded, {\"__builtins__\": {}})"
           },
@@ -1062,7 +1107,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e5a689ed-d1d7-422e-889b-e7775c5378ec",
+          "step_id": "f18c089a-f416-43c6-9bcf-ce996fe81bee",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1089,7 +1134,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c1fb8d80-60b6-4b91-a427-65ff849497d4",
+          "step_id": "2d18b3f3-b058-457e-bee6-5b80a047303d",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1117,7 +1162,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b941ba9e-06ae-4c56-8bc9-af30fd79530f",
+          "step_id": "d34119de-d093-4d11-aacc-d723653e5a5c",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1144,7 +1189,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e2f84270-50b9-4149-bbf0-e6845eee3563",
+          "step_id": "afa3c7eb-5360-408d-839a-77b0db942b36",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1171,61 +1216,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "964b6da6-0bc8-4882-bee5-760f74bd4efa",
-          "status": "pending",
-          "attempts": 0,
-          "started_at": null,
-          "finished_at": null,
-          "output": null,
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "CODE-026",
-          "kind": "notify",
-          "tool": "notify.create_incident",
-          "params": {
-            "severity": "high",
-            "summary": "CODE-026: The `/admin/proxy` endpoint fetches a URL supplied by the client, which can lead",
-            "rule_id": "CODE-026"
-          },
-          "description": "open a generic code-vuln incident",
-          "side_effect": "read",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": false,
-          "step_id": "ec111fc5-3d19-4d99-9b1a-1dbd7122d075",
-          "status": "pending",
-          "attempts": 0,
-          "started_at": null,
-          "finished_at": null,
-          "output": null,
-          "error": null,
-          "refusal_reason": null
-        },
-        {
-          "rule_id": "CODE-037",
-          "kind": "notify",
-          "tool": "notify.create_incident",
-          "params": {
-            "severity": "high",
-            "summary": "CODE-037: The `/admin/logs` endpoint concatenates a user-supplied `path` directly to a bas",
-            "rule_id": "CODE-037"
-          },
-          "description": "open a generic code-vuln incident",
-          "side_effect": "read",
-          "severity_min": "low",
-          "timeout_s": 30,
-          "retries": 1,
-          "pre": [],
-          "post": [],
-          "rollback_steps": [],
-          "requires_authorization": false,
-          "step_id": "5b619bad-1be8-4d6e-911b-5e275a2ae5e1",
+          "step_id": "717dc218-0154-4a63-bf38-f7eb4d01ab61",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1240,7 +1231,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "CODE-001: The `/admin/exec` endpoint executes a shell command supplied by the client, whic",
+            "summary": "CODE-001: The command injection vulnerability occurs because user-supplied input is direct",
             "rule_id": "CODE-001",
             "evidence": "subprocess.check_output(cmd, shell=True, text=True)"
           },
@@ -1253,7 +1244,61 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "75eebbec-34b4-41af-a7dd-0458a1afe1a5",
+          "step_id": "6a694817-871d-42db-a084-833d8185c050",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-026",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-026: The SSRF vulnerability arises from allowing user-supplied URLs to be fetched by ",
+            "rule_id": "CODE-026"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "3d282228-473d-4d6b-9038-58e6a996d79d",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-037",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-037: The path traversal vulnerability is due to directly concatenating user input int",
+            "rule_id": "CODE-037"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "068b997b-f3fb-4b83-a8f8-262058a6fbf5",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1268,7 +1313,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "CODE-007: The use of user-supplied 'name' in file path construction without validation can",
+            "summary": "CODE-007: The use of user-supplied 'name' in path construction without validation can lead",
             "rule_id": "CODE-007"
           },
           "description": "open a generic code-vuln incident",
@@ -1280,7 +1325,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b38adf27-1044-4134-b0eb-0ac45964877f",
+          "step_id": "328d083f-fde6-4ab5-991c-ca1aee5d50d1",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1295,7 +1340,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "CODE-040: The telemetry ingestion endpoint does not authenticate incoming requests, relyin",
+            "summary": "CODE-040: The telemetry ingestion endpoint does not authenticate incoming requests. This r",
             "rule_id": "CODE-040"
           },
           "description": "open a generic code-vuln incident",
@@ -1307,7 +1352,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "7a0a92cc-a013-40ff-b7bf-bb1112dfe5dc",
+          "step_id": "c582250c-6161-4017-a437-b33b287815ca",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1334,7 +1379,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "2a931a8e-028f-4bd2-9d61-4145ca4d067d",
+          "step_id": "ccf50a7d-114f-4152-8ef5-7214d98ad61a",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1349,7 +1394,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "CODE-034: The role comparison is case-insensitive, allowing bypass of role restrictions by",
+            "summary": "CODE-034: The role comparison is case-insensitive, allowing bypass of role checks if the a",
             "rule_id": "CODE-034"
           },
           "description": "open a generic code-vuln incident",
@@ -1361,7 +1406,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "7a608421-5cf5-4a8d-bc21-a2a98df397de",
+          "step_id": "87d1b232-687e-4718-a271-ce5e8f6cadfc",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1376,7 +1421,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "high",
-            "summary": "CODE-044: The Kafka client is configured without SASL or TLS, which can lead to data inter",
+            "summary": "CODE-044: The Kafka client is not configured with SASL or TLS, which means data is transmi",
             "rule_id": "CODE-044"
           },
           "description": "open a generic code-vuln incident",
@@ -1388,7 +1433,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "7def57af-f8ae-4342-9cda-e1318a1cdcd8",
+          "step_id": "18de8c23-afef-4ef9-a119-f767c20e6ab1",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1415,7 +1460,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "47c553f9-5690-4f86-bf97-2e29f5d81885",
+          "step_id": "bc90e0c0-1d66-49a4-a197-d40d3f675bf4",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1443,7 +1488,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "2807458e-86ee-4c18-9ec8-d1994ae1b0d1",
+          "step_id": "5eb00b26-ba4b-4ced-91d3-a5164a14d19b",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1471,7 +1516,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "989eac86-3125-4bca-9fd3-44c4e20a63a4",
+          "step_id": "f87847a7-8b25-43d4-915a-4d5e786a4fdb",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1498,7 +1543,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "19473bf3-5760-4389-b412-e9c71cbcf311",
+          "step_id": "3745ec33-cd71-4657-a4e8-f7a134fb647a",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1525,7 +1570,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "411b8007-e607-46d8-aabd-9b50d36feb5a",
+          "step_id": "abc9ef33-37f1-45c6-a427-eea245d7d608",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1552,7 +1597,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e8e2157a-1040-4459-8502-9b08cb8eb233",
+          "step_id": "4b49ac12-049a-4943-9bb8-01d826958c29",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1567,7 +1612,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-018: The `/admin/exec` endpoint is a state-changing operation that lacks CSRF protect",
+            "summary": "CODE-018: The endpoint is state-changing and lacks CSRF protection, making it vulnerable t",
             "rule_id": "CODE-018"
           },
           "description": "open a generic code-vuln incident",
@@ -1579,7 +1624,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "563a275d-ea8f-4583-a8b1-134f3357641d",
+          "step_id": "b8324fe1-8f4d-404b-9a33-eec39eb2466a",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1594,7 +1639,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-039: There is a potential race condition between fetching the manifest and triggering",
+            "summary": "CODE-039: There is a potential race condition between the manifest fetch and the install t",
             "rule_id": "CODE-039"
           },
           "description": "open a generic code-vuln incident",
@@ -1606,7 +1651,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "3f19a29f-81af-4f6d-a699-26c0b20adab9",
+          "step_id": "7302d28d-4407-4cd0-ac2d-40a13e0bd4b5",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1621,7 +1666,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-041: The 'readings' list in the Batch model is unbounded, which can lead to memory ex",
+            "summary": "CODE-041: The 'readings' list in the Batch model does not have a maximum size constraint. ",
             "rule_id": "CODE-041"
           },
           "description": "open a generic code-vuln incident",
@@ -1633,7 +1678,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9ca52819-290e-408c-a9b8-f2d88e05be45",
+          "step_id": "67a0a059-9d95-45c3-9607-7012bd4a60c9",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1648,7 +1693,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-042: The timestamp 'ts' in the Reading model is accepted from the client without serv",
+            "summary": "CODE-042: The 'ts' (timestamp) field in the Reading model is accepted from the client with",
             "rule_id": "CODE-042"
           },
           "description": "open a generic code-vuln incident",
@@ -1660,7 +1705,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "a8c32929-82be-4730-8541-f6e03481ee99",
+          "step_id": "420f04a0-5ae7-4176-ada3-35b687b79695",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1687,7 +1732,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "21201da4-2848-4b7c-87cc-8e6083618bdf",
+          "step_id": "511339d1-6f15-4e6a-be3a-af6ced9ebdaa",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1714,7 +1759,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "114ae03d-edbf-4819-96d1-267b6f9fd997",
+          "step_id": "149695d7-f7f6-4fc8-b958-1f7c809b6843",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1741,7 +1786,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c0ca4bf8-917f-4bed-969c-cde7f4e331a9",
+          "step_id": "b4cc6bc0-1502-467d-9493-0d4b33b25b07",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1756,7 +1801,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-032: Refresh tokens are stored in memory in plaintext, which can be insecure if the m",
+            "summary": "CODE-032: Refresh tokens are stored in memory in plaintext, which can lead to security iss",
             "rule_id": "CODE-032"
           },
           "description": "open a generic code-vuln incident",
@@ -1768,7 +1813,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "bfbfb51d-94b9-416e-bde2-afcda5622cb8",
+          "step_id": "f1304877-9214-4aed-b46f-7d24f1af64d3",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1783,7 +1828,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-010: Downloading packages over plain HTTP is insecure as it exposes the transfer to p",
+            "summary": "CODE-010: Fetching packages over plain HTTP is insecure as it exposes the download to pote",
             "rule_id": "CODE-010"
           },
           "description": "open a generic code-vuln incident",
@@ -1795,7 +1840,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9827f1a8-8036-48a7-9b61-19097f4a7f8b",
+          "step_id": "3299fb93-e276-4539-8fee-74d63f3f8166",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1810,7 +1855,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-045: There is no mechanism to verify the success of the installation or to rollback c",
+            "summary": "CODE-045: The code does not perform a health check after installation nor does it provide ",
             "rule_id": "CODE-045"
           },
           "description": "open a generic code-vuln incident",
@@ -1822,7 +1867,7 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b6428aac-f0ee-47ea-bcf5-41877af6b75e",
+          "step_id": "002adbf1-2dc2-44be-a35b-2ab6c9954251",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1837,7 +1882,7 @@
           "tool": "notify.create_incident",
           "params": {
             "severity": "medium",
-            "summary": "CODE-017: Debug mode is enabled based on an environment variable, which could be set in pr",
+            "summary": "CODE-017: Debug mode is enabled based on an environment variable, which could be inadverte",
             "rule_id": "CODE-017"
           },
           "description": "open a generic code-vuln incident",
@@ -1849,7 +1894,55 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "0065dc71-0248-457a-abbe-c59c4526b0f7",
+          "step_id": "79dd9d21-a8f4-43a3-88d2-179b4cc4c763",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LLM-SELECTED",
+          "kind": "audit",
+          "tool": "code.static_scan",
+          "params": {
+            "path": "/path/to/affected/code"
+          },
+          "description": "LLM-selected: To verify that the proposed patches address the vulnerabilities effectively and ",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "c38a30a2-9b0e-4f53-8798-b51d24c850b7",
+          "status": "pending",
+          "attempts": 0,
+          "started_at": null,
+          "finished_at": null,
+          "output": null,
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "LLM-SELECTED",
+          "kind": "audit",
+          "tool": "firewall.list_rules",
+          "params": {},
+          "description": "LLM-selected: To ensure that the firewall rules are correctly configured to prevent unauthoriz",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "7bbf78e7-459c-4b85-8536-2c06c7ac955d",
           "status": "pending",
           "attempts": 0,
           "started_at": null,
@@ -1862,52 +1955,23 @@
     },
     "audit_log": [
       {
-        "step_id": "f6fef8d7-b53c-490a-a15c-8dce3d856f15",
+        "step_id": "33a88673-397d-4758-bdc5-60d533507457",
         "tool": "secrets.rotate",
         "kind": "contain",
-        "status": "completed",
-        "msg": "completed",
-        "attempts": 1
-      },
-      {
-        "step_id": "112f8691-b6e8-4d68-98e6-1a889e2a5eb3",
-        "tool": "notify.create_incident",
-        "kind": "contain",
         "status": "refused",
-        "msg": "refused by guard: H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. Alerting the security team may inform them of an issue, but it does not produce a report itself. The objective requires the creation of a document or summary of findings, which 'alert_only' does not accomplish.",
+        "msg": "refused by guard: H_a judge refused step 'secrets.rotate': The action 'patch_code' does not directly serve the objective 'auto-correct insecure code' in the given context. The context involves rotating the sudoer's credentials immediately due to high and critical vulnerabilities, which is a privileged change. The action should focus on addressing the vulnerabilities directly, such as fixing command injection, SQL injection, unsafe deserialization, and data exfiltration issues, rather than patching code in a way that may not directly address these specific threats.",
         "attempts": 0
       }
     ]
   },
-  "mcp_audit": [
-    {
-      "ts": "2026-06-03T19:47:21.442",
-      "tool": "secrets.rotate",
-      "side_effect": "destructive",
-      "real_invoked": false,
-      "dry_run": true,
-      "elapsed_ms": 0.02,
-      "status": "would-execute",
-      "params": {
-        "secret_id": "***redacted***"
-      },
-      "result_payload": {
-        "dry_run": true,
-        "would_invoke": "vault",
-        "params": {
-          "secret_id": "***redacted***"
-        }
-      },
-      "error": null
-    }
-  ],
+  "mcp_audit": [],
   "guard_verdict": {
-    "allowed": true,
+    "allowed": false,
     "task_alignment": true,
-    "action_alignment": true,
+    "action_alignment": false,
     "source_authorization": true,
     "data_isolation": true,
-    "reason": "all four properties satisfied"
+    "reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. While alerting can inform stakeholders of vulnerabilities, it does not involve the analysis, documentation, or synthesis of information required to produce a comprehensive findings report. In the given context of multiple high and critical vulnerabilities, immediate action is needed to address these issues, and simply alerting does not fulfill the objective of producing a detailed report on the findings."
   },
   "trajectory_verdict": {
     "allowed": true,
@@ -1915,6 +1979,31 @@
     "temporal_ok": true,
     "violations": []
   },
+  "replanning": {
+    "rounds": 2,
+    "resolved": false,
+    "history": [
+      {
+        "round": 1,
+        "tier": "hard",
+        "plan_status": "failed",
+        "steps": 68,
+        "guard_allowed": false,
+        "guard_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. While alerting is important for awareness, the objective is to produce a comprehensive report on the vulnerabilities. This requires actions such as analyzing the vulnerabilities, documenting their impact, and compiling the findings into a report, rather than merely alerting stakeholders.",
+        "success": false
+      },
+      {
+        "round": 2,
+        "tier": "hard",
+        "plan_status": "failed",
+        "steps": 69,
+        "guard_allowed": false,
+        "guard_reason": "H_a judge refused: The action 'alert_only' does not directly contribute to producing a findings report. While alerting can inform stakeholders of vulnerabilities, it does not involve the analysis, documentation, or synthesis of information required to produce a comprehensive findings report. In the given context of multiple high and critical vulnerabilities, immediate action is needed to address these issues, and simply alerting does not fulfill the objective of producing a detailed report on the findings.",
+        "success": false
+      }
+    ]
+  },
+  "memory_recommendation": null,
   "findings": [
     {
       "rule_id": "CODE-006",
@@ -1926,10 +2015,28 @@
       "line": 28
     },
     {
+      "rule_id": "CODE-001",
+      "severity": "high",
+      "evidence": "subprocess.check_output(cmd, shell=True, text=True)",
+      "explanation": "The command injection vulnerability occurs because user-supplied input is directly passed to a shell execution function, allowing arbitrary command execution.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 38
+    },
+    {
+      "rule_id": "CODE-018",
+      "severity": "medium",
+      "evidence": "async def exec_command(request: Request, cmd: str)",
+      "explanation": "The endpoint is state-changing and lacks CSRF protection, making it vulnerable to CSRF attacks. Additionally, it does not require authentication, which further exposes it to unauthorized access.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 37
+    },
+    {
       "rule_id": "CODE-026",
       "severity": "high",
       "evidence": "requests.get(url, timeout=5, verify=False)",
-      "explanation": "The `/admin/proxy` endpoint fetches a URL supplied by the client, which can lead to Server-Side Request Forgery (SSRF). This allows an attacker to make requests to internal services or external services from the server's perspective.",
+      "explanation": "The SSRF vulnerability arises from allowing user-supplied URLs to be fetched by the server without validation, potentially exposing internal services and data.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 28
@@ -1938,34 +2045,16 @@
       "rule_id": "CODE-037",
       "severity": "high",
       "evidence": "full = Path(\"/var/log/fleet\") / path",
-      "explanation": "The `/admin/logs` endpoint concatenates a user-supplied `path` directly to a base directory, which can lead to path traversal vulnerabilities. This allows an attacker to read arbitrary files on the server.",
+      "explanation": "The path traversal vulnerability is due to directly concatenating user input into a file path, allowing attackers to access arbitrary files on the server.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 34
-    },
-    {
-      "rule_id": "CODE-001",
-      "severity": "high",
-      "evidence": "subprocess.check_output(cmd, shell=True, text=True)",
-      "explanation": "The `/admin/exec` endpoint executes a shell command supplied by the client, which can lead to command injection vulnerabilities. This allows an attacker to execute arbitrary commands on the server.",
-      "source_agent": "source_code_scanner",
-      "asset_category": null,
-      "line": 41
-    },
-    {
-      "rule_id": "CODE-018",
-      "severity": "medium",
-      "evidence": "@router.post(\"/exec\")",
-      "explanation": "The `/admin/exec` endpoint is a state-changing operation that lacks CSRF protection. This makes it vulnerable to cross-site request forgery attacks, where an attacker can trick a user into executing unintended actions.",
-      "source_agent": "source_code_scanner",
-      "asset_category": null,
-      "line": 40
+      "line": 33
     },
     {
       "rule_id": "CODE-006",
       "severity": "high",
       "evidence": "requests.get(url, timeout=5, verify=False)",
-      "explanation": "TLS certificate verification is disabled in the `/admin/proxy` endpoint, which can lead to man-in-the-middle attacks. An attacker can intercept and modify the traffic between the server and the target URL.",
+      "explanation": "Disabling TLS certificate verification can lead to man-in-the-middle attacks, as it allows connections to potentially malicious servers without validating their authenticity.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 28
@@ -1983,16 +2072,16 @@
       "rule_id": "CODE-007",
       "severity": "high",
       "evidence": "path = Path(\"/var/lib/fleet/ota/manifests\") / name",
-      "explanation": "The use of user-supplied 'name' in file path construction without validation can lead to path traversal, allowing unauthorized file access.",
+      "explanation": "The use of user-supplied 'name' in path construction without validation can lead to path traversal, allowing access to unintended files.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 23
+      "line": 22
     },
     {
       "rule_id": "CODE-038",
       "severity": "critical",
       "evidence": "eval(decoded, {\"__builtins__\": {}})",
-      "explanation": "Using eval on decoded input is highly dangerous as it can execute arbitrary code, leading to remote code execution vulnerabilities.",
+      "explanation": "Using eval on decoded signature material can lead to arbitrary code execution if the input is maliciously crafted.",
       "source_agent": "source_code_scanner",
       "asset_category": "Privacy and Personal Data",
       "line": 38
@@ -2001,7 +2090,7 @@
       "rule_id": "CODE-039",
       "severity": "medium",
       "evidence": "schedule_install(vin=vin, url=package_url)",
-      "explanation": "There is a potential race condition between fetching the manifest and triggering the install, where the package URL could change, leading to inconsistent or unintended installations.",
+      "explanation": "There is a potential race condition between the manifest fetch and the install trigger, where 'package_url' could change before the installation is executed.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 42
@@ -2010,7 +2099,7 @@
       "rule_id": "CODE-040",
       "severity": "high",
       "evidence": "async def ingest(batch: Batch):",
-      "explanation": "The telemetry ingestion endpoint does not authenticate incoming requests, relying solely on network-level trust. This exposes the endpoint to unauthorized access and potential data manipulation. Implementing authentication mechanisms such as per-gateway client certificates or HMAC is recommended.",
+      "explanation": "The telemetry ingestion endpoint does not authenticate incoming requests. This relies on network-level trust, which is insufficient for security. Production must require a per-gateway client certificate or HMAC to ensure that only authorized gateways can send telemetry data.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 28
@@ -2019,7 +2108,7 @@
       "rule_id": "CODE-041",
       "severity": "medium",
       "evidence": "readings: list[Reading]",
-      "explanation": "The 'readings' list in the Batch model is unbounded, which can lead to memory exhaustion if a large number of readings are submitted in a single request. Setting a maximum number of items in the list can mitigate this risk.",
+      "explanation": "The 'readings' list in the Batch model does not have a maximum size constraint. This can lead to memory exhaustion if a client sends a very large list of readings. Implementing a maximum size for the list can prevent this issue.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 21
@@ -2028,7 +2117,7 @@
       "rule_id": "CODE-042",
       "severity": "medium",
       "evidence": "ts: datetime",
-      "explanation": "The timestamp 'ts' in the Reading model is accepted from the client without server-side validation to ensure it falls within a reasonable time window (e.g., 'now \u00b1 60s'). This can lead to replay attacks if timestamps are manipulated. Implementing a sanity check on the server side is recommended.",
+      "explanation": "The 'ts' (timestamp) field in the Reading model is accepted from the client without server-side validation for a reasonable time window. This can allow replay attacks if old timestamps are accepted. Implementing a sanity check to ensure timestamps are within 'now \u00b1 60s' can mitigate replay risks.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 15
@@ -2043,28 +2132,28 @@
       "line": 31
     },
     {
+      "rule_id": "CODE-036",
+      "severity": "high",
+      "evidence": "async def vehicle_history(request: Request, vin: str, limit: int = 100):",
+      "explanation": "The endpoint allows any authenticated user with the 'fleet-operator' or 'admin' role to access the history of any vehicle by VIN without verifying ownership. This can lead to unauthorized access to sensitive vehicle telemetry data.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 19
+    },
+    {
       "rule_id": "CODE-027",
       "severity": "medium",
       "evidence": "log.info(\"history pulled vin=%s rows=%d\", vin, len(rows))",
-      "explanation": "Logging the VIN at INFO level can expose PII in logs, which may be accessible to unauthorized users or systems.",
+      "explanation": "The VIN, which is considered Personally Identifiable Information (PII), is logged at the INFO level. This could lead to exposure of sensitive information in logs.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 31
     },
     {
-      "rule_id": "CODE-036",
-      "severity": "high",
-      "evidence": "async def vehicle_history(request: Request, vin: str, limit: int = 100):",
-      "explanation": "The endpoint allows any authenticated user with the 'fleet-operator' or 'admin' role to access telemetry data for any VIN without checking ownership, leading to an Insecure Direct Object Reference (IDOR) vulnerability.",
-      "source_agent": "source_code_scanner",
-      "asset_category": null,
-      "line": 26
-    },
-    {
       "rule_id": "CODE-002",
       "severity": "medium",
       "evidence": "bcrypt.gensalt(rounds=4)",
-      "explanation": "The bcrypt hashing function is used with a cost factor of 4, which is too low for production environments. A higher cost factor, such as 12 or more, should be used to ensure adequate security against brute-force attacks.",
+      "explanation": "The bcrypt hashing function is used with a cost factor of 4, which is too low for production environments. A higher cost factor, such as 12 or more, should be used to increase the computational difficulty of brute-force attacks.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 19
@@ -2072,65 +2161,56 @@
     {
       "rule_id": "CODE-022",
       "severity": "medium",
-      "evidence": "login function lacks rate limiting",
-      "explanation": "The login function does not implement rate limiting, which can allow attackers to perform brute-force attacks on user credentials. Implementing rate limiting can help mitigate this risk.",
+      "evidence": "def login(username: str, password: str) -> dict:",
+      "explanation": "The login function does not implement rate limiting, which can allow attackers to perform brute-force attacks or denial-of-service attacks by repeatedly attempting to log in.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 27
+      "line": 24
     },
     {
       "rule_id": "CODE-031",
       "severity": "low",
       "evidence": "raise PermissionError(\"no such user\")",
-      "explanation": "The error message distinguishes between a non-existent user and an incorrect password, which can lead to user enumeration attacks. Consider using a generic error message for authentication failures.",
-      "source_agent": "source_code_scanner",
-      "asset_category": null,
-      "line": 29
-    },
-    {
-      "rule_id": "CODE-032",
-      "severity": "medium",
-      "evidence": "_REFRESH_TOKENS: dict[str, str] = {}",
-      "explanation": "Refresh tokens are stored in memory in plaintext, which can be insecure if the memory is accessed by unauthorized processes. Consider encrypting the tokens before storing them in memory.",
-      "source_agent": "source_code_scanner",
-      "asset_category": null,
-      "line": 14
-    },
-    {
-      "rule_id": "CODE-033",
-      "severity": "critical",
-      "evidence": "effective = request.headers.get('X-Effective-Role', claims.get('role', ''))",
-      "explanation": "The code trusts the client-supplied 'X-Effective-Role' header for authorization decisions, allowing users to elevate their privileges by setting this header to 'admin'. This represents a confused-deputy vulnerability where the client can impersonate higher roles.",
-      "source_agent": "source_code_scanner",
-      "asset_category": "Privacy and Personal Data",
-      "line": 19
-    },
-    {
-      "rule_id": "CODE-034",
-      "severity": "high",
-      "evidence": "if effective.lower() not in {r.lower() for r in allowed_roles}:",
-      "explanation": "The role comparison is case-insensitive, allowing bypass of role restrictions by using variations like 'AdMin' or 'ADMIN' if 'admin' is the only allowed role. This can lead to unauthorized access if role names are not strictly validated.",
-      "source_agent": "source_code_scanner",
-      "asset_category": null,
-      "line": 21
-    },
-    {
-      "rule_id": "CODE-027",
-      "severity": "medium",
-      "evidence": "VIN stored in the database as a primary key.",
-      "explanation": "Vehicle Identification Numbers (VINs) are considered Personally Identifiable Information (PII) and should be handled with care to avoid unauthorized access or exposure.",
+      "explanation": "The error message 'no such user' reveals whether a username exists in the system, which can be used by attackers to enumerate valid usernames.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 27
     },
     {
-      "rule_id": "CODE-034",
-      "severity": "high",
-      "evidence": "role = Column(String(32), nullable=False, default=\"fleet-operator\")",
-      "explanation": "Case-insensitive role comparison can lead to privilege escalation if roles are compared without considering case sensitivity, potentially allowing bypass of role-based access controls.",
+      "rule_id": "CODE-032",
+      "severity": "medium",
+      "evidence": "_REFRESH_TOKENS: dict[str, str] = {}",
+      "explanation": "Refresh tokens are stored in memory in plaintext, which can lead to security issues if the memory is accessed by unauthorized parties. Consider encrypting tokens before storing them.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 15
+      "line": 16
+    },
+    {
+      "rule_id": "CODE-033",
+      "severity": "critical",
+      "evidence": "effective = request.headers.get(\"X-Effective-Role\", claims.get(\"role\", \"\"))",
+      "explanation": "The code trusts the client-supplied 'X-Effective-Role' header for authorization decisions, allowing role elevation by the client. This is a confused-deputy vulnerability where a user can elevate their privileges by setting this header.",
+      "source_agent": "source_code_scanner",
+      "asset_category": "Privacy and Personal Data",
+      "line": 17
+    },
+    {
+      "rule_id": "CODE-034",
+      "severity": "high",
+      "evidence": "if effective.lower() not in {r.lower() for r in allowed_roles}:",
+      "explanation": "The role comparison is case-insensitive, allowing bypass of role checks if the allow-list contains roles in a specific case. For example, 'AdMin' or 'ADMIN' can bypass an allow-list that contains only 'admin'.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 19
+    },
+    {
+      "rule_id": "CODE-027",
+      "severity": "medium",
+      "evidence": "id = Column(String(17), primary_key=True)  # VIN",
+      "explanation": "The Vehicle model stores VINs, which are considered PII. Logging or exposing this information without proper safeguards can lead to privacy issues.",
+      "source_agent": "source_code_scanner",
+      "asset_category": null,
+      "line": 26
     },
     {
       "rule_id": "CODE-012",
@@ -2145,7 +2225,7 @@
       "rule_id": "CODE-012",
       "severity": "critical",
       "evidence": "f\"SELECT vin, metric, value, ts FROM telemetry WHERE vin = '{vin}' ORDER BY ts DESC LIMIT {limit}\"",
-      "explanation": "The use of f-string for SQL query construction allows for SQL injection if the input is not properly sanitized. This can lead to unauthorized data access or manipulation.",
+      "explanation": "The use of f-string interpolation in a raw SQL query allows for SQL injection if the `vin` or `limit` parameters are not properly sanitized. This can lead to unauthorized access or manipulation of the database.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 48
@@ -2154,10 +2234,10 @@
       "rule_id": "CODE-035",
       "severity": "low",
       "evidence": "LIMIT {limit}",
-      "explanation": "The `limit` parameter is directly used in the SQL query without bounding, which can lead to a denial-of-service (DoS) if excessively large values are provided.",
+      "explanation": "The `limit` parameter is directly used in the SQL query without any upper bound, which could lead to a denial-of-service (DoS) if a very large number is provided. It is recommended to clamp the limit, e.g., `min(limit, 1000)`.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 49
+      "line": 50
     },
     {
       "rule_id": "CODE-001",
@@ -2181,7 +2261,7 @@
       "rule_id": "CODE-001",
       "severity": "high",
       "evidence": "subprocess.run(f\"tar -xf {image} -C /tmp/ota\", shell=True, check=True)",
-      "explanation": "Using shell=True with subprocess.run can lead to command injection if the 'image' variable contains untrusted input, especially if it ends with a quote.",
+      "explanation": "Using shell=True with untrusted input can lead to command injection if the input is manipulated to include shell metacharacters.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 58
@@ -2190,7 +2270,7 @@
       "rule_id": "CODE-002",
       "severity": "medium",
       "evidence": "h = hashlib.md5()",
-      "explanation": "MD5 is used for hashing, which is considered weak and collision-prone, making it unsuitable for cryptographic purposes like verifying package signatures.",
+      "explanation": "MD5 is a weak hash function and is vulnerable to collision attacks, making it unsuitable for cryptographic purposes like verifying package integrity.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 49
@@ -2199,16 +2279,16 @@
       "rule_id": "CODE-010",
       "severity": "medium",
       "evidence": "if url.startswith(\"http://\"): pass",
-      "explanation": "Downloading packages over plain HTTP is insecure as it exposes the transfer to potential interception and tampering.",
+      "explanation": "Fetching packages over plain HTTP is insecure as it exposes the download to potential interception and tampering.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 38
+      "line": 36
     },
     {
       "rule_id": "CODE-045",
       "severity": "medium",
       "evidence": "no health check + no rollback on failure",
-      "explanation": "There is no mechanism to verify the success of the installation or to rollback changes if the post-install health check fails, which can lead to inconsistent states.",
+      "explanation": "The code does not perform a health check after installation nor does it provide a rollback mechanism in case of failure, which can lead to systems running faulty software.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 66
@@ -2235,7 +2315,7 @@
       "rule_id": "CODE-005",
       "severity": "critical",
       "evidence": "return eval(expr, {\"value\": value})",
-      "explanation": "The use of eval() on untrusted input 'expr' can lead to remote code execution (RCE). This is a critical security vulnerability as it allows execution of arbitrary code.",
+      "explanation": "The use of eval() on the 'expr' variable allows for remote code execution if 'expr' contains malicious code. This is a critical vulnerability as 'expr' is derived from untrusted input.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 27
@@ -2244,7 +2324,7 @@
       "rule_id": "CODE-027",
       "severity": "medium",
       "evidence": "log.info(\"telemetry vin=%s metric=%s result=%s\", payload[\"vin\"], payload[\"metric\"], result)",
-      "explanation": "Logging personally identifiable information (PII) such as VIN at INFO level can lead to sensitive data exposure. Consider using a less verbose logging level or redacting sensitive information.",
+      "explanation": "Logging the VIN at INFO level can lead to exposure of personally identifiable information (PII). This should be avoided or logged at a less verbose level.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
       "line": 46
@@ -2252,20 +2332,20 @@
     {
       "rule_id": "CODE-043",
       "severity": "low",
-      "evidence": "for msg in consumer: ... result = _evaluate_metric_expression(...)",
-      "explanation": "The absence of dead-letter queue (DLQ) or poison-pill handling means that any malformed message can crash the consumer loop, leading to potential downtime.",
+      "evidence": "for msg in consumer: ... any exception here kills the loop.",
+      "explanation": "There is no dead-letter queue (DLQ) or poison-pill handling implemented. A malformed message can crash the consumer loop, leading to potential downtime.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 40
+      "line": 38
     },
     {
       "rule_id": "CODE-044",
       "severity": "high",
-      "evidence": "KafkaConsumer(..., bootstrap_servers=settings.kafka_brokers)",
-      "explanation": "The Kafka client is configured without SASL or TLS, which can lead to data interception or unauthorized access. Ensure that security_protocol and sasl_mechanism are properly configured.",
+      "evidence": "KafkaConsumer(... value_deserializer=lambda b: json.loads(b.decode(\"utf-8\")), ...)",
+      "explanation": "The Kafka client is not configured with SASL or TLS, which means data is transmitted in plaintext and can be intercepted by attackers. This is a high-severity security risk.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 35
+      "line": 34
     },
     {
       "rule_id": "CODE-030",
@@ -2289,10 +2369,10 @@
       "rule_id": "CODE-017",
       "severity": "medium",
       "evidence": "enable_debug_routes=os.environ.get('FLEET_ENABLE_DEBUG_ROUTES', 'false').lower() == 'true'",
-      "explanation": "Debug mode is enabled based on an environment variable, which could be set in production inadvertently. Debug routes can expose sensitive information and functionality that should not be accessible in a production environment.",
+      "explanation": "Debug mode is enabled based on an environment variable, which could be inadvertently set to true in a production environment, exposing sensitive information and increasing the risk of exploitation.",
       "source_agent": "source_code_scanner",
       "asset_category": null,
-      "line": 35
+      "line": 36
     },
     {
       "rule_id": "LOG-EXFIL-01",
@@ -2315,8 +2395,8 @@
     {
       "rule_id": "LOG-EXFIL-01",
       "severity": "high",
-      "evidence": "7 DNS queries with avg subdomain entropy=3.58",
-      "explanation": "High entropy in DNS subdomains suggests potential use of DNS as a covert channel for data exfiltration.",
+      "evidence": "7 DNS queries with high subdomain entropy, avg entropy=3.58",
+      "explanation": "The DNS queries show a pattern of high entropy subdomains, indicating potential use of DNS as a covert channel for data exfiltration.",
       "source_agent": "log_analyzer",
       "asset_category": null,
       "line": null
@@ -2324,8 +2404,8 @@
     {
       "rule_id": "LOG-EXFIL-02",
       "severity": "high",
-      "evidence": "Large outbound transfer to 185.220.101.42 with 12,582,912 bytes in 8s",
-      "explanation": "Significant data transfer to a rare destination indicates potential data exfiltration activity.",
+      "evidence": "Large outbound transfer from 10.0.4.18 to 185.220.101.42, bytes_out=12_582_912 in 8s",
+      "explanation": "A significant amount of data was transferred to a rare destination, suggesting possible data exfiltration.",
       "source_agent": "log_analyzer",
       "asset_category": null,
       "line": null
@@ -2333,8 +2413,8 @@
     {
       "rule_id": "LOG-PRIV-01",
       "severity": "critical",
-      "evidence": "Command execution attempting to read /etc/shadow",
-      "explanation": "Privileged read of /etc/shadow file indicates potential unauthorized access to sensitive credential information.",
+      "evidence": "Attempt to read /etc/shadow via curl command",
+      "explanation": "A privileged read attempt of the /etc/shadow file, which contains sensitive password hashes, indicating potential unauthorized access or data theft.",
       "source_agent": "log_analyzer",
       "asset_category": null,
       "line": null
@@ -2379,7 +2459,7 @@
       "rule_id": "TOP-002",
       "severity": "high",
       "evidence": "external_a2a_agent writes to long_term_memory",
-      "explanation": "External actors must not write to long-term memory. The external_a2a_agent has a write edge to long_term_memory, violating this rule.",
+      "explanation": "External actors must not write to long-term memory unless they are authenticated. The external_a2a_agent has a write edge to long_term_memory, violating this rule.",
       "source_agent": "deployment_scanner",
       "asset_category": null,
       "line": null
@@ -2407,7 +2487,8 @@
         "TOP-006"
       ],
       "tier": "hard",
-      "guard_allowed": true
+      "guard_allowed": true,
+      "remediation_ok": false
     },
     {
       "scenario": "telemetry_uploader",
@@ -2427,21 +2508,41 @@
         "TOP-006"
       ],
       "tier": "hard",
-      "guard_allowed": true
+      "guard_allowed": false,
+      "remediation_ok": false
+    },
+    {
+      "scenario": "can_gateway",
+      "similarity": 0.195,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-003",
+        "CODE-005",
+        "CODE-006",
+        "CODE-040",
+        "LOG-CAN-02",
+        "TOP-001",
+        "TOP-002",
+        "TOP-003",
+        "TOP-004",
+        "TOP-005",
+        "TOP-006",
+        "TOP-007",
+        "TOP-008"
+      ],
+      "tier": "hard",
+      "guard_allowed": true,
+      "remediation_ok": false
     },
     {
       "scenario": "mqtt_handler",
-      "similarity": 0.182,
+      "similarity": 0.116,
       "rule_ids": [
-        "CODE-001",
-        "CODE-002",
-        "CODE-003",
         "CODE-013",
         "CODE-014",
         "CODE-015",
-        "CODE-016",
         "LOG-AUTH-03",
-        "LOG-EXFIL-02",
+        "LOG-LATERAL-01",
         "LOG-PRIV-01",
         "TOP-001",
         "TOP-002",
@@ -2452,33 +2553,10 @@
         "TOP-008"
       ],
       "tier": "hard",
-      "guard_allowed": true
-    },
-    {
-      "scenario": "can_gateway",
-      "similarity": 0.125,
-      "rule_ids": [
-        "CODE-001",
-        "CODE-003",
-        "CODE-005",
-        "CODE-006",
-        "CODE-040",
-        "LOG-CAN-02",
-        "TOP-001",
-        "TOP-002",
-        "TOP-007",
-        "TOP-008"
-      ],
-      "tier": "hard",
-      "guard_allowed": true
+      "guard_allowed": false,
+      "remediation_ok": false
     }
   ],
-  "committed": {
-    "action": "patch_code",
-    "target": "engine",
-    "parameters": {
-      "secret_id": "ops-sudo-token"
-    }
-  },
+  "committed": null,
   "memory_recorded": true
 }

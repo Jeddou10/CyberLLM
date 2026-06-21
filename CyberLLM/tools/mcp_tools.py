@@ -86,6 +86,7 @@ class StaticAnalysisTool:
     description = "Real static analysis via bandit (JSON) or semgrep."
 
     def run(self, filename: str, **_) -> dict:
+        print(f"Running static analysis on {filename}...")
         # Read-only — safe to run whenever a backend is present.
         if shutil.which("bandit"):
             rc, out, _ = _run(["bandit", "-r", filename, "-f", "json", "-q"],
@@ -99,6 +100,7 @@ class StaticAnalysisTool:
                           for r in data.get("results", [])]
             except Exception:           # noqa: BLE001
                 issues = []
+            print(f"Bandit found {len(issues)} issue(s) in {filename}")
             return {"tool": self.name, "filename": filename,
                     "backend": "bandit", "issues": issues}
         if shutil.which("semgrep"):
@@ -114,6 +116,7 @@ class StaticAnalysisTool:
                           for r in data.get("results", [])]
             except Exception:           # noqa: BLE001
                 issues = []
+            print(f"Semgrep found {len(issues)} issue(s) in {filename}")
             return {"tool": self.name, "filename": filename,
                     "backend": "semgrep", "issues": issues}
         return {"tool": self.name, "filename": filename, "backend": None,

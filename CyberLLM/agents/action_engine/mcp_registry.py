@@ -159,12 +159,17 @@ class MCPTool:
 class MCPRegistry:
     """Collection of tools + a runtime audit log."""
 
-    def __init__(self, dry_run: bool = True, work_dir: str | None = None):
+    def __init__(self, dry_run: bool = True, work_dir: str | None = None,
+                 on_call: Callable[[str, dict, ToolResult], None] | None = None):
         self._tools: dict[str, MCPTool] = {}
         self.dry_run = dry_run
         self.work_dir = work_dir
         self.audit: list[dict] = []
         self._authorization_hook: Callable[[str, dict], bool] | None = None
+        # Optional observer invoked after every tool call (name, params,
+        # result) — the pipeline wires it to the Console so each tool the
+        # engine runs is announced. Pure side-channel; never affects results.
+        self._on_call = on_call
 
     # ---- registration ---------------------------------------------------
 
@@ -213,6 +218,11 @@ class MCPRegistry:
         else:
             result = tool.call(params)
         self._append_audit(tool, params, result)
+        if self._on_call is not None:
+            try:
+                self._on_call(name, params, result)
+            except Exception:        # noqa: BLE001 — observer must never break a run
+                pass
         return result
 
     # ---- audit ----------------------------------------------------------

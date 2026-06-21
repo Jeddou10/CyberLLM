@@ -54,15 +54,20 @@ class DeploymentScannerAgent(BaseAgent):
         self.last_static_findings = list(static_as_findings)
 
         # ---- 2. LLM pass with static findings as context -------------
-        self.data["deployment"] = deployment_yaml
-        self.data["rules"] = self.cfg.get("rules_snippet", "")
-        self.data["static_findings"] = (
-            "\n".join(f"- {f.rule_id}: {f.evidence}" for f in static_as_findings)
-            or "(no static findings)"
-        )
-        prompt = self.template(self.PROMPT)
-        resp = self.call_llm(prompt)
-        llm_findings = self._parse_findings(resp.text)
+        if self.cfg.get("use_llm", True):
+            self.data["deployment"] = deployment_yaml
+            self.data["rules"] = self.cfg.get("rules_snippet", "")
+            self.data["static_findings"] = (
+                "\n".join(f"- {f.rule_id}: {f.evidence}" for f in static_as_findings)
+                or "(no static findings)"
+            )
+            prompt = self.template(self.PROMPT)
+            resp = self.call_llm(prompt)
+            llm_findings = self._parse_findings(resp.text)
+            raw_text = resp.text
+        else:
+            llm_findings = []
+            raw_text = "(LLM pass disabled — static layers only)"
 
         # ---- 3. Merge ------------------------------------------------
         merged = merge_findings(static_as_findings, llm_findings)
@@ -70,7 +75,7 @@ class DeploymentScannerAgent(BaseAgent):
             agent_id=self.agent_id,
             objective=self.objective,
             findings=merged,
-            raw_llm_text=resp.text,
+            raw_llm_text=raw_text,
         )
 
     # ---- convenience -----------------------------------------------------

@@ -31,13 +31,17 @@ if str(ROOT) not in sys.path:
 def _force_stub_llm(monkeypatch):
     """Keep the test suite hermetic and deterministic.
 
-    `config.yaml` now selects the `github` (gpt-4o) provider. Without this
-    guard, a developer who has a real GITHUB_TOKEN exported would make the
-    integration tests hit the network (and cost tokens). Forcing the stub
-    for the whole suite keeps tests offline and reproducible regardless of
-    the configured provider or any token present in the env / .env.
+    - `CYBERLLM_FORCE_STUB` forces the offline stub LLM, so no test hits the
+      network or costs tokens regardless of the configured provider.
+    - `CYBERLLM_FORCE_DRY_RUN` forces the action engine to dry-run, so no
+      test runs a real OS command even though `config.yaml` now sets
+      `action_engine.dry_run: false` for live operation.
     """
     monkeypatch.setenv("CYBERLLM_FORCE_STUB", "1")
+    monkeypatch.setenv("CYBERLLM_FORCE_DRY_RUN", "1")
+    # Disable the bandit/semgrep layer so detection is deterministic
+    # whether or not those binaries are installed on the test host.
+    monkeypatch.setenv("CYBERLLM_NO_EXTERNAL_STATIC", "1")
 
 
 @pytest.fixture(scope="session")

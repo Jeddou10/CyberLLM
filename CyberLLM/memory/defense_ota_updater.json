@@ -27,14 +27,14 @@
       "summary": "Secrets store is world-readable",
       "rule_id": "TOP-006"
     },
-    "plan_id": "1a958276-9365-4625-9feb-a5046e035a81"
+    "plan_id": "31fdad67-4065-4607-a433-382f2c46964a"
   },
   "action_report": {
-    "plan_id": "1a958276-9365-4625-9feb-a5046e035a81",
+    "plan_id": "31fdad67-4065-4607-a433-382f2c46964a",
     "status": "completed",
     "summary": "[completed] 22 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=network; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-10T15:47:12.369500",
-    "finished_at": "2026-06-10T15:47:12.370509",
+    "started_at": "2026-06-21T19:22:27.552794",
+    "finished_at": "2026-06-21T19:22:27.553789",
     "tallies": {
       "total": 22,
       "completed": 22,
@@ -44,7 +44,7 @@
       "skipped": 0
     },
     "plan": {
-      "plan_id": "1a958276-9365-4625-9feb-a5046e035a81",
+      "plan_id": "31fdad67-4065-4607-a433-382f2c46964a",
       "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
       "blast_radius": "network",
       "asset_categories": [
@@ -52,7 +52,7 @@
         "Privacy and Personal Data",
         "Life and Bodily Health"
       ],
-      "created_at": "2026-06-10T15:47:12.325362",
+      "created_at": "2026-06-21T19:22:27.508146",
       "estimated_duration_s": 660,
       "steps": [
         {
@@ -73,11 +73,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f78763cd-12a6-420a-a6de-464be90de9d5",
+          "step_id": "278446d8-bb50-4576-9fbe-6859459f3794",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.369500",
-          "finished_at": "2026-06-10T15:47:12.369500",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.552794",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -110,11 +110,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "65401101-9ff7-442f-941e-34bad86a6057",
+          "step_id": "3f7ff1e8-a55a-4ff7-8c7c-df095a10b782",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.369500",
-          "finished_at": "2026-06-10T15:47:12.369500",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.552794",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -147,11 +147,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "8193a84e-a515-44b0-8c1e-9c00418abc83",
+          "step_id": "115d4109-fce5-41bf-9084-0a2a55537ed8",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.369500",
-          "finished_at": "2026-06-10T15:47:12.369500",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.552794",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -184,11 +184,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "71c25108-7718-4c9f-83a4-3df003dd042d",
+          "step_id": "71ae0cfa-dc0a-4b2b-9c89-418889ddce56",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.369500",
-          "finished_at": "2026-06-10T15:47:12.369500",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.552794",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -220,11 +220,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "a37ce6f6-cfe0-49b8-8ef6-6e36b6fc5d3e",
+          "step_id": "269993bc-eb98-4260-954b-c2d9805becf3",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.369500",
-          "finished_at": "2026-06-10T15:47:12.369500",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.552794",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -256,11 +256,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "cc084fb2-e117-4059-97d8-7ef0ecc91a61",
+          "step_id": "aa6a9f3c-8474-4ef8-90c5-9c461bda9c5f",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.369500",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.552794",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -291,11 +291,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "08ce2694-89ce-4c07-bad9-20564b6455fc",
+          "step_id": "c22c34a7-2775-4001-8f21-4acc0e88c935",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.552794",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -327,11 +327,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "1321afe3-ec69-4319-be1b-6e8cc520f90f",
+          "step_id": "807e0215-134a-4f2f-bff9-745026f12fa4",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.552794",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -364,11 +364,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "febf978d-cf9e-4c52-8208-4928df539834",
+          "step_id": "d5a56149-bf15-49b4-a8c5-75161b87f1a2",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -401,11 +401,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "bb332f92-bcc6-4d19-8510-e1ee71c25c06",
+          "step_id": "819ab82a-2c3c-4340-89c9-13ae0447297f",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -440,11 +440,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4a42b251-9591-4f4a-89fd-46b0f3b909d6",
+          "step_id": "7a18be50-d089-4984-9d83-d40c98f1bd81",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -479,11 +479,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "88872dfb-b8ee-4487-aaf0-6ca066ea3bad",
+          "step_id": "7013912b-ca3d-4e75-82d6-82456ef2657b",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -518,11 +518,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "3054a055-5e83-4942-96e7-6936f8ee0eb0",
+          "step_id": "88f8734e-5111-4a8b-8465-cabf794db335",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -557,11 +557,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "79da359a-be89-45ae-99e0-5c3e83be749c",
+          "step_id": "f14c5694-c3c6-4c6f-bb03-46213c9abf05",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -596,11 +596,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "cfe97a53-d622-4adb-aaca-1950152a7ed5",
+          "step_id": "050bfed1-9738-4d4f-ae74-d299ae7725f0",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -634,11 +634,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "485a3bf0-3883-469d-b7e0-c7ce10febc11",
+          "step_id": "7fdee073-6cd6-49bb-95dd-140fe2479ae0",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -671,11 +671,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "cc14bf10-ae7f-41e9-b5fc-de174f949285",
+          "step_id": "f11a6c0b-2e0f-4af2-b32f-1a165f4d3d3e",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -708,11 +708,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "2f0975cb-11ac-4991-946e-c33bdd33dd5b",
+          "step_id": "150fa722-6d5d-4924-b1b3-5f7fe55ce811",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -745,11 +745,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e0702ee6-9576-4bd6-9490-9b7ebefb4a4e",
+          "step_id": "a4ffbf7a-2003-4581-90d2-d874e44ae48f",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -782,11 +782,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "3e3116c4-a47c-4082-9902-a2eb68638ed8",
+          "step_id": "168f5ccc-ba05-43f2-a4c7-f03d843ccddd",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -819,11 +819,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "d1e25f37-b0fb-4921-9253-db6c969ba04d",
+          "step_id": "9d5053ab-1eb3-4f57-9560-dd3150604522",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -857,11 +857,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "a390f8f9-0f13-4f72-bd9a-36869d6d010c",
+          "step_id": "839f4a6f-ec1f-4cad-830d-3a24bfc0c89b",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-10T15:47:12.370509",
-          "finished_at": "2026-06-10T15:47:12.370509",
+          "started_at": "2026-06-21T19:22:27.553789",
+          "finished_at": "2026-06-21T19:22:27.553789",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -881,7 +881,7 @@
     },
     "audit_log": [
       {
-        "step_id": "f78763cd-12a6-420a-a6de-464be90de9d5",
+        "step_id": "278446d8-bb50-4576-9fbe-6859459f3794",
         "tool": "notify.create_incident",
         "kind": "contain",
         "status": "completed",
@@ -889,7 +889,7 @@
         "attempts": 1
       },
       {
-        "step_id": "65401101-9ff7-442f-941e-34bad86a6057",
+        "step_id": "3f7ff1e8-a55a-4ff7-8c7c-df095a10b782",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -897,7 +897,7 @@
         "attempts": 1
       },
       {
-        "step_id": "8193a84e-a515-44b0-8c1e-9c00418abc83",
+        "step_id": "115d4109-fce5-41bf-9084-0a2a55537ed8",
         "tool": "firewall.rate_limit",
         "kind": "contain",
         "status": "completed",
@@ -905,7 +905,7 @@
         "attempts": 1
       },
       {
-        "step_id": "71c25108-7718-4c9f-83a4-3df003dd042d",
+        "step_id": "71ae0cfa-dc0a-4b2b-9c89-418889ddce56",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -913,7 +913,7 @@
         "attempts": 1
       },
       {
-        "step_id": "a37ce6f6-cfe0-49b8-8ef6-6e36b6fc5d3e",
+        "step_id": "269993bc-eb98-4260-954b-c2d9805becf3",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -921,7 +921,7 @@
         "attempts": 1
       },
       {
-        "step_id": "cc084fb2-e117-4059-97d8-7ef0ecc91a61",
+        "step_id": "aa6a9f3c-8474-4ef8-90c5-9c461bda9c5f",
         "tool": "observe.log_tail",
         "kind": "observe",
         "status": "completed",
@@ -929,7 +929,7 @@
         "attempts": 1
       },
       {
-        "step_id": "08ce2694-89ce-4c07-bad9-20564b6455fc",
+        "step_id": "c22c34a7-2775-4001-8f21-4acc0e88c935",
         "tool": "secrets.rotate",
         "kind": "eradicate",
         "status": "completed",
@@ -937,7 +937,7 @@
         "attempts": 1
       },
       {
-        "step_id": "1321afe3-ec69-4319-be1b-6e8cc520f90f",
+        "step_id": "807e0215-134a-4f2f-bff9-745026f12fa4",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -945,7 +945,7 @@
         "attempts": 1
       },
       {
-        "step_id": "febf978d-cf9e-4c52-8208-4928df539834",
+        "step_id": "d5a56149-bf15-49b4-a8c5-75161b87f1a2",
         "tool": "secrets.rotate",
         "kind": "eradicate",
         "status": "completed",
@@ -953,7 +953,7 @@
         "attempts": 1
       },
       {
-        "step_id": "bb332f92-bcc6-4d19-8510-e1ee71c25c06",
+        "step_id": "819ab82a-2c3c-4340-89c9-13ae0447297f",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -961,7 +961,7 @@
         "attempts": 1
       },
       {
-        "step_id": "4a42b251-9591-4f4a-89fd-46b0f3b909d6",
+        "step_id": "7a18be50-d089-4984-9d83-d40c98f1bd81",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -969,7 +969,7 @@
         "attempts": 1
       },
       {
-        "step_id": "88872dfb-b8ee-4487-aaf0-6ca066ea3bad",
+        "step_id": "7013912b-ca3d-4e75-82d6-82456ef2657b",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -977,7 +977,7 @@
         "attempts": 1
       },
       {
-        "step_id": "3054a055-5e83-4942-96e7-6936f8ee0eb0",
+        "step_id": "88f8734e-5111-4a8b-8465-cabf794db335",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -985,7 +985,7 @@
         "attempts": 1
       },
       {
-        "step_id": "79da359a-be89-45ae-99e0-5c3e83be749c",
+        "step_id": "f14c5694-c3c6-4c6f-bb03-46213c9abf05",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -993,7 +993,7 @@
         "attempts": 1
       },
       {
-        "step_id": "cfe97a53-d622-4adb-aaca-1950152a7ed5",
+        "step_id": "050bfed1-9738-4d4f-ae74-d299ae7725f0",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1001,7 +1001,7 @@
         "attempts": 1
       },
       {
-        "step_id": "485a3bf0-3883-469d-b7e0-c7ce10febc11",
+        "step_id": "7fdee073-6cd6-49bb-95dd-140fe2479ae0",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1009,7 +1009,7 @@
         "attempts": 1
       },
       {
-        "step_id": "cc14bf10-ae7f-41e9-b5fc-de174f949285",
+        "step_id": "f11a6c0b-2e0f-4af2-b32f-1a165f4d3d3e",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1017,7 +1017,7 @@
         "attempts": 1
       },
       {
-        "step_id": "2f0975cb-11ac-4991-946e-c33bdd33dd5b",
+        "step_id": "150fa722-6d5d-4924-b1b3-5f7fe55ce811",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1025,7 +1025,7 @@
         "attempts": 1
       },
       {
-        "step_id": "e0702ee6-9576-4bd6-9490-9b7ebefb4a4e",
+        "step_id": "a4ffbf7a-2003-4581-90d2-d874e44ae48f",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1033,7 +1033,7 @@
         "attempts": 1
       },
       {
-        "step_id": "3e3116c4-a47c-4082-9902-a2eb68638ed8",
+        "step_id": "168f5ccc-ba05-43f2-a4c7-f03d843ccddd",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1041,7 +1041,7 @@
         "attempts": 1
       },
       {
-        "step_id": "d1e25f37-b0fb-4921-9253-db6c969ba04d",
+        "step_id": "9d5053ab-1eb3-4f57-9560-dd3150604522",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1049,7 +1049,7 @@
         "attempts": 1
       },
       {
-        "step_id": "a390f8f9-0f13-4f72-bd9a-36869d6d010c",
+        "step_id": "839f4a6f-ec1f-4cad-830d-3a24bfc0c89b",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1060,7 +1060,7 @@
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-10T15:47:12.369",
+      "ts": "2026-06-21T19:22:27.552",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1084,7 +1084,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.369",
+      "ts": "2026-06-21T19:22:27.552",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1108,7 +1108,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.369",
+      "ts": "2026-06-21T19:22:27.552",
       "tool": "firewall.rate_limit",
       "side_effect": "write",
       "real_invoked": false,
@@ -1132,7 +1132,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.369",
+      "ts": "2026-06-21T19:22:27.552",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1156,7 +1156,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.369",
+      "ts": "2026-06-21T19:22:27.552",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -1178,7 +1178,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.369",
+      "ts": "2026-06-21T19:22:27.552",
       "tool": "observe.log_tail",
       "side_effect": "read",
       "real_invoked": false,
@@ -1202,7 +1202,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.552",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1222,7 +1222,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1248,7 +1248,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1270,7 +1270,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1296,7 +1296,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1322,7 +1322,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1348,7 +1348,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1374,7 +1374,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1400,7 +1400,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1426,7 +1426,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1450,7 +1450,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1474,7 +1474,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1498,7 +1498,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1522,7 +1522,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1546,7 +1546,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1570,7 +1570,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-10T15:47:12.370",
+      "ts": "2026-06-21T19:22:27.553",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1626,151 +1626,266 @@
     ]
   },
   "memory_recommendation": {
-    "scenario": "clean_auth",
-    "similarity": 0.5,
+    "scenario": "telemetry_uploader",
+    "similarity": 0.588,
     "tier": "moderate",
-    "action_kind": "rate_limit",
+    "action_kind": "alert_only",
     "plan_status": "completed",
-    "seen_at": "2026-06-10T15:47:12"
+    "seen_at": "2026-06-21T18:53:01"
   },
   "findings": [
     {
       "rule_id": "CODE-001",
       "severity": "high",
-      "evidence": "03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def",
-      "explanation": "Command injection sink \u2014 Shell execution of untrusted strings is a direct RCE.",
-      "source_agent": "source_code_scanner",
+      "title": "Command injection sink",
+      "location": "extract()",
+      "line": 51,
+      "detail": "Shell execution of untrusted strings is a direct RCE. \u2014 matched: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def",
       "asset_category": "Material and Economic Resources",
-      "line": 51
+      "source_agent": "source_code_scanner",
+      "evidence": "03_ota_updater.py: n via the path.     subprocess.run(f\"tar -xf {image} -C {STAGING_DIR}\", shell=True, check=True)   def"
     },
     {
       "rule_id": "CODE-002",
       "severity": "medium",
-      "evidence": "03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag",
-      "explanation": "Weak hash for credentials \u2014 MD5/SHA1 are unsuitable for password storage.",
-      "source_agent": "source_code_scanner",
+      "title": "Weak hash for credentials",
+      "location": "verify_signature()",
+      "line": 42,
+      "detail": "MD5/SHA1 are unsuitable for password storage. \u2014 matched: e \u2014 broken.     h = hashlib.md5()     with open(imag",
       "asset_category": "Privacy and Personal Data",
-      "line": 42
+      "source_agent": "source_code_scanner",
+      "evidence": "03_ota_updater.py: e \u2014 broken.     h = hashlib.md5()     with open(imag"
     },
     {
       "rule_id": "CODE-010",
       "severity": "medium",
-      "evidence": "03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST",
-      "explanation": "Plain HTTP for software update / sensitive flow",
-      "source_agent": "source_code_scanner",
+      "title": "Plain HTTP for software update / sensitive flow",
+      "location": "module level",
+      "line": 27,
+      "detail": "Plain HTTP for software update / sensitive flow \u2014 matched: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST",
       "asset_category": "Material and Economic Resources",
-      "line": 27
+      "source_agent": "source_code_scanner",
+      "evidence": "03_ota_updater.py: UPDATE_BASE_URL = \"http://updates.example-oem.com/firmware\"      # CODE-010 ST"
     },
     {
       "rule_id": "CODE-001",
       "severity": "high",
-      "evidence": "subprocess.call(user_input, shell=True)",
-      "explanation": "Shell-injection sink fed by untrusted input.",
-      "source_agent": "source_code_scanner",
+      "title": "Command injection sink",
+      "location": "module level",
+      "line": 14,
+      "detail": "Shell-injection sink fed by untrusted input. \u2014 matched: subprocess.call(user_input, shell=True)",
       "asset_category": "Material and Economic Resources",
-      "line": 14
+      "source_agent": "source_code_scanner",
+      "evidence": "subprocess.call(user_input, shell=True)"
     },
     {
       "rule_id": "CODE-002",
       "severity": "medium",
-      "evidence": "hashlib.md5(password)",
-      "explanation": "Weak hash algorithm for password storage.",
-      "source_agent": "source_code_scanner",
+      "title": "Weak hash for credentials",
+      "location": "module level",
+      "line": 22,
+      "detail": "Weak hash algorithm for password storage. \u2014 matched: hashlib.md5(password)",
       "asset_category": null,
-      "line": 22
+      "source_agent": "source_code_scanner",
+      "evidence": "hashlib.md5(password)"
     },
     {
       "rule_id": "LOG-EXFIL-02",
       "severity": "high",
-      "evidence": "2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\"",
-      "explanation": "Large outbound transfer to a rare destination",
-      "source_agent": "log_analyzer",
+      "title": "Large outbound transfer to a rare destination",
+      "location": "log stream",
+      "line": null,
+      "detail": "Large outbound transfer to a rare destination \u2014 matched: 2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\"",
       "asset_category": null,
-      "line": null
+      "source_agent": "log_analyzer",
+      "evidence": "2026-05-19T15:31:25Z net  10.0.5.4 \u2192 10.0.5.11 port 5432 bytes_out=18_874_368  note=\"psql data transfer\""
     },
     {
       "rule_id": "LOG-LATERAL-01",
       "severity": "high",
-      "evidence": "2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s",
-      "explanation": "Internal port-scan pattern from a single host",
-      "source_agent": "log_analyzer",
+      "title": "Internal port-scan pattern from a single host",
+      "location": "log stream",
+      "line": null,
+      "detail": "Internal port-scan pattern from a single host \u2014 matched: 2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s",
       "asset_category": null,
-      "line": null
+      "source_agent": "log_analyzer",
+      "evidence": "2026-05-19T15:30:14Z app  internal-scan src=10.0.4.18 dst=10.0.4.0/24 port=22  rate=200/s"
     },
     {
       "rule_id": "LOG-NET-01",
       "severity": "high",
-      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
-      "explanation": "Sudden internal broadcast burst \u2014 possible reconnaissance.",
-      "source_agent": "log_analyzer",
+      "title": "Unusual broadcast burst",
+      "location": "log stream",
+      "line": null,
+      "detail": "Sudden internal broadcast burst \u2014 possible reconnaissance. \u2014 matched: 10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s",
       "asset_category": null,
-      "line": null
+      "source_agent": "log_analyzer",
+      "evidence": "10.0.0.42 \u2192 10.0.0.255 :7000 burst 1200 pkts/s"
     },
     {
       "rule_id": "LOG-AUTH-03",
       "severity": "medium",
-      "evidence": "12 failed auth attempts in 30 s, user='root'",
-      "explanation": "Brute-force pattern on privileged account.",
-      "source_agent": "log_analyzer",
+      "title": "Brute-force on privileged account",
+      "location": "log stream",
+      "line": null,
+      "detail": "Brute-force pattern on privileged account. \u2014 matched: 12 failed auth attempts in 30 s, user='root'",
       "asset_category": null,
-      "line": null
+      "source_agent": "log_analyzer",
+      "evidence": "12 failed auth attempts in 30 s, user='root'"
     },
     {
       "rule_id": "TOP-002",
       "severity": "high",
-      "evidence": "external actor external_a2a_agent writes to long_term_memory (poison path)",
-      "explanation": "External actors must not write to long-term memory",
-      "source_agent": "deployment_scanner",
+      "title": "External actors must not write to long-term memory",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "External actors must not write to long-term memory \u2014 matched: external actor external_a2a_agent writes to long_term_memory (poison path)",
       "asset_category": null,
-      "line": null
+      "source_agent": "deployment_scanner",
+      "evidence": "external actor external_a2a_agent writes to long_term_memory (poison path)"
     },
     {
       "rule_id": "TOP-004",
       "severity": "high",
-      "evidence": "public_internet \u2192 admin_portal: no WAF on admin surface",
-      "explanation": "Admin portal exposed to public internet",
-      "source_agent": "deployment_scanner",
+      "title": "Admin portal exposed to public internet",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "Admin portal exposed to public internet \u2014 matched: public_internet \u2192 admin_portal: no WAF on admin surface",
       "asset_category": null,
-      "line": null
+      "source_agent": "deployment_scanner",
+      "evidence": "public_internet \u2192 admin_portal: no WAF on admin surface"
     },
     {
       "rule_id": "TOP-005",
       "severity": "high",
-      "evidence": "database postgres binds 0.0.0.0",
-      "explanation": "Database bound to 0.0.0.0",
-      "source_agent": "deployment_scanner",
+      "title": "Database bound to 0.0.0.0",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "Database bound to 0.0.0.0 \u2014 matched: database postgres binds 0.0.0.0",
       "asset_category": null,
-      "line": null
+      "source_agent": "deployment_scanner",
+      "evidence": "database postgres binds 0.0.0.0"
     },
     {
       "rule_id": "TOP-006",
       "severity": "critical",
-      "evidence": "secrets store secrets_store access_policy=world-readable",
-      "explanation": "Secrets store world-readable",
-      "source_agent": "deployment_scanner",
+      "title": "Secrets store world-readable",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "Secrets store world-readable \u2014 matched: secrets store secrets_store access_policy=world-readable",
       "asset_category": "Material and Economic Resources",
-      "line": null
+      "source_agent": "deployment_scanner",
+      "evidence": "secrets store secrets_store access_policy=world-readable"
     },
     {
       "rule_id": "TOP-001",
       "severity": "high",
-      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
-      "explanation": "Violates HPCtoZoneEthernetIEEE1722 architectural rule.",
-      "source_agent": "deployment_scanner",
+      "title": "HPC\u2194ZoneECU must be Ethernet/IEEE-1722",
+      "location": "deployment topology",
+      "line": null,
+      "detail": "Violates HPCtoZoneEthernetIEEE1722 architectural rule. \u2014 matched: HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)",
       "asset_category": null,
-      "line": null
-    },
-    {
-      "rule_id": "TOP-002",
-      "severity": "medium",
-      "evidence": "External A2A agent has write-edge to long_term_memory",
-      "explanation": "Datasource is writable by an unauthenticated actor (poison path).",
       "source_agent": "deployment_scanner",
-      "asset_category": null,
-      "line": null
+      "evidence": "HighPerformanceComputer\u2192ZoneECU on CAN (not Ethernet)"
     }
   ],
   "consulted_memory": [
+    {
+      "scenario": "telemetry_uploader",
+      "similarity": 0.588,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-002",
+        "CODE-003",
+        "CODE-006",
+        "CODE-008",
+        "CODE-012",
+        "LOG-AUTH-03",
+        "LOG-EXFIL-01",
+        "LOG-EXFIL-02",
+        "LOG-NET-01",
+        "TOP-001",
+        "TOP-002",
+        "TOP-004",
+        "TOP-005",
+        "TOP-006"
+      ],
+      "tier": "moderate",
+      "guard_allowed": true,
+      "remediation_ok": true
+    },
+    {
+      "scenario": "telemetry_uploader",
+      "similarity": 0.588,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-002",
+        "CODE-003",
+        "CODE-006",
+        "CODE-008",
+        "CODE-012",
+        "LOG-AUTH-03",
+        "LOG-EXFIL-01",
+        "LOG-EXFIL-02",
+        "LOG-NET-01",
+        "TOP-001",
+        "TOP-002",
+        "TOP-004",
+        "TOP-005",
+        "TOP-006"
+      ],
+      "tier": "moderate",
+      "guard_allowed": true,
+      "remediation_ok": true
+    },
+    {
+      "scenario": "telemetry_uploader",
+      "similarity": 0.588,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-002",
+        "CODE-003",
+        "CODE-006",
+        "CODE-008",
+        "CODE-012",
+        "LOG-AUTH-03",
+        "LOG-EXFIL-01",
+        "LOG-EXFIL-02",
+        "LOG-NET-01",
+        "TOP-001",
+        "TOP-002",
+        "TOP-004",
+        "TOP-005",
+        "TOP-006"
+      ],
+      "tier": "moderate",
+      "guard_allowed": true,
+      "remediation_ok": true
+    },
+    {
+      "scenario": "telemetry_uploader",
+      "similarity": 0.588,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-002",
+        "CODE-003",
+        "CODE-006",
+        "CODE-008",
+        "CODE-012",
+        "LOG-AUTH-03",
+        "LOG-EXFIL-01",
+        "LOG-EXFIL-02",
+        "LOG-NET-01",
+        "TOP-001",
+        "TOP-002",
+        "TOP-004",
+        "TOP-005",
+        "TOP-006"
+      ],
+      "tier": "moderate",
+      "guard_allowed": true,
+      "remediation_ok": true
+    },
     {
       "scenario": "clean_auth",
       "similarity": 0.5,
@@ -1781,26 +1896,6 @@
         "LOG-NET-01",
         "TOP-001",
         "TOP-002"
-      ],
-      "tier": "moderate",
-      "guard_allowed": true,
-      "remediation_ok": true
-    },
-    {
-      "scenario": "can_gateway",
-      "similarity": 0.353,
-      "rule_ids": [
-        "CODE-001",
-        "CODE-002",
-        "CODE-003",
-        "CODE-005",
-        "CODE-006",
-        "LOG-AUTH-03",
-        "LOG-CAN-02",
-        "LOG-NET-01",
-        "TOP-001",
-        "TOP-002",
-        "TOP-007"
       ],
       "tier": "moderate",
       "guard_allowed": true,

@@ -29,11 +29,18 @@ Three entry points, one per scanner type
 
 from __future__ import annotations
 
+import importlib.util
+import json
 import math
 import re
+import shutil
+import subprocess
+import sys
+import tempfile
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Iterable
 
 import yaml
@@ -350,16 +357,194 @@ def scan_deployment_static(deployment_yaml: str, rules: dict) -> list[StaticFind
 
 def merge_findings(static: list[StaticFinding],
                    llm_findings: list) -> list:
-    """De-dup by (rule_id, evidence prefix). Static findings take priority
-    because they are deterministic."""
+    """Merge the deterministic (static) findings with the LLM's, dropping
+    LLM duplicates. Static findings take priority because they are precise.
+
+    An LLM finding is dropped when it restates a static one:
+      * same (rule_id, line)            — same issue, same locus, or
+      * same (rule_id, evidence prefix) — same issue, same snippet, or
+      * same rule_id with no line       — the deterministic layer already
+        covers that rule and the LLM added no new, specific locus.
+    LLM findings on a *different* line (a locus the static layer missed) are
+    kept, so we never lose real signal."""
     out = list(static)
-    seen = {(f.rule_id, (f.evidence or "")[:40]) for f in static}
+    seen_line = {(f.rule_id, f.line) for f in static
+                 if getattr(f, "line", None) is not None}
+    seen_ev = {(f.rule_id, (f.evidence or "")[:40]) for f in static}
+    seen_rid = {f.rule_id for f in static}
     for f in llm_findings:
-        key = (getattr(f, "rule_id", None), (getattr(f, "evidence", "") or "")[:40])
+        rid = getattr(f, "rule_id", None)
+        line = getattr(f, "line", None)
+        ev_key = (rid, (getattr(f, "evidence", "") or "")[:40])
+        if line is not None and (rid, line) in seen_line:
+            continue
+        if ev_key in seen_ev:
+            continue
+        if line is None and rid in seen_rid:
+            continue
+        out.append(f)
+        seen_ev.add(ev_key)
+        seen_rid.add(rid)
+        if line is not None:
+            seen_line.add((rid, line))
+    return out
+
+
+def merge_static_layers(primary: list[StaticFinding],
+                        extra: list[StaticFinding]) -> list[StaticFinding]:
+    """Combine two *static* layers (e.g. the regex floor and the bandit /
+    semgrep layer). The `primary` layer wins: an `extra` finding is added
+    only if its (rule_id, line) is not already covered by `primary`, so we
+    keep the issues the external analyser catches that regex missed without
+    double-reporting the same issue on the same line."""
+    out = list(primary)
+    seen = {(f.rule_id, f.line) for f in primary}
+    for f in extra:
+        key = (f.rule_id, f.line)
         if key not in seen:
             out.append(f)
             seen.add(key)
     return out
+
+
+# ---------------------------------------------------------------------------
+# Optional external static-analysis layer — bandit (Python) / semgrep.
+#
+# Why: regex is a high-recall but shallow floor. bandit/semgrep are AST- and
+# data-flow-aware, so they catch structural issues a regex misses. We run
+# them as an *additional detection layer* (merged with the regex floor and
+# then the LLM), mapping their findings onto our own rule-ids where we can
+# so everything stays traceable. They are optional: if the binary is not
+# installed (or errors), this returns [] and the regex floor still stands.
+# ---------------------------------------------------------------------------
+
+# bandit test-id → our CODE-* rule-id (so a bandit hit inherits our title,
+# severity and asset category). Unmapped ids are kept as `BANDIT-<id>`.
+_BANDIT_TO_RULE = {
+    "B602": "CODE-001", "B603": "CODE-001", "B604": "CODE-001",
+    "B605": "CODE-001", "B606": "CODE-001", "B609": "CODE-001",
+    "B303": "CODE-002", "B324": "CODE-002",
+    "B105": "CODE-003", "B106": "CODE-003", "B107": "CODE-003",
+    "B608": "CODE-012",
+    "B301": "CODE-005", "B302": "CODE-005", "B403": "CODE-005",
+    "B506": "CODE-005",
+    "B307": "CODE-038",
+    "B501": "CODE-006", "B502": "CODE-006", "B503": "CODE-006",
+    "B311": "CODE-008",
+}
+
+_BANDIT_SEV = {"HIGH": "high", "MEDIUM": "medium", "LOW": "low"}
+_SEMGREP_SEV = {"ERROR": "high", "WARNING": "medium", "INFO": "low"}
+
+
+def _rule_index(rules: dict) -> dict:
+    idx: dict = {}
+    for items in (rules or {}).values():
+        for r in (items or []):
+            if isinstance(r, dict) and "id" in r:
+                idx[r["id"]] = r
+    return idx
+
+
+def bandit_results_to_findings(results: list, filename: str,
+                               rules: dict | None = None) -> list[StaticFinding]:
+    """Pure mapping: bandit JSON `results` → StaticFinding[] (no subprocess,
+    so this is unit-testable on synthetic data)."""
+    rule_idx = _rule_index(rules or {})
+    out: list[StaticFinding] = []
+    for r in results:
+        test_id = r.get("test_id", "")
+        rid = _BANDIT_TO_RULE.get(test_id, f"BANDIT-{test_id or 'UNKNOWN'}")
+        rule = rule_idx.get(rid, {})
+        bandit_sev = _BANDIT_SEV.get((r.get("issue_severity") or "").upper(), "medium")
+        snippet = (r.get("code") or r.get("issue_text") or "").strip().replace("\n", " ")
+        out.append(StaticFinding(
+            rule_id=rid,
+            # prefer our rule's severity when the id is mapped, else bandit's
+            severity=rule.get("severity", bandit_sev),
+            evidence=f"{filename}: {snippet[:120]}",
+            explanation=((rule.get("title") or r.get("issue_text") or "")
+                         + f" [bandit {test_id}]").strip(),
+            source_agent="bandit",
+            asset_category=rule.get("asset_category"),
+            line=r.get("line_number"),
+        ))
+    return out
+
+
+def semgrep_results_to_findings(results: list, filename: str) -> list[StaticFinding]:
+    """Pure mapping: semgrep JSON `results` → StaticFinding[]."""
+    out: list[StaticFinding] = []
+    for r in results:
+        check = (r.get("check_id") or "semgrep").split(".")[-1][:24]
+        extra = r.get("extra", {}) or {}
+        sev = _SEMGREP_SEV.get((extra.get("severity") or "").upper(), "medium")
+        lines = (extra.get("lines") or "").strip().replace("\n", " ")
+        out.append(StaticFinding(
+            rule_id=f"SEMGREP-{check}",
+            severity=sev,
+            evidence=f"{filename}: {lines[:120]}",
+            explanation=((extra.get("message") or "semgrep finding")[:200]
+                         + " [semgrep]"),
+            source_agent="semgrep",
+            line=(r.get("start", {}) or {}).get("line"),
+        ))
+    return out
+
+
+def _analyzer_cmd(name: str) -> list[str] | None:
+    """Resolve how to invoke `name` (bandit/semgrep): prefer the binary on
+    PATH, else fall back to `python -m <name>` if the module is importable
+    (common for `pip install --user` on Windows, where the .exe shim is not
+    on PATH). Returns the command prefix, or None if unavailable."""
+    if shutil.which(name):
+        return [name]
+    if importlib.util.find_spec(name) is not None:
+        return [sys.executable, "-m", name]
+    return None
+
+
+def external_static_available(suffix: str = ".py") -> bool:
+    """True when a real AST analyser can run for files of this suffix."""
+    if suffix.lower() == ".py" and _analyzer_cmd("bandit"):
+        return True
+    return _analyzer_cmd("semgrep") is not None
+
+
+def scan_code_external(code: str, filename: str, rules: dict | None = None,
+                       timeout: int = 60) -> list[StaticFinding]:
+    """Run a *real* static analyser (bandit for Python, else semgrep) over
+    `code` and return StaticFinding[]. Always graceful: returns [] when no
+    backend is installed or on any error — the regex floor is unaffected.
+
+    `code` is written to a temp file named like `filename` so line numbers
+    line up with the original. No `shell=True`; bounded timeout."""
+    suffix = (Path(filename).suffix or ".py").lower()
+    bandit_cmd = _analyzer_cmd("bandit")
+    semgrep_cmd = _analyzer_cmd("semgrep")
+    tmpdir = tempfile.mkdtemp(prefix="cyberllm_ext_")
+    try:
+        tmpfile = Path(tmpdir) / (Path(filename).name or "code.py")
+        tmpfile.write_text(code, encoding="utf-8")
+        if suffix == ".py" and bandit_cmd:
+            cp = subprocess.run([*bandit_cmd, "-f", "json", "-q", str(tmpfile)],
+                                capture_output=True, text=True,
+                                timeout=timeout, check=False)
+            data = json.loads(cp.stdout or "{}")
+            return bandit_results_to_findings(
+                data.get("results", []), filename, rules)
+        if semgrep_cmd:
+            cp = subprocess.run([*semgrep_cmd, "--config=auto", "--json",
+                                 "--quiet", str(tmpfile)],
+                                capture_output=True, text=True,
+                                timeout=timeout, check=False)
+            data = json.loads(cp.stdout or "{}")
+            return semgrep_results_to_findings(data.get("results", []), filename)
+    except Exception:        # noqa: BLE001 — external layer is best-effort
+        return []
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+    return []
 
 
 def staticfinding_to_finding(static_findings: Iterable[StaticFinding], finding_cls):

@@ -9,11 +9,13 @@ Inspiration:
 """
 
 from __future__ import annotations
+import os
 from pathlib import Path
 
 from .base_agent import BaseAgent, AgentResult, Finding, Input
 from tools.static_analyzer import (
-    merge_findings, scan_code_static, staticfinding_to_finding,
+    merge_findings, merge_static_layers, scan_code_external,
+    scan_code_static, staticfinding_to_finding,
 )
 
 
@@ -40,34 +42,57 @@ class SourceCodeScannerAgent(BaseAgent):
             return AgentResult(self.agent_id, self.objective, [])
 
         rules = self.cfg.get("rules_full", {})
+        # The AST-based external analyser (bandit/semgrep) is an *extra*
+        # detection layer. On by default; disabled by config flag or by the
+        # CYBERLLM_NO_EXTERNAL_STATIC kill-switch (the test suite sets it so
+        # results stay deterministic whether or not bandit is installed).
+        external_on = (self.cfg.get("external_static", True)
+                       and not os.environ.get("CYBERLLM_NO_EXTERNAL_STATIC"))
+        # When the configured LLM is the offline stub, its canned findings
+        # are wrong for *arbitrary real* code — so callers (e.g. the web UI)
+        # set use_llm=False to return the deterministic regex+bandit layers
+        # only. Defaults True (examples / real provider).
+        use_llm = self.cfg.get("use_llm", True)
         all_findings: list[Finding] = []
         raw_texts: list[str] = []
         self.last_static_findings = []
 
         for inp in code_inputs:
-            # ---- 1. Deterministic static pass (regex over the rules) -----
+            # ---- 1a. Deterministic static FLOOR (regex over the rules) ---
             static_hits = scan_code_static(inp.content, inp.source, rules)
             static_as_findings = staticfinding_to_finding(static_hits, Finding)
             for f in static_as_findings:
                 f.source_agent = self.agent_id
-            self.last_static_findings.extend(static_as_findings)
 
-            # ---- 2. LLM pass — given the static hits as context ---------
-            self.data["code"] = inp.content
-            self.data["filename"] = inp.source
-            self.data["rules"] = self.cfg.get("rules_snippet", "")
-            self.data["static_findings"] = (
-                "\n".join(f"- {f.rule_id} (line {f.line}): {f.evidence}"
-                          for f in static_as_findings)
-                or "(no static findings)"
-            )
-            prompt = self.template(self.PROMPT)
-            resp = self.call_llm(prompt)
-            raw_texts.append(resp.text)
-            llm_findings = self._parse_findings(resp.text)
+            # ---- 1b. External AST layer (bandit/semgrep) — regex wins ----
+            if external_on:
+                ext_hits = scan_code_external(inp.content, inp.source, rules)
+                ext_findings = staticfinding_to_finding(ext_hits, Finding)
+                # keep their tool name ('bandit'/'semgrep') as source_agent
+                static_layer = merge_static_layers(static_as_findings, ext_findings)
+            else:
+                static_layer = static_as_findings
+            self.last_static_findings.extend(static_layer)
 
-            # ---- 3. Merge (static wins on dedup) ------------------------
-            merged = merge_findings(static_as_findings, llm_findings)
+            # ---- 2. LLM pass — given the static layer as context --------
+            if use_llm:
+                self.data["code"] = inp.content
+                self.data["filename"] = inp.source
+                self.data["rules"] = self.cfg.get("rules_snippet", "")
+                self.data["static_findings"] = (
+                    "\n".join(f"- {f.rule_id} (line {f.line}): {f.evidence}"
+                              for f in static_layer)
+                    or "(no static findings)"
+                )
+                prompt = self.template(self.PROMPT)
+                resp = self.call_llm(prompt)
+                raw_texts.append(resp.text)
+                llm_findings = self._parse_findings(resp.text)
+            else:
+                llm_findings = []
+
+            # ---- 3. Merge (static layer wins on dedup) ------------------
+            merged = merge_findings(static_layer, llm_findings)
             all_findings.extend(merged)
 
         return AgentResult(

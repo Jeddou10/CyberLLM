@@ -23,6 +23,21 @@ llm_configs:
     temperature: 0.0
     max_tokens: 2048
 
+# ---- Scanner layers (static-first detection) ------------------------------
+# The source-code scanner always runs the deterministic regex floor; with
+# external_static it ALSO runs a real AST-based analyser (bandit for Python,
+# else semgrep) as an extra detection layer, merged with the regex floor
+# (regex wins on the same rule+line) and then refined by the LLM. It is
+# optional/graceful: if the binary is absent it is silently skipped, so the
+# regex floor still stands. Disable here, or via CYBERLLM_NO_EXTERNAL_STATIC=1
+# (the test suite + verify.py set that so results stay deterministic).
+scanners:
+  external_static: true
+  # use_llm: run the LLM refinement pass on top of the static layers. The web
+  # UI sets this per-request (off in Fast mode / when no live LLM creds exist)
+  # so the offline stub's canned findings never appear on real pasted code.
+  use_llm: true
+
 # ---- Agent configurations -------------------------------------------------
 agent_configs:
   # ---- Defense side ----
@@ -150,6 +165,11 @@ defaults:
 # the log file to pair with, and the deployment YAML to pair with.
 # Paths are relative to the project root (CyberLLM/).
 example_sets:
+  test_blind:
+    - name: test_blind
+      code: examples/01_fleet_db_service.py
+      log: examples\sample_log.log
+      deployment: examples\sample_deployment.yaml
   juliet:
     - name: juliet_smoke
       code: examples/juliet

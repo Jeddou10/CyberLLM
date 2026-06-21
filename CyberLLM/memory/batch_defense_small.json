@@ -12,7 +12,7 @@
     {
       "name": "can_gateway",
       "files_scanned": 1,
-      "findings": 15,
+      "findings": 13,
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",
@@ -21,7 +21,7 @@
     {
       "name": "ota_updater",
       "files_scanned": 1,
-      "findings": 15,
+      "findings": 14,
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",
@@ -30,7 +30,7 @@
     {
       "name": "telemetry_uploader",
       "files_scanned": 1,
-      "findings": 20,
+      "findings": 19,
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",
@@ -39,7 +39,7 @@
     {
       "name": "mqtt_handler",
       "files_scanned": 1,
-      "findings": 22,
+      "findings": 19,
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",

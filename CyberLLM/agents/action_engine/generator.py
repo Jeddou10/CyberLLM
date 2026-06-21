@@ -68,10 +68,12 @@ class ActionGenerator(BaseAgent):
 
     def __init__(self, agent_id: str, cfg: dict, llm: LLMClient,
                  registry: MCPRegistry | None = None,
-                 guard: GuardAdapter | None = None):
+                 guard: GuardAdapter | None = None,
+                 on_tool=None):
         super().__init__(agent_id, cfg, llm)
         self.dry_run = bool(cfg.get("dry_run", True))
         self.work_dir = cfg.get("work_dir", "./mcp_workspace")
+        self._on_tool = on_tool                     # announce each tool run
         self.registry = registry or self._build_default_registry()
         self.guard = guard
         self.executor = ActionExecutor(self.registry, guard=self.guard)
@@ -194,7 +196,8 @@ class ActionGenerator(BaseAgent):
     # ------------------------------------------------------------------
 
     def _build_default_registry(self) -> MCPRegistry:
-        reg = MCPRegistry(dry_run=self.dry_run, work_dir=self.work_dir)
+        reg = MCPRegistry(dry_run=self.dry_run, work_dir=self.work_dir,
+                          on_call=self._on_tool)
         reg.register_many(default_toolset())
         return reg
 
