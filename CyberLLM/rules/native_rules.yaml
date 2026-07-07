@@ -1,0 +1,69 @@
+# Native-language (C / C++ / Rust) detection rules.
+#
+# These extend the `code_rules` family with patterns for compiled-language
+# idioms the original (Python-oriented) rules miss. They serve two layers at
+# once: the deterministic regex floor matches them directly, and they are
+# injected into the scanner prompt as rules-as-context (paper 3) so the LLM
+# anchors its findings to real rule ids.
+#
+# Each pattern targets an *inherently dangerous* construct (banned functions,
+# unsafe blocks, shelling out, panics on untrusted input), NOT the mere
+# presence of a common API — so they do not fire on defensively-written code
+# (verified against the clean control files in benchmark/automotive/).
+
+code_rules:
+  - id: CODE-101
+    severity: high
+    title: "Unsafe C string function"
+    pattern: "\\b(strcpy|strcat|sprintf|vsprintf|gets|stpcpy)\\s*\\("
+    asset_category: "Material and Economic Resources"
+    rationale: "strcpy/strcat/sprintf/gets perform no bounds checking; classic buffer-overflow sinks (use the n-variants / snprintf)."
+
+  - id: CODE-102
+    severity: high
+    title: "Shell execution of a command string"
+    pattern: "\\b(system|popen|execlp|execvp|execl)\\s*\\("
+    asset_category: "Material and Economic Resources"
+    rationale: "Passing a built string to system()/popen()/exec* enables OS command injection when any part is attacker-influenced."
+
+  - id: CODE-103
+    severity: high
+    title: "Unsafe Rust block"
+    pattern: "\\bunsafe\\s*\\{|\\bunsafe\\s+(fn|extern)"
+    asset_category: "Material and Economic Resources"
+    rationale: "unsafe code bypasses Rust's memory-safety guarantees; raw pointer / FFI use here can read or write out of bounds."
+
+  - id: CODE-104
+    severity: medium
+    title: "Reachable panic on untrusted input (unwrap/expect)"
+    pattern: "\\.unwrap\\(\\)|\\.expect\\("
+    asset_category: "Material and Economic Resources"
+    rationale: ".unwrap()/.expect() panic on Err/None; when fed client-controlled data this is a remotely reachable crash (DoS)."
+
+  - id: CODE-105
+    severity: high
+    title: "Unsafe memory reinterpretation (transmute)"
+    pattern: "transmute(_copy)?\\s*[<(:]|\\btransmute\\b"
+    asset_category: "Privacy and Personal Data"
+    rationale: "mem::transmute reinterprets bytes with no validation; on an unchecked-length buffer it reads out of bounds."
+
+  - id: CODE-106
+    severity: high
+    title: "Insecure pseudo-random generator"
+    pattern: "\\b(srand|rand)\\s*\\("
+    asset_category: "Privacy and Personal Data"
+    rationale: "rand()/srand() are not cryptographically secure; predictable output undermines seeds, nonces and tokens (use a CSPRNG)."
+
+  - id: CODE-107
+    severity: critical
+    title: "SQL built with format!/string interpolation"
+    pattern: "format!\\s*\\(\\s*\"[^\"]*\\b(SELECT|INSERT|UPDATE|DELETE|DROP)\\b[^\"]*\\{"
+    asset_category: "Privacy and Personal Data"
+    rationale: "Interpolating user input into a SQL string (format!) is SQL injection; use bound parameters instead."
+
+  - id: CODE-108
+    severity: high
+    title: "Spawning a shell interpreter"
+    pattern: "Command::new\\(\\s*\"(sh|bash|cmd|powershell)\""
+    asset_category: "Material and Economic Resources"
+    rationale: "Command::new(\"sh\").arg(\"-c\") runs a string through the shell; attacker-controlled arguments yield command injection."

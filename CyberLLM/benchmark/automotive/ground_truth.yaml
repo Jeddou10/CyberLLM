@@ -1,0 +1,235 @@
+# =============================================================================
+# Automotive Security Benchmark — ground truth.
+#
+# Original, real-world-style automotive subsystem code (C / C++ / Rust) seeded
+# with layered, non-obvious vulnerabilities. There are NO hint comments in the
+# code: each vulnerability is located here by file + line + CWE.
+#
+# Matching (location-based, per the chosen methodology):
+#   A labelled vulnerability counts as DETECTED if the program emits any finding
+#   whose line is within `meta.match_window` lines of the labelled line (or of
+#   the [line, line_end] range). The finding's rule_id need NOT equal the CWE —
+#   CWE/category are recorded for reporting, not to penalise naming differences.
+#
+# Clean files carry `clean: true` and have NO labelled vulnerabilities; any
+# finding on them is a false positive (negative controls for precision).
+# =============================================================================
+
+meta:
+  name: "Automotive Security Benchmark"
+  version: 1
+  match_window: 3
+  total_files: 11
+  languages: [c, cpp, rust]
+
+files:
+  # ---------------------------------------------------------------- C ----------
+  - path: can_gateway.c
+    language: c
+    subsystem: "CAN-to-Ethernet routing gateway"
+    clean: false
+    vulnerabilities:
+      - {id: CG-01, line: 20, cwe: CWE-798, category: secrets, severity: critical,
+         title: "Hard-coded gateway HMAC key",
+         detail: "A 32-char HMAC key is baked into the firmware; extractable from any binary and identical fleet-wide."}
+      - {id: CG-02, line: 40, cwe: CWE-787, category: memory-safety, severity: critical,
+         title: "Out-of-bounds write copying CAN payload",
+         detail: "memcpy(r->buf, f->data, f->dlc) writes f->dlc (signed, attacker-set) bytes into an 8-byte buffer; classic stack/heap overflow."}
+      - {id: CG-03, line: 47, line_end: 48, cwe: CWE-134, category: injection, severity: high,
+         title: "Format-string via operator template into syslog",
+         detail: "operator_template is used as a printf format and the result is passed as the syslog format argument — uncontrolled format string."}
+      - {id: CG-04, line: 53, cwe: CWE-125, category: memory-safety, severity: medium,
+         title: "Off-by-one out-of-bounds read in route lookup",
+         detail: "loop condition i <= route_count reads route_table[route_count], one past the populated entries."}
+      - {id: CG-05, line: 62, cwe: CWE-287, category: auth, severity: high,
+         title: "Implicit trust of diagnostic CAN IDs",
+         detail: "Any frame in 0x7E0..0x7EF is accepted as authentic diagnostics with no source authentication — enables CAN injection / spoofing."}
+      - {id: CG-06, line: 101, cwe: CWE-78, category: injection, severity: high,
+         title: "OS command injection in forward path",
+         detail: "sprintf builds a shell string with the caller-supplied ip and passes it to system(); attacker-controlled ip yields command injection."}
+
+  - path: uds_security.c
+    language: c
+    subsystem: "UDS (ISO 14229) Security Access"
+    clean: false
+    vulnerabilities:
+      - {id: UD-01, line: 20, cwe: CWE-798, category: secrets, severity: high,
+         title: "Hard-coded key-derivation secret",
+         detail: "SECRET_CONSTANT is the only secret in the seed/key scheme and is embedded in the binary, so any attacker can compute valid keys."}
+      - {id: UD-02, line: 29, cwe: CWE-330, category: crypto, severity: high,
+         title: "Predictable security-access seed",
+         detail: "Seed comes from srand(time(NULL)) + rand(); time-seeded PRNG makes the challenge predictable, defeating seed/key."}
+      - {id: UD-03, line: 57, cwe: CWE-787, category: memory-safety, severity: critical,
+         title: "Unvalidated length in key copy",
+         detail: "memcpy(key_bytes, &req[2], req[1]) copies an attacker-controlled length into a 4-byte buffer — remote buffer overflow in the diagnostic handler."}
+      - {id: UD-04, line: 66, line_end: 70, cwe: CWE-208, category: crypto, severity: medium,
+         title: "Non-constant-time key comparison",
+         detail: "The key check breaks on first mismatching byte, leaking timing that allows byte-by-byte key recovery."}
+      - {id: UD-05, line: 90, cwe: CWE-1390, category: auth, severity: critical,
+         title: "Security unlock via programming session",
+         detail: "Entering SESSION_PROGRAMMING sets g_security_unlocked=1 with no seed/key exchange — full authentication bypass for privileged routines."}
+
+  - path: secure_boot.c
+    language: c
+    subsystem: "Verified-boot image loader"
+    clean: false
+    vulnerabilities:
+      - {id: SB-01, line: 42, line_end: 45, cwe: CWE-347, category: crypto, severity: critical,
+         title: "Forgeable signature (XOR 'MAC') + insecure verify",
+         detail: "The 'signature' is a rolling XOR of the payload into the key — trivially forgeable; verification is not a real digital signature."}
+      - {id: SB-02, line: 53, cwe: CWE-125, category: memory-safety, severity: medium,
+         title: "Header parsed without length check",
+         detail: "parse_header memcpy's sizeof(img_header) from buf without verifying buf_len, allowing an out-of-bounds read on short inputs."}
+      - {id: SB-03, line: 66, cwe: CWE-190, category: memory-safety, severity: critical,
+         title: "Integer overflow defeats the size check",
+         detail: "total = header_len + payload_len can wrap, passing 'total > buf_len' and leading to an over-read/over-write in the load memcpy."}
+      - {id: SB-04, line: 93, cwe: CWE-347, category: auth, severity: critical,
+         title: "Recovery path skips signature verification",
+         detail: "load_image_recovery(force=1) copies the payload into executable RAM with no signature check — unsigned firmware via the USB recovery path."}
+
+  # --------------------------------------------------------------- C++ ---------
+  - path: ota_update.cpp
+    language: cpp
+    subsystem: "OTA firmware update agent"
+    clean: false
+    vulnerabilities:
+      - {id: OT-01, line: 16, cwe: CWE-798, category: secrets, severity: high,
+         title: "Hard-coded backend bearer token",
+         detail: "UPDATE_TOKEN is embedded in the binary and reused for every unit; leaks fleet backend access."}
+      - {id: OT-02, line: 34, line_end: 36, cwe: CWE-78, category: injection, severity: critical,
+         title: "Command injection in package download",
+         detail: "A shell string is built from the manifest url + package_name and passed to system(); both are attacker-influenced."}
+      - {id: OT-03, line: 54, line_end: 55, cwe: CWE-787, category: memory-safety, severity: critical,
+         title: "Descriptor copy with attacker length",
+         detail: "memcpy(out->name, pkg.data(), name_len) with name_len from inside the package overflows the 32-byte name field; the NUL write is also OOB."}
+      - {id: OT-04, line: 63, line_end: 64, cwe: CWE-347, category: crypto, severity: critical,
+         title: "Missing image integrity/signature verification",
+         detail: "apply_update only checks the size; the promised digest/signature check is absent, so unsigned/modified images are flashed."}
+      - {id: OT-05, line: 69, cwe: CWE-191, category: memory-safety, severity: critical,
+         title: "Integer underflow in body size",
+         detail: "body = declared_size - header underflows when header > declared_size, yielding a huge size for the following memcpy (heap over-read)."}
+      - {id: OT-06, line: 75, cwe: CWE-78, category: injection, severity: high,
+         title: "Command injection in staging move",
+         detail: "The 'mv' shell command embeds the attacker-controlled package_name and is passed to system()."}
+
+  - path: telemetry_mqtt.cpp
+    language: cpp
+    subsystem: "MQTT telemetry publisher"
+    clean: false
+    vulnerabilities:
+      - {id: TM-01, line: 24, cwe: CWE-798, category: secrets, severity: high,
+         title: "Hard-coded fleet MQTT password",
+         detail: "A shared broker password is embedded in the firmware; compromise of one unit compromises the fleet account."}
+      - {id: TM-02, line: 30, cwe: CWE-295, category: config, severity: high,
+         title: "TLS verification disabled",
+         detail: "mosquitto_tls_insecure_set(m, true) disables certificate validation, enabling MITM on the telemetry/command channel."}
+      - {id: TM-03, line: 37, line_end: 39, cwe: CWE-120, category: memory-safety, severity: high,
+         title: "Unbounded VIN concatenation in topic build",
+         detail: "strcpy/strcat of an unbounded vin into a 64-byte prefix overflows; sprintf compounds it."}
+      - {id: TM-04, line: 47, line_end: 48, cwe: CWE-787, category: memory-safety, severity: critical,
+         title: "Broker-controlled length memcpy",
+         detail: "memcpy(tmp, payload, payload_len) into a 64-byte stack buffer using the broker-reported length; remote stack overflow."}
+      - {id: TM-05, line: 54, cwe: CWE-120, category: memory-safety, severity: high,
+         title: "Unbounded strcpy into command fields",
+         detail: "strcpy into verb[16]/arg[48] from the parsed payload with no length limit."}
+      - {id: TM-06, line: 67, cwe: CWE-78, category: injection, severity: critical,
+         title: "Command injection via diagnostic arg",
+         detail: "The 'obd-dump --pid <arg>' shell string embeds the command argument from the MQTT message and runs via system()."}
+
+  - path: sensor_fusion.cpp
+    language: cpp
+    subsystem: "ADAS sensor-fusion buffer manager"
+    clean: false
+    vulnerabilities:
+      - {id: SF-01, line: 31, cwe: CWE-190, category: memory-safety, severity: critical,
+         title: "Integer overflow in allocation size",
+         detail: "malloc(n * sizeof(Track)) with sensor-controlled n can wrap, under-allocating before the full-size memcpy — heap overflow."}
+      - {id: SF-02, line: 46, cwe: CWE-362, category: concurrency, severity: medium,
+         title: "Data race on shared frame-set pointer",
+         detail: "g_current is swapped/freed with no lock while the planner thread reads it concurrently."}
+      - {id: SF-03, line: 51, cwe: CWE-476, category: memory-safety, severity: medium,
+         title: "NULL pointer dereference of current frame set",
+         detail: "closest_track dereferences g_current (initially null / null after release) without a check."}
+      - {id: SF-04, line: 74, cwe: CWE-416, category: memory-safety, severity: critical,
+         title: "Use-after-free on resume",
+         detail: "release_current frees g_current but leaves the dangling pointer; resume() then writes through it (stamp = now)."}
+
+  # --------------------------------------------------------------- Rust ---------
+  - path: can_parser.rs
+    language: rust
+    subsystem: "CAN-FD frame parser (with C FFI)"
+    clean: false
+    vulnerabilities:
+      - {id: CP-01, line: 29, cwe: CWE-125, category: dos, severity: medium,
+         title: "Unchecked index can panic",
+         detail: "frame.data[start_byte + i] with a DBC-supplied start_byte can index past the 64-byte array, panicking (reachable DoS)."}
+      - {id: CP-02, line: 37, cwe: CWE-191, category: dos, severity: medium,
+         title: "Integer underflow in total_len",
+         detail: "total - 1 underflows (panic in debug, wrap in release) when the computed total is 0."}
+      - {id: CP-03, line: 48, cwe: CWE-248, category: dos, severity: medium,
+         title: "unwrap() on attacker-influenced lookup",
+         detail: "lookup_scaling(name).unwrap() panics for any unknown signal name, a remotely reachable crash."}
+      - {id: CP-04, line: 72, cwe: CWE-125, category: memory-safety, severity: high,
+         title: "FFI buffer indexed without length check",
+         detail: "bytes[0..4] / bytes[4] are read with no check that len >= 5, after building a slice from a raw caller pointer."}
+      - {id: CP-05, line: 76, cwe: CWE-787, category: memory-safety, severity: high,
+         title: "Copies dlc bytes ignoring real buffer length",
+         detail: "frame.data[i] = bytes[5 + i] copies dlc bytes from the FFI buffer regardless of the actual len, over-reading the source."}
+
+  - path: crypto_keystore.rs
+    language: rust
+    subsystem: "In-vehicle key store + tokens"
+    clean: false
+    vulnerabilities:
+      - {id: CK-01, line: 10, cwe: CWE-798, category: secrets, severity: critical,
+         title: "Hard-coded factory master key",
+         detail: "MASTER_KEY is embedded and identical across the product line; recovering one unit's binary breaks every vehicle's auth."}
+      - {id: CK-02, line: 35, cwe: CWE-330, category: crypto, severity: high,
+         title: "Predictable nonce from clock-seeded LCG",
+         detail: "nonce() derives from the wall clock via a linear congruential mix rather than a CSPRNG — predictable session nonces."}
+      - {id: CK-03, line: 42, cwe: CWE-327, category: crypto, severity: high,
+         title: "Weak homemade MAC",
+         detail: "tag() is an XOR-fold 'MAC' with no real cryptographic strength; tokens are forgeable."}
+      - {id: CK-04, line: 68, cwe: CWE-208, category: crypto, severity: medium,
+         title: "Non-constant-time token comparison",
+         detail: "verify_token returns on the first mismatching MAC byte, leaking timing for forgery."}
+      - {id: CK-05, line: 79, cwe: CWE-119, category: memory-safety, severity: high,
+         title: "Unsafe transmute of unchecked IPC buffer",
+         detail: "key_from_ipc casts a slice pointer to *const [u8;16] and transmutes without verifying buf.len() >= 16 — out-of-bounds read."}
+      - {id: CK-06, line: 86, cwe: CWE-916, category: crypto, severity: medium,
+         title: "Weak key stretching for PIN",
+         detail: "pin_to_key uses an LCG step as a 'KDF'; trivially brute-forceable, unsuitable for deriving a wrapping key."}
+
+  - path: vehicle_api.rs
+    language: rust
+    subsystem: "Local fleet vehicle API"
+    clean: false
+    vulnerabilities:
+      - {id: VA-01, line: 28, cwe: CWE-89, category: injection, severity: critical,
+         title: "SQL injection via VIN",
+         detail: "format!(\"... vin = '{}'\", vin) concatenates the client VIN into SQL — classic injection / auth bypass."}
+      - {id: VA-02, line: 38, cwe: CWE-78, category: injection, severity: critical,
+         title: "Command injection in maintenance routine",
+         detail: "Command::new(\"sh\").arg(\"-c\").arg(format!(... {routine})) runs an attacker-supplied routine string through the shell."}
+      - {id: VA-03, line: 45, cwe: CWE-22, category: injection, severity: high,
+         title: "Path traversal in report retrieval",
+         detail: "read_report joins the client-supplied name into a path with no sanitisation; '../../etc/passwd' escapes the reports dir."}
+      - {id: VA-04, line: 51, cwe: CWE-248, category: dos, severity: medium,
+         title: "unwrap() on client-controlled limit",
+         detail: "req.query.parse().unwrap() panics on any non-integer query value — remotely reachable crash."}
+      - {id: VA-05, line: 62, cwe: CWE-862, category: auth, severity: critical,
+         title: "Missing authorization on admin endpoint",
+         detail: "/admin/maintenance runs the privileged routine without checking req.role; any caller reaches the admin action."}
+
+  # ---------------------------------------------------- negative controls ------
+  - path: clean_ringbuffer.c
+    language: c
+    subsystem: "Bounded ring buffer (control)"
+    clean: true
+    vulnerabilities: []
+
+  - path: clean_config.rs
+    language: rust
+    subsystem: "Safe config/credential loader (control)"
+    clean: true
+    vulnerabilities: []

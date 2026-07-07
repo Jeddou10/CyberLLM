@@ -16,7 +16,7 @@ llm_configs:
     provider: azure
     model: gpt-4o              # = Azure deployment name (unless AZURE_OPENAI_DEPLOYMENT set)
     temperature: 0.2
-    max_tokens: 1024
+    max_tokens: 2048           # headroom so multi-finding scans aren't truncated
   reasoning:
     provider: azure
     model: gpt-4o
@@ -37,6 +37,11 @@ scanners:
   # UI sets this per-request (off in Fast mode / when no live LLM creds exist)
   # so the offline stub's canned findings never appear on real pasted code.
   use_llm: true
+  # second_pass: a focused "what did you miss?" critic call after the first LLM
+  # pass, targeting subtle classes (races, off-by-one, use-after-free, integer
+  # over/underflow, reachable panics, missing authz, TOCTOU). Costs one extra
+  # LLM call per file; a no-op under the offline stub. Gated by use_llm.
+  second_pass: true
 
 # ---- Agent configurations -------------------------------------------------
 agent_configs:

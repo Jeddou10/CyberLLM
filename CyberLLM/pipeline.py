@@ -1,3 +1,5 @@
+
+
 """CyberLLM — end-to-end pipeline (defense + attack modes).
 
 Modes
@@ -81,7 +83,8 @@ from tools.log import Console
 
 HERE = Path(__file__).parent
 RUN_LOGS_DIR = HERE / "run_logs"
-CODE_EXTENSIONS = {".py", ".c", ".cpp", ".h"}
+CODE_EXTENSIONS = {".py", ".c", ".h", ".cc", ".cpp", ".cxx", ".hpp", ".hxx",
+                   ".rs", ".go", ".java", ".js", ".ts"}
 
 
 # ---------------------------------------------------------------------------
@@ -419,10 +422,12 @@ def run_defense_pipeline(
     # topology findings out of an empty or default input.
     use_llm_log = bool(_scan_cfg.get("use_llm_log", use_llm))
     use_llm_dep = bool(_scan_cfg.get("use_llm_deployment", use_llm))
+    second_pass = bool(_scan_cfg.get("second_pass", False))
     code_cfg = dict(cfg["agent_configs"]["source_code_scanner"],
                     rules_snippet=rules_snippet(rules, "code_rules"),
                     rules_full=rules,
-                    external_static=external_static, use_llm=use_llm)
+                    external_static=external_static, use_llm=use_llm,
+                    second_pass=second_pass)
     log_cfg = dict(cfg["agent_configs"]["log_analyzer"],
                    rules_snippet=rules_snippet(rules, "log_rules"),
                    rules_full=rules, use_llm=use_llm_log)
@@ -801,7 +806,8 @@ def run_attack_pipeline(
                     rules_full=rules,
                     attack_rules_snippet=rules_snippet(rules, "attack_rules"),
                     external_static=bool(cfg.get("scanners", {}).get(
-                        "external_static", True)))
+                        "external_static", True)),
+                    use_llm=bool(cfg.get("scanners", {}).get("use_llm", True)))
     dep_cfg = dict(cfg["agent_configs"]["deployment_exploiter"],
                    rules_full=rules,
                    attack_rules_snippet=rules_snippet(rules, "attack_rules"))

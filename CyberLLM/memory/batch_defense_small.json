@@ -39,7 +39,7 @@
     {
       "name": "mqtt_handler",
       "files_scanned": 1,
-      "findings": 19,
+      "findings": 24,
       "tier": "moderate",
       "confidence": 0.72,
       "guard": "PASS",

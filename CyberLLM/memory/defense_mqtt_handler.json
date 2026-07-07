@@ -25,24 +25,24 @@
     "parameters": {
       "secret_id": "ops-sudo-token"
     },
-    "plan_id": "a52961ea-bedb-4cd7-9a30-7a8f8de74ccc"
+    "plan_id": "5f822886-84ad-4503-ac69-bbe7fa41d451"
   },
   "action_report": {
-    "plan_id": "a52961ea-bedb-4cd7-9a30-7a8f8de74ccc",
+    "plan_id": "5f822886-84ad-4503-ac69-bbe7fa41d451",
     "status": "completed",
-    "summary": "[completed] 21 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=node; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-21T19:22:27.841680",
-    "finished_at": "2026-06-21T19:22:27.842687",
+    "summary": "[completed] 25 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=node; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
+    "started_at": "2026-07-01T00:34:03.557647",
+    "finished_at": "2026-07-01T00:34:03.558648",
     "tallies": {
-      "total": 21,
-      "completed": 21,
+      "total": 25,
+      "completed": 25,
       "failed": 0,
       "refused": 0,
       "rolled_back": 0,
       "skipped": 0
     },
     "plan": {
-      "plan_id": "a52961ea-bedb-4cd7-9a30-7a8f8de74ccc",
+      "plan_id": "5f822886-84ad-4503-ac69-bbe7fa41d451",
       "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
       "blast_radius": "node",
       "asset_categories": [
@@ -50,8 +50,8 @@
         "Privacy and Personal Data",
         "Life and Bodily Health"
       ],
-      "created_at": "2026-06-21T19:22:27.794573",
-      "estimated_duration_s": 630,
+      "created_at": "2026-07-01T00:34:03.522670",
+      "estimated_duration_s": 750,
       "steps": [
         {
           "rule_id": "LOG-PRIV-01",
@@ -69,11 +69,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "9d09fbda-4bf9-4c40-8e3c-03679aa90372",
+          "step_id": "a7710dc7-28e8-480e-b052-5e87a68534af",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -104,11 +104,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "b203bac9-cd9a-47ac-b141-54ca33aa9e40",
+          "step_id": "c1c3b31e-252e-4d36-840e-25a9d03fdf69",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -141,11 +141,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "b7b7c22e-4bce-4f5b-b2e9-06e689d2b123",
+          "step_id": "20611501-24d7-4e3c-bf7b-b4a96f11deb5",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -177,11 +177,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "6c327e00-0409-427d-8443-419cb8d76568",
+          "step_id": "12968192-2d0c-4f2e-b794-9020aa061311",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -213,11 +213,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b57cb67a-113c-461f-a698-ba60c0993726",
+          "step_id": "c457d375-90b3-4b86-ac7d-4c5914911099",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -251,11 +251,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "a84fff81-01d5-4ff2-8168-c1c7a386b1e6",
+          "step_id": "e284fa0f-fbab-4f16-a4de-b30848256940",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -290,11 +290,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f49e95f2-5be3-4e81-9924-718c853335e3",
+          "step_id": "78feb867-b7fd-46a6-9c57-3b73f7ac3a5d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -302,6 +302,84 @@
               "rule_id": "CODE-015",
               "file": "05_mqtt_handler.c",
               "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-015  (high)\n# evidence: 05_mqtt_handler.c: ng vulnerability in printf(topic).  *  - CODE-01\n# remediation: follow the rule's remediation guidance.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-101",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-101",
+            "file": "05_mqtt_handler.c",
+            "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-101  (high)\n# evidence: 05_mqtt_handler.c: either copy. */     strcpy(cmd, payload);     s\n# remediation: follow the rule's remediation guidance.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "96898b56-2d17-4207-8950-8637ced00276",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-101",
+              "file": "05_mqtt_handler.c",
+              "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-101  (high)\n# evidence: 05_mqtt_handler.c: either copy. */     strcpy(cmd, payload);     s\n# remediation: follow the rule's remediation guidance.\n",
+              "rationale": "Auto-generated remediation proposal."
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-102",
+          "kind": "eradicate",
+          "tool": "code.propose_patch",
+          "params": {
+            "rule_id": "CODE-102",
+            "file": "05_mqtt_handler.c",
+            "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-102  (high)\n# evidence: 05_mqtt_handler.c: w).  *  - CODE-001: system() invoked with a con\n# remediation: follow the rule's remediation guidance.\n",
+            "rationale": "Auto-generated remediation proposal."
+          },
+          "description": "propose a remediation patch",
+          "side_effect": "write",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "6309d5f0-765e-4f2d-ad97-43d1c5dc3ab6",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-07-01T00:34:03.557647",
+          "finished_at": "2026-07-01T00:34:03.557647",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "rule_id": "CODE-102",
+              "file": "05_mqtt_handler.c",
+              "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-102  (high)\n# evidence: 05_mqtt_handler.c: w).  *  - CODE-001: system() invoked with a con\n# remediation: follow the rule's remediation guidance.\n",
               "rationale": "Auto-generated remediation proposal."
             },
             "_status": "would-execute",
@@ -329,11 +407,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "501f155c-cb59-40ef-91ab-95f669ba0360",
+          "step_id": "5826bdd6-e09e-42b2-a2b7-fe26e87b6c66",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -368,11 +446,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9fa8ffca-fb22-4be6-af83-51416e8c9cc0",
+          "step_id": "acf70b17-8f9d-4321-b816-26fee88d77bb",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -407,11 +485,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "d6e006bf-568b-4dc0-84ed-183a461f593f",
+          "step_id": "2cd1c6bc-e660-4ebb-a58a-dc189f524b40",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -445,11 +523,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ba58c98e-9749-4d9c-a906-9010b163e926",
+          "step_id": "a7466961-b028-419c-811d-3bbe52a7abe1",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.841680",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -482,11 +560,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "d0d95d02-4a89-4abf-a866-e3f8e52c1eec",
+          "step_id": "80c592d3-b945-4f47-bd31-295627ad531a",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.841680",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -519,11 +597,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f6c87c84-6d02-4f95-9f40-4c4d7c7d9970",
+          "step_id": "9580169f-2c23-4195-a044-c6fc9cc2fc7a",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -531,6 +609,80 @@
               "severity": "high",
               "summary": "CODE-015: Format-string vulnerability",
               "rule_id": "CODE-015"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-101",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-101: Unsafe C string function \u2014 strcpy/strcat/sprintf/gets perform no bounds checking",
+            "rule_id": "CODE-101"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "cc5ce557-e7fe-4b69-88f4-09c6bde47b98",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "CODE-101: Unsafe C string function \u2014 strcpy/strcat/sprintf/gets perform no bounds checking",
+              "rule_id": "CODE-101"
+            },
+            "_status": "would-execute",
+            "_real": false
+          },
+          "error": null,
+          "refusal_reason": null
+        },
+        {
+          "rule_id": "CODE-102",
+          "kind": "notify",
+          "tool": "notify.create_incident",
+          "params": {
+            "severity": "high",
+            "summary": "CODE-102: Shell execution of a command string \u2014 Passing a built string to system()/popen()",
+            "rule_id": "CODE-102"
+          },
+          "description": "open a generic code-vuln incident",
+          "side_effect": "read",
+          "severity_min": "low",
+          "timeout_s": 30,
+          "retries": 1,
+          "pre": [],
+          "post": [],
+          "rollback_steps": [],
+          "requires_authorization": false,
+          "step_id": "8d770025-097d-42ea-a6ba-82e3e79d68bf",
+          "status": "completed",
+          "attempts": 1,
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
+          "output": {
+            "dry_run": true,
+            "would_invoke": "(no real binary)",
+            "params": {
+              "severity": "high",
+              "summary": "CODE-102: Shell execution of a command string \u2014 Passing a built string to system()/popen()",
+              "rule_id": "CODE-102"
             },
             "_status": "would-execute",
             "_real": false
@@ -557,11 +709,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "885c7e9d-f177-4f7f-923d-ff368e6e41f1",
+          "step_id": "1562199e-f35a-4fb0-9d35-9f9edceccced",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -596,11 +748,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "1e4d654a-b366-412b-b754-954ddd55d866",
+          "step_id": "a6471ef6-90cd-4e31-b069-50d2903f0daa",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -634,11 +786,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "603e277c-e2a3-43e1-957b-61c56358d197",
+          "step_id": "33512d15-3769-4299-8e23-daae8b419e55",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -671,11 +823,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "8fac4bbe-f41b-413c-ae61-659d71268854",
+          "step_id": "7a5ce188-2959-480c-8975-ca9c4cf33704",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -708,11 +860,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "23e7c898-4826-4f46-a3dd-8b730dd472fd",
+          "step_id": "53cca335-d508-4242-8fff-44d3e012fb49",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -745,11 +897,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "f7c91f15-11bc-4d91-8431-54ae4aba635d",
+          "step_id": "643fe092-3fa7-4ec6-99ce-ddad64913b82",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -782,11 +934,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c4eb1d40-d8ba-4e6c-83d9-f39932ba913a",
+          "step_id": "43e2ed2b-ad83-4c5f-ae67-f540e25c103c",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -820,11 +972,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "c8a3ea3b-2d87-4485-ba2d-7bc8fdaaaf9a",
+          "step_id": "b543223f-7048-43fe-bdd2-edbebf9b565d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.842687",
-          "finished_at": "2026-06-21T19:22:27.842687",
+          "started_at": "2026-07-01T00:34:03.558648",
+          "finished_at": "2026-07-01T00:34:03.558648",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -844,7 +996,7 @@
     },
     "audit_log": [
       {
-        "step_id": "9d09fbda-4bf9-4c40-8e3c-03679aa90372",
+        "step_id": "a7710dc7-28e8-480e-b052-5e87a68534af",
         "tool": "secrets.rotate",
         "kind": "contain",
         "status": "completed",
@@ -852,7 +1004,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b203bac9-cd9a-47ac-b141-54ca33aa9e40",
+        "step_id": "c1c3b31e-252e-4d36-840e-25a9d03fdf69",
         "tool": "firewall.rate_limit",
         "kind": "contain",
         "status": "completed",
@@ -860,7 +1012,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b7b7c22e-4bce-4f5b-b2e9-06e689d2b123",
+        "step_id": "20611501-24d7-4e3c-bf7b-b4a96f11deb5",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -868,7 +1020,7 @@
         "attempts": 1
       },
       {
-        "step_id": "6c327e00-0409-427d-8443-419cb8d76568",
+        "step_id": "12968192-2d0c-4f2e-b794-9020aa061311",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -876,7 +1028,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b57cb67a-113c-461f-a698-ba60c0993726",
+        "step_id": "c457d375-90b3-4b86-ac7d-4c5914911099",
         "tool": "observe.log_tail",
         "kind": "observe",
         "status": "completed",
@@ -884,7 +1036,7 @@
         "attempts": 1
       },
       {
-        "step_id": "a84fff81-01d5-4ff2-8168-c1c7a386b1e6",
+        "step_id": "e284fa0f-fbab-4f16-a4de-b30848256940",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -892,7 +1044,7 @@
         "attempts": 1
       },
       {
-        "step_id": "f49e95f2-5be3-4e81-9924-718c853335e3",
+        "step_id": "78feb867-b7fd-46a6-9c57-3b73f7ac3a5d",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -900,7 +1052,7 @@
         "attempts": 1
       },
       {
-        "step_id": "501f155c-cb59-40ef-91ab-95f669ba0360",
+        "step_id": "96898b56-2d17-4207-8950-8637ced00276",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -908,7 +1060,7 @@
         "attempts": 1
       },
       {
-        "step_id": "9fa8ffca-fb22-4be6-af83-51416e8c9cc0",
+        "step_id": "6309d5f0-765e-4f2d-ad97-43d1c5dc3ab6",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -916,7 +1068,7 @@
         "attempts": 1
       },
       {
-        "step_id": "d6e006bf-568b-4dc0-84ed-183a461f593f",
+        "step_id": "5826bdd6-e09e-42b2-a2b7-fe26e87b6c66",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -924,7 +1076,23 @@
         "attempts": 1
       },
       {
-        "step_id": "ba58c98e-9749-4d9c-a906-9010b163e926",
+        "step_id": "acf70b17-8f9d-4321-b816-26fee88d77bb",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "2cd1c6bc-e660-4ebb-a58a-dc189f524b40",
+        "tool": "code.propose_patch",
+        "kind": "eradicate",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "a7466961-b028-419c-811d-3bbe52a7abe1",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -932,7 +1100,7 @@
         "attempts": 1
       },
       {
-        "step_id": "d0d95d02-4a89-4abf-a866-e3f8e52c1eec",
+        "step_id": "80c592d3-b945-4f47-bd31-295627ad531a",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -940,7 +1108,7 @@
         "attempts": 1
       },
       {
-        "step_id": "f6c87c84-6d02-4f95-9f40-4c4d7c7d9970",
+        "step_id": "9580169f-2c23-4195-a044-c6fc9cc2fc7a",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -948,7 +1116,7 @@
         "attempts": 1
       },
       {
-        "step_id": "885c7e9d-f177-4f7f-923d-ff368e6e41f1",
+        "step_id": "cc5ce557-e7fe-4b69-88f4-09c6bde47b98",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -956,7 +1124,7 @@
         "attempts": 1
       },
       {
-        "step_id": "1e4d654a-b366-412b-b754-954ddd55d866",
+        "step_id": "8d770025-097d-42ea-a6ba-82e3e79d68bf",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -964,7 +1132,7 @@
         "attempts": 1
       },
       {
-        "step_id": "603e277c-e2a3-43e1-957b-61c56358d197",
+        "step_id": "1562199e-f35a-4fb0-9d35-9f9edceccced",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -972,7 +1140,7 @@
         "attempts": 1
       },
       {
-        "step_id": "8fac4bbe-f41b-413c-ae61-659d71268854",
+        "step_id": "a6471ef6-90cd-4e31-b069-50d2903f0daa",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -980,7 +1148,7 @@
         "attempts": 1
       },
       {
-        "step_id": "23e7c898-4826-4f46-a3dd-8b730dd472fd",
+        "step_id": "33512d15-3769-4299-8e23-daae8b419e55",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -988,7 +1156,7 @@
         "attempts": 1
       },
       {
-        "step_id": "f7c91f15-11bc-4d91-8431-54ae4aba635d",
+        "step_id": "7a5ce188-2959-480c-8975-ca9c4cf33704",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -996,7 +1164,7 @@
         "attempts": 1
       },
       {
-        "step_id": "c4eb1d40-d8ba-4e6c-83d9-f39932ba913a",
+        "step_id": "53cca335-d508-4242-8fff-44d3e012fb49",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1004,7 +1172,23 @@
         "attempts": 1
       },
       {
-        "step_id": "c8a3ea3b-2d87-4485-ba2d-7bc8fdaaaf9a",
+        "step_id": "643fe092-3fa7-4ec6-99ce-ddad64913b82",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "43e2ed2b-ad83-4c5f-ae67-f540e25c103c",
+        "tool": "notify.create_incident",
+        "kind": "notify",
+        "status": "completed",
+        "msg": "completed",
+        "attempts": 1
+      },
+      {
+        "step_id": "b543223f-7048-43fe-bdd2-edbebf9b565d",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1015,7 +1199,7 @@
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1035,7 +1219,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
       "tool": "firewall.rate_limit",
       "side_effect": "write",
       "real_invoked": false,
@@ -1059,7 +1243,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1083,7 +1267,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -1105,7 +1289,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
       "tool": "observe.log_tail",
       "side_effect": "read",
       "real_invoked": false,
@@ -1129,7 +1313,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1155,7 +1339,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1181,7 +1365,59 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.557",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-101",
+        "file": "05_mqtt_handler.c",
+        "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-101  (high)\n# evidence: 05_mqtt_handler.c: either copy. */     strcpy(cmd, payload);     s\n# remediation: follow the rule's remediation guidance.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-101",
+          "file": "05_mqtt_handler.c",
+          "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-101  (high)\n# evidence: 05_mqtt_handler.c: either copy. */     strcpy(cmd, payload);     s\n# remediation: follow the rule's remediation guidance.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-07-01T00:34:03.557",
+      "tool": "code.propose_patch",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "rule_id": "CODE-102",
+        "file": "05_mqtt_handler.c",
+        "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-102  (high)\n# evidence: 05_mqtt_handler.c: w).  *  - CODE-001: system() invoked with a con\n# remediation: follow the rule's remediation guidance.\n",
+        "rationale": "Auto-generated remediation proposal."
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "rule_id": "CODE-102",
+          "file": "05_mqtt_handler.c",
+          "diff": "--- a/05_mqtt_handler.c\n+++ b/05_mqtt_handler.c\n@@ context-of-finding @@\n# rule_id: CODE-102  (high)\n# evidence: 05_mqtt_handler.c: w).  *  - CODE-001: system() invoked with a con\n# remediation: follow the rule's remediation guidance.\n",
+          "rationale": "Auto-generated remediation proposal."
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1207,7 +1443,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1233,7 +1469,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1259,7 +1495,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1283,7 +1519,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.841",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1307,7 +1543,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1331,7 +1567,55 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "CODE-101: Unsafe C string function \u2014 strcpy/strcat/sprintf/gets perform no bounds checking",
+        "rule_id": "CODE-101"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "CODE-101: Unsafe C string function \u2014 strcpy/strcat/sprintf/gets perform no bounds checking",
+          "rule_id": "CODE-101"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-07-01T00:34:03.558",
+      "tool": "notify.create_incident",
+      "side_effect": "write",
+      "real_invoked": false,
+      "dry_run": true,
+      "elapsed_ms": 0.0,
+      "status": "would-execute",
+      "params": {
+        "severity": "high",
+        "summary": "CODE-102: Shell execution of a command string \u2014 Passing a built string to system()/popen()",
+        "rule_id": "CODE-102"
+      },
+      "result_payload": {
+        "dry_run": true,
+        "would_invoke": "(no real binary)",
+        "params": {
+          "severity": "high",
+          "summary": "CODE-102: Shell execution of a command string \u2014 Passing a built string to system()/popen()",
+          "rule_id": "CODE-102"
+        }
+      },
+      "error": null
+    },
+    {
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1357,7 +1641,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1383,7 +1667,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1407,7 +1691,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1431,7 +1715,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1455,7 +1739,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1479,7 +1763,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1503,7 +1787,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.842",
+      "ts": "2026-07-01T00:34:03.558",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1551,21 +1835,14 @@
         "round": 1,
         "tier": "moderate",
         "plan_status": "completed",
-        "steps": 21,
+        "steps": 25,
         "guard_allowed": true,
         "guard_reason": "all four properties satisfied",
         "success": true
       }
     ]
   },
-  "memory_recommendation": {
-    "scenario": "clean_auth",
-    "similarity": 0.545,
-    "tier": "moderate",
-    "action_kind": "rate_limit",
-    "plan_status": "completed",
-    "seen_at": "2026-06-21T19:22:27"
-  },
+  "memory_recommendation": null,
   "findings": [
     {
       "rule_id": "CODE-013",
@@ -1689,6 +1966,61 @@
       "evidence": "05_mqtt_handler.c: ) : \"\")) {         fprintf(stderr, \"auth failed\\"
     },
     {
+      "rule_id": "CODE-101",
+      "severity": "high",
+      "title": "Unsafe C string function",
+      "location": "on_message()",
+      "line": 30,
+      "detail": "strcpy/strcat/sprintf/gets perform no bounds checking; classic buffer-overflow sinks (use the n-variants / snprintf). \u2014 matched: either copy. */     strcpy(cmd, payload);     s",
+      "asset_category": "Material and Economic Resources",
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: either copy. */     strcpy(cmd, payload);     s"
+    },
+    {
+      "rule_id": "CODE-101",
+      "severity": "high",
+      "title": "Unsafe C string function",
+      "location": "on_message()",
+      "line": 31,
+      "detail": "strcpy/strcat/sprintf/gets perform no bounds checking; classic buffer-overflow sinks (use the n-variants / snprintf). \u2014 matched: (cmd, payload);     sprintf(log_line, \"received",
+      "asset_category": "Material and Economic Resources",
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: (cmd, payload);     sprintf(log_line, \"received"
+    },
+    {
+      "rule_id": "CODE-101",
+      "severity": "high",
+      "title": "Unsafe C string function",
+      "location": "on_message()",
+      "line": 40,
+      "detail": "strcpy/strcat/sprintf/gets perform no bounds checking; classic buffer-overflow sinks (use the n-variants / snprintf). \u2014 matched: har shell[256];     sprintf(shell, \"/usr/bin/ivi",
+      "asset_category": "Material and Economic Resources",
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: har shell[256];     sprintf(shell, \"/usr/bin/ivi"
+    },
+    {
+      "rule_id": "CODE-102",
+      "severity": "high",
+      "title": "Shell execution of a command string",
+      "location": "module level",
+      "line": 7,
+      "detail": "Passing a built string to system()/popen()/exec* enables OS command injection when any part is attacker-influenced. \u2014 matched: w).  *  - CODE-001: system() invoked with a con",
+      "asset_category": "Material and Economic Resources",
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: w).  *  - CODE-001: system() invoked with a con"
+    },
+    {
+      "rule_id": "CODE-102",
+      "severity": "high",
+      "title": "Shell execution of a command string",
+      "location": "on_message()",
+      "line": 41,
+      "detail": "Passing a built string to system()/popen()/exec* enables OS command injection when any part is attacker-influenced. \u2014 matched: --do=%s\", cmd);     system(shell); }  char *pre",
+      "asset_category": "Material and Economic Resources",
+      "source_agent": "source_code_scanner",
+      "evidence": "05_mqtt_handler.c: --do=%s\", cmd);     system(shell); }  char *pre"
+    },
+    {
       "rule_id": "CODE-001",
       "severity": "high",
       "title": "Command injection sink",
@@ -1780,7 +2112,7 @@
   "consulted_memory": [
     {
       "scenario": "clean_auth",
-      "similarity": 0.545,
+      "similarity": 0.462,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
@@ -1795,7 +2127,7 @@
     },
     {
       "scenario": "clean_auth",
-      "similarity": 0.545,
+      "similarity": 0.462,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
@@ -1810,7 +2142,7 @@
     },
     {
       "scenario": "clean_auth",
-      "similarity": 0.545,
+      "similarity": 0.462,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
@@ -1825,7 +2157,7 @@
     },
     {
       "scenario": "clean_auth",
-      "similarity": 0.545,
+      "similarity": 0.462,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
@@ -1840,7 +2172,7 @@
     },
     {
       "scenario": "clean_auth",
-      "similarity": 0.545,
+      "similarity": 0.462,
       "rule_ids": [
         "CODE-001",
         "CODE-002",

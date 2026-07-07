@@ -27,14 +27,14 @@
       "rate_per_minute": 6,
       "duration_minutes": 30
     },
-    "plan_id": "ecc14700-91d0-4d5e-a101-7f966d04908c"
+    "plan_id": "c30efb55-bd01-420d-a870-c338637a3976"
   },
   "action_report": {
-    "plan_id": "ecc14700-91d0-4d5e-a101-7f966d04908c",
+    "plan_id": "c30efb55-bd01-420d-a870-c338637a3976",
     "status": "completed",
     "summary": "[completed] 12 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=service; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-21T19:22:27.304681",
-    "finished_at": "2026-06-21T19:22:27.306680",
+    "started_at": "2026-07-01T00:34:03.144872",
+    "finished_at": "2026-07-01T00:34:03.145872",
     "tallies": {
       "total": 12,
       "completed": 12,
@@ -44,7 +44,7 @@
       "skipped": 0
     },
     "plan": {
-      "plan_id": "ecc14700-91d0-4d5e-a101-7f966d04908c",
+      "plan_id": "c30efb55-bd01-420d-a870-c338637a3976",
       "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
       "blast_radius": "service",
       "asset_categories": [
@@ -52,7 +52,7 @@
         "Privacy and Personal Data",
         "Life and Bodily Health"
       ],
-      "created_at": "2026-06-21T19:22:27.267564",
+      "created_at": "2026-07-01T00:34:03.102535",
       "estimated_duration_s": 360,
       "steps": [
         {
@@ -73,11 +73,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "0b3a1922-1fac-431b-a17a-8057aac4e785",
+          "step_id": "79d18a78-3884-4f35-9e9a-c58fc082f006",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.304681",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.144872",
+          "finished_at": "2026-07-01T00:34:03.144872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -110,11 +110,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "0f8f351d-d2fc-4b41-ba2e-efda40fea528",
+          "step_id": "9e367ec8-9d81-4c4a-a9bc-aa16e2b56b19",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.144872",
+          "finished_at": "2026-07-01T00:34:03.144872",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -146,11 +146,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "222d8346-4f52-431e-bfbb-a6340233c58d",
+          "step_id": "ab156ed8-73b2-4ae3-980d-46cca38ace07",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.144872",
+          "finished_at": "2026-07-01T00:34:03.144872",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -182,11 +182,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "914ecb18-7427-4f62-8b6b-40feb1790133",
+          "step_id": "5a62eb01-4233-423e-83c8-53afe933ac60",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.144872",
+          "finished_at": "2026-07-01T00:34:03.144872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -220,11 +220,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ac8cc241-bc8a-4cae-99be-33c0c118eca3",
+          "step_id": "7abd8803-ac63-4d97-9513-51a7b8faab14",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.144872",
+          "finished_at": "2026-07-01T00:34:03.144872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -259,11 +259,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "40125f59-2b33-4203-bb21-d3e6ae25399d",
+          "step_id": "79fefc1c-67ca-4ec6-8e51-6b8b6b280306",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.145872",
+          "finished_at": "2026-07-01T00:34:03.145872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -298,11 +298,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "99a785f4-0031-4ac3-a521-d7ca28a9380c",
+          "step_id": "3110d41a-491b-47cb-87d6-03021c1af534",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.145872",
+          "finished_at": "2026-07-01T00:34:03.145872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -337,11 +337,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "5dd0306c-9402-4d5c-b22a-6b77ff218273",
+          "step_id": "de86b475-dd79-4323-9bca-394c63c12e1f",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.145872",
+          "finished_at": "2026-07-01T00:34:03.145872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -375,11 +375,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e1b67426-7759-4d1e-bc09-eb9acc6cc3f6",
+          "step_id": "86b91220-ad7e-484c-92d4-893410fcfbe6",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.145872",
+          "finished_at": "2026-07-01T00:34:03.145872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -412,11 +412,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ae5661a7-edf4-4475-8538-8d5c5637975b",
+          "step_id": "11c8a665-6985-43a5-bf41-222e75e9c0d9",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.305679",
+          "started_at": "2026-07-01T00:34:03.145872",
+          "finished_at": "2026-07-01T00:34:03.145872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -450,11 +450,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "6d47a19f-1a60-4785-b7cc-b625f3d03c34",
+          "step_id": "fd40576f-98b0-40e2-8c76-1055f4af9a4b",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.305679",
-          "finished_at": "2026-06-21T19:22:27.306680",
+          "started_at": "2026-07-01T00:34:03.145872",
+          "finished_at": "2026-07-01T00:34:03.145872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -488,11 +488,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "4e518fa9-f7d8-423f-9edf-328a7c95b0a0",
+          "step_id": "8ac7d659-869c-42e3-9f32-228c0f647fcf",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.306680",
-          "finished_at": "2026-06-21T19:22:27.306680",
+          "started_at": "2026-07-01T00:34:03.145872",
+          "finished_at": "2026-07-01T00:34:03.145872",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -511,7 +511,7 @@
     },
     "audit_log": [
       {
-        "step_id": "0b3a1922-1fac-431b-a17a-8057aac4e785",
+        "step_id": "79d18a78-3884-4f35-9e9a-c58fc082f006",
         "tool": "firewall.rate_limit",
         "kind": "contain",
         "status": "completed",
@@ -519,7 +519,7 @@
         "attempts": 1
       },
       {
-        "step_id": "0f8f351d-d2fc-4b41-ba2e-efda40fea528",
+        "step_id": "9e367ec8-9d81-4c4a-a9bc-aa16e2b56b19",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -527,7 +527,7 @@
         "attempts": 1
       },
       {
-        "step_id": "222d8346-4f52-431e-bfbb-a6340233c58d",
+        "step_id": "ab156ed8-73b2-4ae3-980d-46cca38ace07",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -535,7 +535,7 @@
         "attempts": 1
       },
       {
-        "step_id": "914ecb18-7427-4f62-8b6b-40feb1790133",
+        "step_id": "5a62eb01-4233-423e-83c8-53afe933ac60",
         "tool": "observe.log_tail",
         "kind": "observe",
         "status": "completed",
@@ -543,7 +543,7 @@
         "attempts": 1
       },
       {
-        "step_id": "ac8cc241-bc8a-4cae-99be-33c0c118eca3",
+        "step_id": "7abd8803-ac63-4d97-9513-51a7b8faab14",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -551,7 +551,7 @@
         "attempts": 1
       },
       {
-        "step_id": "40125f59-2b33-4203-bb21-d3e6ae25399d",
+        "step_id": "79fefc1c-67ca-4ec6-8e51-6b8b6b280306",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -559,7 +559,7 @@
         "attempts": 1
       },
       {
-        "step_id": "99a785f4-0031-4ac3-a521-d7ca28a9380c",
+        "step_id": "3110d41a-491b-47cb-87d6-03021c1af534",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -567,7 +567,7 @@
         "attempts": 1
       },
       {
-        "step_id": "5dd0306c-9402-4d5c-b22a-6b77ff218273",
+        "step_id": "de86b475-dd79-4323-9bca-394c63c12e1f",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -575,7 +575,7 @@
         "attempts": 1
       },
       {
-        "step_id": "e1b67426-7759-4d1e-bc09-eb9acc6cc3f6",
+        "step_id": "86b91220-ad7e-484c-92d4-893410fcfbe6",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -583,7 +583,7 @@
         "attempts": 1
       },
       {
-        "step_id": "ae5661a7-edf4-4475-8538-8d5c5637975b",
+        "step_id": "11c8a665-6985-43a5-bf41-222e75e9c0d9",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -591,7 +591,7 @@
         "attempts": 1
       },
       {
-        "step_id": "6d47a19f-1a60-4785-b7cc-b625f3d03c34",
+        "step_id": "fd40576f-98b0-40e2-8c76-1055f4af9a4b",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -599,7 +599,7 @@
         "attempts": 1
       },
       {
-        "step_id": "4e518fa9-f7d8-423f-9edf-328a7c95b0a0",
+        "step_id": "8ac7d659-869c-42e3-9f32-228c0f647fcf",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -610,7 +610,7 @@
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-21T19:22:27.304",
+      "ts": "2026-07-01T00:34:03.144",
       "tool": "firewall.rate_limit",
       "side_effect": "write",
       "real_invoked": false,
@@ -634,7 +634,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.144",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -658,7 +658,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.144",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -680,7 +680,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.144",
       "tool": "observe.log_tail",
       "side_effect": "read",
       "real_invoked": false,
@@ -704,7 +704,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.144",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -730,7 +730,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.145",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -756,7 +756,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.145",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -782,7 +782,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.145",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -808,7 +808,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.145",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -832,7 +832,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.145",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -856,7 +856,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.305",
+      "ts": "2026-07-01T00:34:03.145",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -882,7 +882,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.306",
+      "ts": "2026-07-01T00:34:03.145",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -936,12 +936,12 @@
     ]
   },
   "memory_recommendation": {
-    "scenario": "mqtt_handler",
+    "scenario": "can_gateway",
     "similarity": 0.545,
     "tier": "moderate",
-    "action_kind": "patch_code",
+    "action_kind": "isolate_node",
     "plan_status": "completed",
-    "seen_at": "2026-06-21T18:53:01"
+    "seen_at": "2026-06-30T20:04:56"
   },
   "findings": [
     {
@@ -1013,17 +1013,57 @@
   ],
   "consulted_memory": [
     {
-      "scenario": "mqtt_handler",
+      "scenario": "can_gateway",
       "similarity": 0.545,
       "rule_ids": [
         "CODE-001",
         "CODE-002",
-        "CODE-013",
-        "CODE-014",
-        "CODE-015",
+        "CODE-003",
+        "CODE-005",
+        "CODE-006",
         "LOG-AUTH-03",
+        "LOG-CAN-02",
         "LOG-NET-01",
-        "LOG-PRIV-01",
+        "TOP-001",
+        "TOP-002",
+        "TOP-007"
+      ],
+      "tier": "moderate",
+      "guard_allowed": true,
+      "remediation_ok": true
+    },
+    {
+      "scenario": "can_gateway",
+      "similarity": 0.545,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-002",
+        "CODE-003",
+        "CODE-005",
+        "CODE-006",
+        "LOG-AUTH-03",
+        "LOG-CAN-02",
+        "LOG-NET-01",
+        "TOP-001",
+        "TOP-002",
+        "TOP-007"
+      ],
+      "tier": "moderate",
+      "guard_allowed": true,
+      "remediation_ok": true
+    },
+    {
+      "scenario": "can_gateway",
+      "similarity": 0.545,
+      "rule_ids": [
+        "CODE-001",
+        "CODE-002",
+        "CODE-003",
+        "CODE-005",
+        "CODE-006",
+        "LOG-AUTH-03",
+        "LOG-CAN-02",
+        "LOG-NET-01",
         "TOP-001",
         "TOP-002",
         "TOP-007"
@@ -1064,46 +1104,6 @@
         "LOG-AUTH-03",
         "LOG-NET-01",
         "LOG-PRIV-01",
-        "TOP-001",
-        "TOP-002",
-        "TOP-007"
-      ],
-      "tier": "moderate",
-      "guard_allowed": true,
-      "remediation_ok": true
-    },
-    {
-      "scenario": "can_gateway",
-      "similarity": 0.545,
-      "rule_ids": [
-        "CODE-001",
-        "CODE-002",
-        "CODE-003",
-        "CODE-005",
-        "CODE-006",
-        "LOG-AUTH-03",
-        "LOG-CAN-02",
-        "LOG-NET-01",
-        "TOP-001",
-        "TOP-002",
-        "TOP-007"
-      ],
-      "tier": "moderate",
-      "guard_allowed": true,
-      "remediation_ok": true
-    },
-    {
-      "scenario": "can_gateway",
-      "similarity": 0.545,
-      "rule_ids": [
-        "CODE-001",
-        "CODE-002",
-        "CODE-003",
-        "CODE-005",
-        "CODE-006",
-        "LOG-AUTH-03",
-        "LOG-CAN-02",
-        "LOG-NET-01",
         "TOP-001",
         "TOP-002",
         "TOP-007"

@@ -27,14 +27,14 @@
       "summary": "Secrets store is world-readable",
       "rule_id": "TOP-006"
     },
-    "plan_id": "3c822ef5-4e08-4f94-b200-fcb1a4699b26"
+    "plan_id": "7ff4ea90-db3b-4b91-9466-7a5c6352b13e"
   },
   "action_report": {
-    "plan_id": "3c822ef5-4e08-4f94-b200-fcb1a4699b26",
+    "plan_id": "7ff4ea90-db3b-4b91-9466-7a5c6352b13e",
     "status": "completed",
     "summary": "[completed] 31 completed \u00b7 0 failed \u00b7 0 refused \u00b7 0 rolled-back \u00b7 0 skipped. blast_radius=network; assets=['Material and Economic Resources', 'Privacy and Personal Data', 'Life and Bodily Health'].",
-    "started_at": "2026-06-21T19:22:27.691568",
-    "finished_at": "2026-06-21T19:22:27.693597",
+    "started_at": "2026-07-01T00:34:03.454830",
+    "finished_at": "2026-07-01T00:34:03.457011",
     "tallies": {
       "total": 31,
       "completed": 31,
@@ -44,7 +44,7 @@
       "skipped": 0
     },
     "plan": {
-      "plan_id": "3c822ef5-4e08-4f94-b200-fcb1a4699b26",
+      "plan_id": "7ff4ea90-db3b-4b91-9466-7a5c6352b13e",
       "decision_summary": "Multiple high-severity findings; one likely active brute-force; topology rule violations.",
       "blast_radius": "network",
       "asset_categories": [
@@ -52,7 +52,7 @@
         "Privacy and Personal Data",
         "Life and Bodily Health"
       ],
-      "created_at": "2026-06-21T19:22:27.648912",
+      "created_at": "2026-07-01T00:34:03.416118",
       "estimated_duration_s": 930,
       "steps": [
         {
@@ -73,11 +73,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "8fbc844b-b0f1-4f20-a901-bc59afa48d1d",
+          "step_id": "2f6e7c3e-c663-4f7b-b930-850ebf558745",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.691568",
-          "finished_at": "2026-06-21T19:22:27.691568",
+          "started_at": "2026-07-01T00:34:03.455368",
+          "finished_at": "2026-07-01T00:34:03.455368",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -110,11 +110,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "bd991c55-c274-4993-b1b0-3b7a14b14749",
+          "step_id": "ad61b21a-ada2-4dd1-be4b-4b992bbddc2a",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.691568",
-          "finished_at": "2026-06-21T19:22:27.691568",
+          "started_at": "2026-07-01T00:34:03.455368",
+          "finished_at": "2026-07-01T00:34:03.455368",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -147,11 +147,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "aeeeace0-9f7b-490e-9c9c-d695bb28c95c",
+          "step_id": "b38134bc-f83d-4c44-9d82-508458060340",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455368",
+          "finished_at": "2026-07-01T00:34:03.455368",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -184,11 +184,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "2b80f389-9452-4fc2-bd50-1861aefe437a",
+          "step_id": "92831a90-4165-48cc-a2f1-001644db0fd9",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455368",
+          "finished_at": "2026-07-01T00:34:03.455368",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -221,11 +221,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "cd4f7276-6475-4004-9338-2c52c866eff3",
+          "step_id": "65e4b166-e5e2-4e94-8257-315218ce022c",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455368",
+          "finished_at": "2026-07-01T00:34:03.455368",
           "output": {
             "dry_run": true,
             "would_invoke": "netsh",
@@ -257,11 +257,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "8d0253f5-97f6-4780-9004-81e4ebe15ae3",
+          "step_id": "cc5bcc06-1c9f-4931-8e69-42a12d3a9713",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455368",
+          "finished_at": "2026-07-01T00:34:03.455368",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -292,11 +292,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "099d8f29-624e-4be2-8bd5-8cfe4d250c4d",
+          "step_id": "0600ef6e-3732-4fc8-a594-8ac67a6e1697",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "bandit",
@@ -328,11 +328,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "72a192c7-8913-4bd4-8552-9f1ccc3e2022",
+          "step_id": "74e58e3c-8197-4323-9f07-cf39e64cb22c",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -363,11 +363,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "3aa50296-190f-48ea-bb74-8c27ab7e4a93",
+          "step_id": "3144d75b-d0fe-4716-b4e6-7c34aa2afea1",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -399,11 +399,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b69506f1-f297-420d-b625-72d3906b83d1",
+          "step_id": "18d0001f-1d78-4e9d-80eb-b5e80d196e5d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -438,11 +438,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "23a1989a-fe70-4172-b16b-8c7f10cfae9e",
+          "step_id": "b005f513-ca79-42de-a393-22f4ffd51cac",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -477,11 +477,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "cd603ff1-ff18-4ed3-a0a9-2ead316464e2",
+          "step_id": "ededc260-1893-4f97-ae4a-957564343206",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -516,11 +516,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "6db9fad7-40a5-414b-933d-4fba8aa8c4b7",
+          "step_id": "55f6b85a-8d96-42e0-8e41-1da566b1a168",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -553,11 +553,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "2073f823-7971-4045-9911-a524fba6340d",
+          "step_id": "9a5391f3-1032-4438-b654-4e52cc9cce87",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "vault",
@@ -590,11 +590,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "e579a39f-c41f-4e03-81a2-4f5b9953786a",
+          "step_id": "501e95c9-f431-4039-960a-cc5bd22d8dd1",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.455904",
+          "finished_at": "2026-07-01T00:34:03.455904",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -629,11 +629,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9ee6447b-e357-4126-823c-8ce10a72c6fe",
+          "step_id": "7f6a2612-0f3a-46c7-9097-09afec3cda49",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -668,11 +668,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "a93257a5-f998-40e7-a7a4-cce5310257e0",
+          "step_id": "e0ba3e46-31e8-42a2-b22c-db56f41bc4af",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -707,11 +707,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "6c0c0211-1fa7-49b9-be6a-0158912cce55",
+          "step_id": "c491f364-b432-4d24-ac75-4670313caa39",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -745,11 +745,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "d947e171-a268-47c9-adc4-f97def3c5351",
+          "step_id": "2e3b5f82-eae5-4a1a-bf44-c572513cedd2",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -783,11 +783,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "74694b74-4904-4d61-9e5b-b620d0bb4b49",
+          "step_id": "6c18bb27-c641-4a21-bba5-d92d723cc40a",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -822,11 +822,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ebab5768-11cc-4680-950a-396eba6b7152",
+          "step_id": "7383c91d-f3d4-415f-a66e-183356e81a2d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.692600",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -861,11 +861,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "b02efdaf-cce1-411f-b42a-3cd6f61f1cc6",
+          "step_id": "6aeb7f3b-b8a2-454c-9b38-9322102653ca",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.692600",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -900,11 +900,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ef205c69-458f-4d8c-90f4-9d0e8fd7dc73",
+          "step_id": "3c0db74b-2f66-4758-958a-3aacdb84e295",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -938,11 +938,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9b7c9b6e-53d9-4724-9dcd-1a06a53d520e",
+          "step_id": "11f36cc2-bb3e-4cce-920a-be4c8cbac746",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -975,11 +975,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "cd16c8db-1faf-4d68-ba91-9566d96df6f6",
+          "step_id": "9dc1720b-87d0-4f8f-8e55-7007531e6ef0",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.456453",
+          "finished_at": "2026-07-01T00:34:03.456453",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -1012,11 +1012,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "09cd51ca-0678-4a04-803c-c4bebd3a1740",
+          "step_id": "513ac435-0bbc-4d6b-bd27-e44889fde51d",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.457011",
+          "finished_at": "2026-07-01T00:34:03.457011",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -1049,11 +1049,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "ffda499d-1b34-4f28-9946-7bc6780336be",
+          "step_id": "d0038ff0-8094-4922-858c-5ccb2245ecb2",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.457011",
+          "finished_at": "2026-07-01T00:34:03.457011",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -1086,11 +1086,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "46b0d883-4b7b-432c-9a2a-e883b1bcc172",
+          "step_id": "dd2c5595-23de-4367-b17c-4f9da2c40c79",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.457011",
+          "finished_at": "2026-07-01T00:34:03.457011",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -1123,11 +1123,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "9d005190-52cc-4b8c-a0b2-97fee44f8379",
+          "step_id": "cc7d4bfa-ea17-4903-b24d-cf654c23f31b",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.457011",
+          "finished_at": "2026-07-01T00:34:03.457011",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -1161,11 +1161,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": false,
-          "step_id": "1285bb64-fe29-4ede-b8cc-e806ba85ecee",
+          "step_id": "6dad8150-dcf4-4a89-987e-46338357d305",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.457011",
+          "finished_at": "2026-07-01T00:34:03.457011",
           "output": {
             "dry_run": true,
             "would_invoke": "(no real binary)",
@@ -1198,11 +1198,11 @@
           "post": [],
           "rollback_steps": [],
           "requires_authorization": true,
-          "step_id": "c60739cb-3649-4411-93ac-2a2378fdd051",
+          "step_id": "e67d92e6-3725-40f7-b2a0-d7ff9f7ec8d9",
           "status": "completed",
           "attempts": 1,
-          "started_at": "2026-06-21T19:22:27.693597",
-          "finished_at": "2026-06-21T19:22:27.693597",
+          "started_at": "2026-07-01T00:34:03.457011",
+          "finished_at": "2026-07-01T00:34:03.457011",
           "output": {
             "dry_run": true,
             "would_invoke": "git",
@@ -1220,7 +1220,7 @@
     },
     "audit_log": [
       {
-        "step_id": "8fbc844b-b0f1-4f20-a901-bc59afa48d1d",
+        "step_id": "2f6e7c3e-c663-4f7b-b930-850ebf558745",
         "tool": "notify.create_incident",
         "kind": "contain",
         "status": "completed",
@@ -1228,7 +1228,7 @@
         "attempts": 1
       },
       {
-        "step_id": "bd991c55-c274-4993-b1b0-3b7a14b14749",
+        "step_id": "ad61b21a-ada2-4dd1-be4b-4b992bbddc2a",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -1236,7 +1236,7 @@
         "attempts": 1
       },
       {
-        "step_id": "aeeeace0-9f7b-490e-9c9c-d695bb28c95c",
+        "step_id": "b38134bc-f83d-4c44-9d82-508458060340",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -1244,7 +1244,7 @@
         "attempts": 1
       },
       {
-        "step_id": "2b80f389-9452-4fc2-bd50-1861aefe437a",
+        "step_id": "92831a90-4165-48cc-a2f1-001644db0fd9",
         "tool": "firewall.rate_limit",
         "kind": "contain",
         "status": "completed",
@@ -1252,7 +1252,7 @@
         "attempts": 1
       },
       {
-        "step_id": "cd4f7276-6475-4004-9338-2c52c866eff3",
+        "step_id": "65e4b166-e5e2-4e94-8257-315218ce022c",
         "tool": "firewall.block_ipv4",
         "kind": "contain",
         "status": "completed",
@@ -1260,7 +1260,7 @@
         "attempts": 1
       },
       {
-        "step_id": "8d0253f5-97f6-4780-9004-81e4ebe15ae3",
+        "step_id": "cc5bcc06-1c9f-4931-8e69-42a12d3a9713",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -1268,7 +1268,7 @@
         "attempts": 1
       },
       {
-        "step_id": "099d8f29-624e-4be2-8bd5-8cfe4d250c4d",
+        "step_id": "0600ef6e-3732-4fc8-a594-8ac67a6e1697",
         "tool": "code.static_scan",
         "kind": "observe",
         "status": "completed",
@@ -1276,7 +1276,7 @@
         "attempts": 1
       },
       {
-        "step_id": "72a192c7-8913-4bd4-8552-9f1ccc3e2022",
+        "step_id": "74e58e3c-8197-4323-9f07-cf39e64cb22c",
         "tool": "observe.log_tail",
         "kind": "observe",
         "status": "completed",
@@ -1284,7 +1284,7 @@
         "attempts": 1
       },
       {
-        "step_id": "3aa50296-190f-48ea-bb74-8c27ab7e4a93",
+        "step_id": "3144d75b-d0fe-4716-b4e6-7c34aa2afea1",
         "tool": "secrets.rotate",
         "kind": "eradicate",
         "status": "completed",
@@ -1292,7 +1292,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b69506f1-f297-420d-b625-72d3906b83d1",
+        "step_id": "18d0001f-1d78-4e9d-80eb-b5e80d196e5d",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1300,7 +1300,7 @@
         "attempts": 1
       },
       {
-        "step_id": "23a1989a-fe70-4172-b16b-8c7f10cfae9e",
+        "step_id": "b005f513-ca79-42de-a393-22f4ffd51cac",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1308,7 +1308,7 @@
         "attempts": 1
       },
       {
-        "step_id": "cd603ff1-ff18-4ed3-a0a9-2ead316464e2",
+        "step_id": "ededc260-1893-4f97-ae4a-957564343206",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1316,7 +1316,7 @@
         "attempts": 1
       },
       {
-        "step_id": "6db9fad7-40a5-414b-933d-4fba8aa8c4b7",
+        "step_id": "55f6b85a-8d96-42e0-8e41-1da566b1a168",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1324,7 +1324,7 @@
         "attempts": 1
       },
       {
-        "step_id": "2073f823-7971-4045-9911-a524fba6340d",
+        "step_id": "9a5391f3-1032-4438-b654-4e52cc9cce87",
         "tool": "secrets.rotate",
         "kind": "eradicate",
         "status": "completed",
@@ -1332,7 +1332,7 @@
         "attempts": 1
       },
       {
-        "step_id": "e579a39f-c41f-4e03-81a2-4f5b9953786a",
+        "step_id": "501e95c9-f431-4039-960a-cc5bd22d8dd1",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1340,7 +1340,7 @@
         "attempts": 1
       },
       {
-        "step_id": "9ee6447b-e357-4126-823c-8ce10a72c6fe",
+        "step_id": "7f6a2612-0f3a-46c7-9097-09afec3cda49",
         "tool": "code.propose_patch",
         "kind": "eradicate",
         "status": "completed",
@@ -1348,7 +1348,7 @@
         "attempts": 1
       },
       {
-        "step_id": "a93257a5-f998-40e7-a7a4-cce5310257e0",
+        "step_id": "e0ba3e46-31e8-42a2-b22c-db56f41bc4af",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1356,7 +1356,7 @@
         "attempts": 1
       },
       {
-        "step_id": "6c0c0211-1fa7-49b9-be6a-0158912cce55",
+        "step_id": "c491f364-b432-4d24-ac75-4670313caa39",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1364,7 +1364,7 @@
         "attempts": 1
       },
       {
-        "step_id": "d947e171-a268-47c9-adc4-f97def3c5351",
+        "step_id": "2e3b5f82-eae5-4a1a-bf44-c572513cedd2",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1372,7 +1372,7 @@
         "attempts": 1
       },
       {
-        "step_id": "74694b74-4904-4d61-9e5b-b620d0bb4b49",
+        "step_id": "6c18bb27-c641-4a21-bba5-d92d723cc40a",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1380,7 +1380,7 @@
         "attempts": 1
       },
       {
-        "step_id": "ebab5768-11cc-4680-950a-396eba6b7152",
+        "step_id": "7383c91d-f3d4-415f-a66e-183356e81a2d",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1388,7 +1388,7 @@
         "attempts": 1
       },
       {
-        "step_id": "b02efdaf-cce1-411f-b42a-3cd6f61f1cc6",
+        "step_id": "6aeb7f3b-b8a2-454c-9b38-9322102653ca",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1396,7 +1396,7 @@
         "attempts": 1
       },
       {
-        "step_id": "ef205c69-458f-4d8c-90f4-9d0e8fd7dc73",
+        "step_id": "3c0db74b-2f66-4758-958a-3aacdb84e295",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1404,7 +1404,7 @@
         "attempts": 1
       },
       {
-        "step_id": "9b7c9b6e-53d9-4724-9dcd-1a06a53d520e",
+        "step_id": "11f36cc2-bb3e-4cce-920a-be4c8cbac746",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1412,7 +1412,7 @@
         "attempts": 1
       },
       {
-        "step_id": "cd16c8db-1faf-4d68-ba91-9566d96df6f6",
+        "step_id": "9dc1720b-87d0-4f8f-8e55-7007531e6ef0",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1420,7 +1420,7 @@
         "attempts": 1
       },
       {
-        "step_id": "09cd51ca-0678-4a04-803c-c4bebd3a1740",
+        "step_id": "513ac435-0bbc-4d6b-bd27-e44889fde51d",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1428,7 +1428,7 @@
         "attempts": 1
       },
       {
-        "step_id": "ffda499d-1b34-4f28-9946-7bc6780336be",
+        "step_id": "d0038ff0-8094-4922-858c-5ccb2245ecb2",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1436,7 +1436,7 @@
         "attempts": 1
       },
       {
-        "step_id": "46b0d883-4b7b-432c-9a2a-e883b1bcc172",
+        "step_id": "dd2c5595-23de-4367-b17c-4f9da2c40c79",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1444,7 +1444,7 @@
         "attempts": 1
       },
       {
-        "step_id": "9d005190-52cc-4b8c-a0b2-97fee44f8379",
+        "step_id": "cc7d4bfa-ea17-4903-b24d-cf654c23f31b",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1452,7 +1452,7 @@
         "attempts": 1
       },
       {
-        "step_id": "1285bb64-fe29-4ede-b8cc-e806ba85ecee",
+        "step_id": "6dad8150-dcf4-4a89-987e-46338357d305",
         "tool": "notify.create_incident",
         "kind": "notify",
         "status": "completed",
@@ -1460,7 +1460,7 @@
         "attempts": 1
       },
       {
-        "step_id": "c60739cb-3649-4411-93ac-2a2378fdd051",
+        "step_id": "e67d92e6-3725-40f7-b2a0-d7ff9f7ec8d9",
         "tool": "code.scrub_git_history",
         "kind": "audit",
         "status": "completed",
@@ -1471,7 +1471,7 @@
   },
   "mcp_audit": [
     {
-      "ts": "2026-06-21T19:22:27.691",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1495,7 +1495,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.691",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1519,7 +1519,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1543,7 +1543,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "firewall.rate_limit",
       "side_effect": "write",
       "real_invoked": false,
@@ -1567,7 +1567,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "firewall.block_ipv4",
       "side_effect": "write",
       "real_invoked": false,
@@ -1591,7 +1591,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -1613,7 +1613,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "code.static_scan",
       "side_effect": "read",
       "real_invoked": false,
@@ -1635,7 +1635,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "observe.log_tail",
       "side_effect": "read",
       "real_invoked": false,
@@ -1659,7 +1659,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1679,7 +1679,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1705,7 +1705,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1731,7 +1731,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1757,7 +1757,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1783,7 +1783,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "secrets.rotate",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -1805,7 +1805,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.455",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1831,7 +1831,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "code.propose_patch",
       "side_effect": "write",
       "real_invoked": false,
@@ -1857,7 +1857,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1883,7 +1883,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1909,7 +1909,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1933,7 +1933,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1959,7 +1959,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.692",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -1985,7 +1985,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2011,7 +2011,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2037,7 +2037,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2061,7 +2061,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.456",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2085,7 +2085,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.457",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2109,7 +2109,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.457",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2133,7 +2133,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.457",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2157,7 +2157,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.457",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2181,7 +2181,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.457",
       "tool": "notify.create_incident",
       "side_effect": "write",
       "real_invoked": false,
@@ -2207,7 +2207,7 @@
       "error": null
     },
     {
-      "ts": "2026-06-21T19:22:27.693",
+      "ts": "2026-07-01T00:34:03.457",
       "tool": "code.scrub_git_history",
       "side_effect": "destructive",
       "real_invoked": false,
@@ -2264,7 +2264,7 @@
     "tier": "moderate",
     "action_kind": "alert_only",
     "plan_status": "completed",
-    "seen_at": "2026-06-21T19:22:27"
+    "seen_at": "2026-07-01T00:34:03"
   },
   "findings": [
     {

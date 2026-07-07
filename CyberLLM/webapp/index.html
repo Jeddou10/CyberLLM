@@ -144,6 +144,59 @@
   .note{font-size:11.5px;color:var(--dim);margin-top:9px;line-height:1.5}
   .err{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.4);color:#ff9b94;
     padding:11px 14px;border-radius:8px;margin-top:12px;font-size:13px}
+
+  /* ---- tabs ---- */
+  .tabs{display:flex;gap:6px}
+  .tab{padding:6px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);
+    color:var(--muted);cursor:pointer;font-size:13px;font-weight:600}
+  .tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#08111f;border-color:transparent}
+
+  /* ---- benchmark ---- */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:4px}
+  .metric{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 10px;text-align:center}
+  .metric .n{font-size:25px;font-weight:800;line-height:1}
+  .metric .l{font-size:10.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.4px}
+  .metric.good .n{color:var(--ok)} .metric.warn .n{color:var(--med)} .metric.bad .n{color:var(--bad)}
+  .metric.accent .n{color:var(--accent)}
+  .track2{height:11px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .fill2{height:100%;border-radius:6px;transition:width .4s}
+  .brow{display:grid;grid-template-columns:150px 1fr 70px;gap:12px;align-items:center;margin-bottom:8px;font-size:12.5px}
+  .brow .lab{color:var(--muted);text-transform:capitalize}
+  .brow .val{font-family:var(--mono);font-size:11.5px;color:var(--dim);text-align:right}
+  .bfile{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;background:var(--panel2);overflow:hidden}
+  .bfile summary{cursor:pointer;padding:10px 13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;list-style:none}
+  .bfile summary::-webkit-details-marker{display:none}
+  .bfile .fname{font-family:var(--mono);font-weight:600}
+  .bfile .langtag{font-size:10px;text-transform:uppercase;letter-spacing:.5px;padding:1px 7px;border-radius:5px;
+    background:rgba(110,168,254,.12);color:var(--accent)}
+  .bfile .cov{margin-left:auto;font-family:var(--mono);font-size:12px}
+  .bfile .inner{padding:4px 14px 12px}
+  .vrow{display:flex;gap:9px;align-items:baseline;padding:6px 0;font-size:12.5px;border-top:1px solid var(--line)}
+  .vrow .mark{font-weight:800;width:16px}
+  .vrow .vt{flex:1}
+  .vrow .vmeta{color:var(--dim);font-size:11px}
+  .ok{color:var(--ok)} .bad{color:var(--bad)}
+  .tag2{font-family:var(--mono);font-size:10.5px;padding:1px 6px;border-radius:4px;background:var(--bg);
+    border:1px solid var(--line);color:var(--muted)}
+  .pill.skip{color:var(--med);border-color:rgba(255,210,63,.35)}
+  .benchnote{font-size:11.5px;color:var(--dim);line-height:1.55;margin-top:10px}
+
+  /* ---- attack ---- */
+  .warnbanner{background:rgba(255,159,67,.1);border:1px solid rgba(255,159,67,.4);
+    color:#ffce9e;padding:11px 14px;border-radius:8px;font-size:12.5px;line-height:1.55}
+  .scriptcard{border:1px solid var(--line);border-radius:9px;background:var(--panel2);
+    margin-bottom:10px;overflow:hidden}
+  .scriptcard .sh{padding:9px 13px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;
+    border-bottom:1px solid var(--line)}
+  .scriptcard .st{font-weight:600}
+  .scriptcard .eff{color:var(--dim);font-size:11.5px;width:100%}
+  .scriptcard pre{margin:0;padding:12px 14px;font-family:var(--mono);font-size:11.5px;
+    white-space:pre-wrap;color:#cdd6e0;max-height:320px;overflow:auto}
+  .scriptcard.redacted{border-color:rgba(248,81,73,.4)}
+  .scriptcard.redacted .sh{color:var(--bad)}
+  .pathrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px}
+  .pathstep{font-family:var(--mono);font-size:11px;background:var(--bg);border:1px solid var(--line);
+    border-radius:5px;padding:2px 8px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -152,6 +205,11 @@
   <div class="inner">
     <div class="brand"><span class="dot"></span>CyberLLM
       <small>static-first code security · multi-agent</small></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="scan">Scan</button>
+      <button class="tab" data-tab="bench">Benchmark</button>
+      <button class="tab" data-tab="attack">Attack</button>
+    </div>
     <div class="spacer"></div>
     <span class="pill" id="provPill"><span class="d gray"></span>checking provider…</span>
     <label class="toggle" title="Deep mode uses the configured LLM (Azure gpt-4o) when credentials exist; otherwise the deterministic regex+bandit layers run.">
@@ -163,6 +221,7 @@
 </header>
 
 <div class="wrap">
+  <div id="view-scan">
   <div class="grid">
 
     <!-- ============ INPUT ============ -->
@@ -177,6 +236,7 @@
               <option value="py">Python (.py)</option>
               <option value="c">C (.c)</option>
               <option value="cpp">C++ (.cpp)</option>
+              <option value="rust">Rust (.rs)</option>
               <option value="java">Java (.java)</option>
               <option value="js">JavaScript (.js)</option>
               <option value="go">Go (.go)</option>
@@ -207,6 +267,7 @@
         </details>
 
         <p class="note" id="modeNote"></p>
+        <p class="note" id="loadHint"></p>
       </div>
     </section>
 
@@ -253,11 +314,135 @@
       </div>
     </section>
   </div>
+  </div><!-- /view-scan -->
+
+  <!-- ============ BENCHMARK ============ -->
+  <div id="view-bench" style="display:none">
+    <section class="card"><div class="head">Automotive Security Benchmark
+      <span class="sub" id="benchSub">loading corpus…</span></div>
+      <div class="body">
+        <div class="row" style="align-items:flex-end;gap:14px">
+          <div>
+            <label class="fld" for="benchWindow">Line-match window (±)</label>
+            <input type="text" id="benchWindow" value="3" style="width:70px">
+          </div>
+          <button class="btn primary" id="benchBtn">Run benchmark</button>
+          <span class="note" id="benchModeNote"></span>
+        </div>
+        <p class="benchnote">
+          The corpus is original C / C++ / Rust automotive code seeded with labelled
+          vulnerabilities (ground truth in <span class="mono">benchmark/automotive/</span>).
+          A labelled vuln counts as <b>detected</b> when a finding lands within the window
+          of its line. Clean control files measure false positives. <b>Fast</b> = deterministic
+          layers (offline); <b>Deep</b> = live LLM per file (the realistic detector for C/C++/Rust).
+        </p>
+        <div id="benchErr" class="err" style="display:none"></div>
+      </div>
+    </section>
+
+    <div id="benchResults" style="display:none">
+      <div class="card gap"><div class="body">
+        <div class="metrics" id="benchMetrics"></div>
+        <div class="gap"></div>
+        <div class="brow"><div class="lab">Overall coverage</div>
+          <div class="track2"><div class="fill2" id="benchCovBar"></div></div>
+          <div class="val" id="benchCovVal"></div></div>
+      </div></div>
+
+      <div class="card gap"><div class="head">Coverage by severity</div>
+        <div class="body" id="benchBySev"></div></div>
+      <div class="card gap"><div class="head">Coverage by category</div>
+        <div class="body" id="benchByCat"></div></div>
+      <div class="card gap"><div class="head">Coverage by language</div>
+        <div class="body" id="benchByLang"></div></div>
+
+      <div class="card gap"><div class="head">Per-file results
+        <span class="sub">click a file to expand its labelled vulnerabilities</span></div>
+        <div class="body" id="benchFiles"></div></div>
+
+      <div class="card gap"><div class="head">Raw benchmark (JSON)</div>
+        <div class="body"><details><summary class="note" style="cursor:pointer">show full result</summary>
+          <pre class="json gap" id="benchRaw"></pre></details></div>
+      </div>
+    </div>
+  </div><!-- /view-bench -->
+
+  <!-- ============ ATTACK ============ -->
+  <div id="view-attack" style="display:none">
+    <div class="grid">
+      <section class="card"><div class="head">Target source
+        <span class="sub">red-team analysis — for authorised testing only</span></div>
+        <div class="body">
+          <div class="row" style="margin-bottom:10px">
+            <div style="flex:1;min-width:160px">
+              <label class="fld" for="atkFname">Filename</label>
+              <input type="text" id="atkFname" value="input.py" style="width:100%">
+            </div>
+            <div>
+              <label class="fld" for="atkExamples">Load from corpus</label>
+              <select id="atkExamples"><option value="">— pick —</option></select>
+            </div>
+          </div>
+          <label class="fld" for="atkScenario">Attack scenario / goal</label>
+          <input type="text" id="atkScenario" style="width:100%;margin-bottom:10px"
+            placeholder="e.g. Exfiltrate fleet vehicle records / tamper with the brake ECU">
+          <label class="fld" for="atkCode">Code</label>
+          <textarea id="atkCode" placeholder="# paste the target source code here…"></textarea>
+          <details class="opt">
+            <summary>+ optional deployment / topology (YAML)</summary>
+            <div class="inner"><textarea id="atkDep"
+              placeholder="actors / datasources / edges YAML — enables poison/trigger path analysis"></textarea></div>
+          </details>
+          <div class="row" style="margin-top:12px">
+            <button class="btn primary" id="atkBtn">Run red-team analysis</button>
+            <span class="note" id="atkModeNote"></span>
+          </div>
+          <p class="warnbanner" style="margin-top:12px">
+            ⚠ This produces an <b>attack plan and proof-of-concept scripts</b> for
+            <b>authorised</b> red-team use. The scripts are <b>generated as text and never
+            executed</b> here; an <b>EthicsGuard</b> checks scope/target and <b>redacts</b>
+            destructive payloads. Use only on systems you own or are authorised to test.
+          </p>
+          <div id="atkErr" class="err" style="display:none"></div>
+        </div>
+      </section>
+
+      <section>
+        <div id="atkPlaceholder" class="card"><div class="body empty">
+          <div class="big">🎯</div>
+          Paste target code, give a scenario, and run.<br>
+          You'll get the recon graph, the chosen exploit chain (poison/trigger paths),
+          the ethics verdict, and benign PoC scripts.
+        </div></div>
+        <div id="atkResults" style="display:none">
+          <div class="card"><div class="body">
+            <div class="banner" id="atkBanner"></div>
+            <p class="note" id="atkSummary"></p>
+          </div></div>
+
+          <div class="card gap"><div class="head">Reconnaissance
+            <span class="sub">passive — no packets sent</span></div>
+            <div class="body" id="atkRecon"></div></div>
+
+          <div class="card gap"><div class="head">Exploit plan</div>
+            <div class="body" id="atkPlan"></div></div>
+
+          <div class="card gap"><div class="head">PoC scripts
+            <span class="sub" id="atkScriptCount"></span></div>
+            <div class="body" id="atkScripts"></div></div>
+
+          <div class="card gap"><div class="head">Raw result (JSON)</div>
+            <div class="body"><details><summary class="note" style="cursor:pointer">show full record</summary>
+              <pre class="json gap" id="atkRaw"></pre></details></div></div>
+        </div>
+      </section>
+    </div>
+  </div>
 </div>
 
 <script>
 const $ = s => document.querySelector(s);
-const EXT = {py:".py",c:".c",cpp:".cpp",java:".java",js:".js",go:".go"};
+const EXT = {py:".py",c:".c",cpp:".cpp",rust:".rs",java:".java",js:".js",go:".go"};
 const SEV = ["critical","high","medium","low","info"];
 const sevClass = s => SEV.includes((s||"").toLowerCase()) ? (s||"").toLowerCase() : "info";
 const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -290,21 +475,46 @@ function refreshModeNote(av){
 }
 
 // ---- examples ----
+function populateLoader(sel, data){
+  sel._data=[];
+  const addGroup = (label, items) => {
+    if(!items || !items.length) return;
+    const og=document.createElement("optgroup"); og.label=label;
+    items.forEach(ex=>{
+      const i=sel._data.length; sel._data[i]=ex;
+      const o=document.createElement("option"); o.value=i; o.textContent=ex.name;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  };
+  addGroup("Examples", data.examples);
+  addGroup("Benchmark corpus (automotive)", data.benchmark);
+}
 async function loadExamples(){
   try{
     const r = await (await fetch("/api/examples")).json();
-    const sel = $("#examples");
-    (r.examples||[]).forEach((ex,i)=>{
-      const o=document.createElement("option"); o.value=i; o.textContent=ex.name; sel.appendChild(o);
-      sel._data=sel._data||[]; sel._data[i]=ex;
-    });
+    populateLoader($("#examples"), r);
+    populateLoader($("#atkExamples"), r);
   }catch(e){}
 }
+$("#atkExamples").addEventListener("change",e=>{
+  const d=e.target._data&&e.target._data[e.target.value]; if(!d)return;
+  $("#atkCode").value=d.code; $("#atkFname").value=d.filename;
+});
 $("#examples").addEventListener("change",e=>{
   const d=e.target._data&&e.target._data[e.target.value]; if(!d)return;
   $("#code").value=d.code; $("#fname").value=d.filename;
   const ext=(d.filename.match(/\.(\w+)$/)||[])[1];
   for(const k in EXT){ if(EXT[k]==="."+ext){ $("#lang").value=k; } }
+  // benchmark files carry ground-truth counts — hint what to expect
+  if(d.n_vulns!==undefined){
+    $("#loadHint").innerHTML = d.clean
+      ? "🧪 <b>Clean control</b> — a correct scan finds nothing here."
+      : `🚗 <b>Benchmark file</b> — ground truth lists <b>${d.n_vulns}</b> vulnerabilit`+
+        `${d.n_vulns===1?'y':'ies'}. Toggle <b>Deep&nbsp;(AI)</b> for the realistic result, then Scan.`;
+  } else {
+    $("#loadHint").textContent = "";
+  }
 });
 $("#lang").addEventListener("change",e=>{
   const f=$("#fname"); const base=(f.value.replace(/\.\w+$/,"")||"input");
@@ -449,6 +659,225 @@ function renderReasoning(rec){
     html+=`</ul>`;
   }
   $("#reasoning").innerHTML=html;
+}
+
+// ---- tabs ----
+let benchLoaded = false;
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+  t.classList.add("active");
+  const tab = t.getAttribute("data-tab");
+  $("#view-scan").style.display = tab === "scan" ? "block" : "none";
+  $("#view-bench").style.display = tab === "bench" ? "block" : "none";
+  $("#view-attack").style.display = tab === "attack" ? "block" : "none";
+  $("#scanBtn").style.display = tab === "scan" ? "" : "none";
+  if (tab === "bench" && !benchLoaded) { benchLoaded = true; loadBenchManifest(); }
+  if (tab === "bench") refreshBenchModeNote();
+  if (tab === "attack") refreshAtkModeNote();
+}));
+
+function refreshBenchModeNote(){
+  const deep = $("#deep").checked, real = HEALTH && HEALTH.llm_real;
+  $("#benchModeNote").textContent = (deep && real)
+    ? "Deep: one live gpt-4o call per ingested file (slower, costs tokens)."
+    : (deep && !real) ? "Deep requested but no live LLM — running the deterministic layers."
+    : "Fast: deterministic layers only (offline, instant).";
+}
+$("#deep").addEventListener("change", refreshBenchModeNote);
+
+async function loadBenchManifest(){
+  try{
+    const m = await (await fetch("/api/benchmark")).json();
+    if(!m.ok) return;
+    const langs = [...new Set(m.files.map(f=>f.language))].join(" · ");
+    const clean = m.files.filter(f=>f.clean).length;
+    const skip = m.files.filter(f=>!f.ingested && !f.clean).length;
+    $("#benchSub").innerHTML = `${m.files.length} files (${langs}) · `+
+      `<b>${m.total_vulns}</b> labelled vulnerabilities · ${clean} clean control(s)`+
+      (skip?` · <span style="color:var(--med)">${skip} file(s) not ingested by the scanner</span>`:"");
+    refreshBenchModeNote();
+  }catch(e){ $("#benchSub").textContent = "could not load corpus"; }
+}
+
+$("#benchBtn").addEventListener("click", runBench);
+async function runBench(){
+  const btn=$("#benchBtn"); btn.disabled=true; btn.innerHTML='<span class="spin"></span> Running…';
+  $("#benchErr").style.display="none";
+  try{
+    const win = parseInt($("#benchWindow").value) || 3;
+    const res = await fetch("/api/benchmark",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({deep:$("#deep").checked, window:win})});
+    const data = await res.json();
+    if(!data.ok){ $("#benchErr").textContent="⚠ "+(data.error||"failed"); $("#benchErr").style.display="block"; return; }
+    renderBench(data);
+  }catch(e){ $("#benchErr").textContent="⚠ "+String(e); $("#benchErr").style.display="block"; }
+  finally{ btn.disabled=false; btn.textContent="Run benchmark"; }
+}
+
+function covColor(pct){
+  if(pct>=75) return "var(--ok)";
+  if(pct>=40) return "var(--med)";
+  if(pct>=15) return "var(--high)";
+  return "var(--bad)";
+}
+function bar(label, covered, total){
+  const pct = total ? Math.round(covered/total*100) : 0;
+  return `<div class="brow"><div class="lab">${esc(label)}</div>`+
+    `<div class="track2"><div class="fill2" style="width:${pct}%;background:${covColor(pct)}"></div></div>`+
+    `<div class="val">${covered}/${total} · ${pct}%</div></div>`;
+}
+function barGroup(obj){
+  // sort by total desc for stable display
+  return Object.keys(obj).sort((a,b)=>obj[b].total-obj[a].total)
+    .map(k=>bar(k, obj[k].covered, obj[k].total)).join("") || '<div class="note">—</div>';
+}
+
+function renderBench(data){
+  $("#benchResults").style.display="block";
+  const m = data.metrics;
+  const cards = [
+    {n:m.coverage_pct+"%", l:"coverage", c:m.coverage_pct>=50?"good":(m.coverage_pct>=20?"warn":"bad")},
+    {n:`${m.covered}/${m.total_vulns}`, l:"detected", c:"accent"},
+    {n:m.missed, l:"missed", c:m.missed?"warn":"good"},
+    {n:m.recall, l:"recall", c:"accent"},
+    {n:m.precision, l:"precision", c:"accent"},
+    {n:m.f1, l:"F1 score", c:"accent"},
+    {n:m.false_positives, l:"false positives", c:m.false_positives?"bad":"good"},
+    {n:m.extra_findings, l:"extra (unlabeled)", c:""},
+  ];
+  $("#benchMetrics").innerHTML = cards.map(c=>
+    `<div class="metric ${c.c}"><div class="n">${esc(c.n)}</div><div class="l">${c.l}</div></div>`).join("");
+
+  const pct = m.coverage_pct;
+  $("#benchCovBar").style.width = pct+"%";
+  $("#benchCovBar").style.background = covColor(pct);
+  $("#benchCovVal").textContent = `${m.covered}/${m.total_vulns} · ${pct}%`+
+    `  (${data.deep?'Deep · gpt-4o':'Fast · static'})`;
+
+  $("#benchBySev").innerHTML  = barGroup(m.by_severity);
+  $("#benchByCat").innerHTML  = barGroup(m.by_category);
+  $("#benchByLang").innerHTML = barGroup(m.by_language);
+
+  // per-file accordion
+  $("#benchFiles").innerHTML = data.files.map(f=>{
+    const cov = f.clean
+      ? `<span class="cov">${f.false_positives? '<span class="bad">'+f.false_positives+' FP</span>':'<span class="ok">0 FP</span>'}</span>`
+      : `<span class="cov" style="color:${covColor(f.n_vulns?Math.round(f.covered/f.n_vulns*100):100)}">${f.covered}/${f.n_vulns}</span>`;
+    const skipBadge = (!f.ingested && !f.clean)
+      ? '<span class="pill skip">not ingested (.'+f.path.split(".").pop()+')</span>' : '';
+    let body = "";
+    if(f.clean){
+      body = f.extra.length
+        ? f.extra.map(x=>`<div class="vrow"><span class="mark bad">⚠</span><span class="vt">false positive: <span class="tag2">${esc(x.rule_id)}</span> ${esc(x.title||'')} <span class="vmeta">line ${x.line||'?'}</span></span></div>`).join("")
+        : '<div class="vrow" style="border:0"><span class="mark ok">✓</span><span class="vt">no findings — clean control behaved correctly</span></div>';
+    } else {
+      body = (f.vulns||[]).map(v=>{
+        const mk = v.detected ? '<span class="mark ok">✓</span>' : '<span class="mark bad">✗</span>';
+        const matched = v.detected && v.matched
+          ? ` <span class="vmeta">→ matched <span class="tag2">${esc(v.matched.rule_id)}</span> @ line ${v.matched.line}</span>` : '';
+        return `<div class="vrow">${mk}<span class="vt">`+
+          `<span class="tag2">${esc(v.cwe)}</span> <b>${esc(v.title)}</b> `+
+          `<span class="vmeta">${esc(v.severity)} · line ${v.line} · ${esc(v.category)}</span>${matched}</span></div>`;
+      }).join("");
+      if(f.extra && f.extra.length){
+        body += `<div class="vrow"><span class="mark">·</span><span class="vt vmeta">`+
+          `${f.extra.length} extra finding(s) not matching a label (not scored): `+
+          f.extra.map(x=>`<span class="tag2">${esc(x.rule_id)}@${x.line||'?'}</span>`).join(" ")+`</span></div>`;
+      }
+    }
+    return `<details class="bfile"><summary>`+
+      `<span class="langtag">${esc(f.language)}</span>`+
+      `<span class="fname">${esc(f.path)}</span>`+
+      `<span class="note" style="color:var(--dim)">${esc(f.subsystem)}</span>`+
+      skipBadge + cov + `</summary><div class="inner">${body}</div></details>`;
+  }).join("");
+
+  $("#benchRaw").textContent = JSON.stringify(data, null, 2);
+}
+
+// ---- attack tab ----
+function refreshAtkModeNote(){
+  const deep = $("#deep").checked, real = HEALTH && HEALTH.llm_real;
+  $("#atkModeNote").textContent = (deep && real)
+    ? "Deep: live gpt-4o plans the chain and authors the PoC scripts."
+    : (deep && !real) ? "Deep requested but no live LLM — deterministic demo plan/scripts."
+    : "Fast: deterministic plan from the static findings + template scripts (offline).";
+}
+$("#deep").addEventListener("change", refreshAtkModeNote);
+
+$("#atkBtn").addEventListener("click", runAttack);
+async function runAttack(){
+  const code=$("#atkCode").value;
+  if(!code.trim()){ $("#atkErr").textContent="⚠ Please paste target code first."; $("#atkErr").style.display="block"; return; }
+  const btn=$("#atkBtn"); btn.disabled=true; btn.innerHTML='<span class="spin"></span> Analysing…';
+  $("#atkErr").style.display="none";
+  try{
+    const res=await fetch("/api/attack",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({code, filename:$("#atkFname").value||"input.py",
+        scenario:$("#atkScenario").value, deployment:$("#atkDep").value, deep:$("#deep").checked})});
+    const data=await res.json();
+    if(!data.ok){ $("#atkErr").textContent="⚠ "+(data.error||"failed"); $("#atkErr").style.display="block"; return; }
+    renderAttack(data);
+  }catch(e){ $("#atkErr").textContent="⚠ "+String(e); $("#atkErr").style.display="block"; }
+  finally{ btn.disabled=false; btn.textContent="Run red-team analysis"; }
+}
+
+function renderAttack(data){
+  $("#atkPlaceholder").style.display="none";
+  $("#atkResults").style.display="block";
+  const rec=data.record||{}, plan=rec.plan||{}, ev=rec.ethics_verdict||{}, inst=rec.system_instance||{};
+  const allowed=ev.allowed;
+
+  $("#atkBanner").innerHTML =
+    `<span class="badge mode">${data.deep?'DEEP · AI':'FAST · static'}</span>`+
+    `<span class="badge ${allowed?'pass':'refused'}">ethics: ${allowed?'PASS':'REFUSED'}</span>`+
+    `<span class="pill">target <b>${esc(plan.target_asset||'—')}</b></span>`+
+    `<span class="pill">confidence <b>${Math.round((plan.confidence||0)*100)}%</b></span>`+
+    `<span class="pill">${esc(data.filename)}</span>`;
+  $("#atkSummary").textContent = plan.summary || rec.scenario || "";
+
+  // recon
+  const chips = (arr)=> (arr&&arr.length? arr.map(x=>`<span class="chip">${esc(x)}</span>`).join(" ") : '<span class="chip">none</span>');
+  $("#atkRecon").innerHTML = `<div class="kv">`+
+    `<div class="k">External actors</div><div class="v">${chips(inst.external_actors)}</div>`+
+    `<div class="k">Safety actors</div><div class="v">${chips(inst.safety_actors)}</div>`+
+    `<div class="k">Notes</div><div class="v">${(inst.notes&&inst.notes.length)?inst.notes.map(esc).join("<br>"):'—'}</div>`+
+    `</div>`;
+
+  // plan
+  const pathRow = (arr)=> (arr&&arr.length)? `<div class="pathrow">${arr.map(s=>`<span class="pathstep">${esc(s)}</span>`).join("")}</div>` : '<span class="note">—</span>';
+  $("#atkPlan").innerHTML = `<div class="kv">`+
+    `<div class="k">Target asset</div><div class="v"><b>${esc(plan.target_asset||'—')}</b></div>`+
+    `<div class="k">Chosen exploits</div><div class="v">${(plan.chosen_rule_ids||[]).map(r=>`<span class="tag2">${esc(r)}</span>`).join(" ")||'—'}</div>`+
+    `<div class="k">Poison path</div><div class="v">${pathRow(plan.poison_path)}</div>`+
+    `<div class="k">Trigger path</div><div class="v">${pathRow(plan.trigger_path)}</div>`+
+    `<div class="k">Justification</div><div class="v">${esc(plan.justification||'—')}</div>`+
+    `<div class="k">Ethics</div><div class="v">${allowed?'<span style="color:var(--ok)">✓ in scope</span>':'<span style="color:var(--bad)">✕ refused</span>'} — ${esc(ev.reason||'')}`+
+      ` <span class="vmeta">(scope ${ev.scope_ok?'✓':'✕'} · target ${ev.target_ok?'✓':'✕'} · non-destructive ${ev.non_destructive?'✓':'✕'})</span></div>`+
+    `</div>`;
+
+  // scripts
+  const scripts=rec.scripts||[], redacted=rec.redacted||[];
+  $("#atkScriptCount").textContent = `${scripts.length} generated`+(redacted.length?` · ${redacted.length} redacted`:"")+" · never executed";
+  if(!allowed){
+    $("#atkScripts").innerHTML = `<div class="empty"><div class="big">🛡️</div>Ethics guard refused this scenario/target — no scripts generated.</div>`;
+  } else if(!scripts.length){
+    $("#atkScripts").innerHTML = `<div class="empty">No scripts produced for the chosen plan.</div>`;
+  } else {
+    $("#atkScripts").innerHTML = scripts.map(s=>{
+      const red = (s.expected_effect==="REDACTED")||/^\[REDACTED\]/.test(s.title||"");
+      return `<div class="scriptcard${red?' redacted':''}">`+
+        `<div class="sh"><span class="tag2">${esc(s.rule_id)}</span>`+
+        `<span class="langtag">${esc(s.language)}</span>`+
+        `<span class="st">${esc(s.title)}</span>`+
+        (s.target_hint?`<span class="vmeta">target: ${esc(s.target_hint)}</span>`:"")+
+        (s.expected_effect&&!red?`<span class="eff">effect: ${esc(s.expected_effect)}</span>`:"")+
+        `</div><pre>${esc(s.body||"")}</pre></div>`;
+    }).join("");
+  }
+
+  $("#atkRaw").textContent = JSON.stringify(rec,null,2);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 loadHealth(); loadExamples();

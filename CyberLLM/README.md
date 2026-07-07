@@ -229,6 +229,12 @@ Two modes:
 command is ever executed from the UI. Detection is real; remediation is
 simulated. Each scan runs in an isolated temp workspace and is stateless.
 
+The UI's **Benchmark** tab runs the scanner over an independent, ground-truthed
+**automotive security corpus** (47 labelled vulnerabilities across original
+C/C++/Rust ECU code — CAN gateway, UDS, secure boot, OTA, telemetry, ADAS,
+keystore, vehicle API) and reports coverage, precision/recall/F1, and per-file
+results. See [`benchmark/automotive/README.md`](benchmark/automotive/README.md).
+
 ---
 
 ## 3. The defense pipeline — step by step

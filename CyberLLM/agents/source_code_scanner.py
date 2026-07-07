@@ -18,6 +18,12 @@ from tools.static_analyzer import (
     scan_code_static, staticfinding_to_finding,
 )
 
+# Source-file suffixes the code scanner ingests. The regex floor is
+# language-agnostic; the external AST layer routes by suffix (bandit for
+# Python, semgrep for the rest); the LLM pass is fully language-agnostic.
+CODE_SUFFIXES = (".py", ".c", ".h", ".cc", ".cpp", ".cxx", ".hpp", ".hxx",
+                 ".rs", ".go", ".java", ".js", ".ts")
+
 
 class SourceCodeScannerAgent(BaseAgent):
     PROMPT = (
@@ -35,9 +41,38 @@ class SourceCodeScannerAgent(BaseAgent):
         "\"evidence\": \"...\", \"explanation\": \"...\"}, ...]}"
     )
 
+    # Completeness "what did you miss?" critic (roadmap: second pass). Phrased
+    # to AVOID the offline stub's trigger keywords, so under the stub it returns
+    # nothing (no-op) and only a real model does extra work. Targets the subtle,
+    # semantic classes that pattern-matching and a single pass tend to miss.
+    SECOND_PASS_PROMPT = (
+        "You are reviewing one program file for security defects an earlier "
+        "automated pass may have OVERLOOKED. That pass already reported these "
+        "rule ids: [found].\n\n"
+        "Hunt specifically for SUBTLE, semantic issues that pattern matching "
+        "misses:\n"
+        " - race conditions / unsynchronised shared state,\n"
+        " - off-by-one and other boundary errors,\n"
+        " - NULL or dangling pointer dereference, use-after-free, double free,\n"
+        " - integer overflow / underflow feeding an allocation or copy,\n"
+        " - reachable panics / aborts on attacker-influenced input,\n"
+        " - missing authorization or capability checks,\n"
+        " - time-of-check to time-of-use (TOCTOU) gaps.\n\n"
+        "Report ONLY genuine, newly-identified defects you are HIGHLY CONFIDENT "
+        "are exploitable — do NOT repeat any rule id listed above. Treat these "
+        "defensive patterns as SAFE and never report them: parameterized / bound "
+        "queries, length-checked or bounds-checked copies, constant-time "
+        "comparisons, and Result/Option error handling that does not unwrap. If "
+        "the file appears secure, return an empty list. Map each real defect to "
+        "the closest rule id you know, or a CWE id.\n\n"
+        "File [filename]:\n```\n[code]\n```\n\n"
+        "Return JSON: {\"findings\": [{\"rule_id\": \"...\", \"severity\": "
+        "\"low|medium|high|critical\", \"line\": <int>, \"evidence\": \"...\", "
+        "\"explanation\": \"...\"}, ...]}"
+    )
+
     def run(self, inputs: list[Input]) -> AgentResult:
-        code_inputs = [i for i in inputs if i.source.endswith(".py")
-                       or i.source.endswith(".c") or i.source.endswith(".cpp")]
+        code_inputs = [i for i in inputs if i.source.endswith(CODE_SUFFIXES)]
         if not code_inputs:
             return AgentResult(self.agent_id, self.objective, [])
 
@@ -93,6 +128,22 @@ class SourceCodeScannerAgent(BaseAgent):
 
             # ---- 3. Merge (static layer wins on dedup) ------------------
             merged = merge_findings(static_layer, llm_findings)
+
+            # ---- 4. Completeness second pass (optional) ----------------
+            # A focused critic that looks for the subtle classes (races,
+            # off-by-one, UAF, integer over/underflow, reachable panics,
+            # missing authz, TOCTOU) the first pass misses. Gated by use_llm
+            # AND the `second_pass` flag; a no-op under the offline stub.
+            if use_llm and self.cfg.get("second_pass"):
+                self.data["code"] = inp.content
+                self.data["filename"] = inp.source
+                self.data["found"] = (
+                    ", ".join(sorted({f.rule_id for f in merged})) or "(none)")
+                resp2 = self.call_llm(self.template(self.SECOND_PASS_PROMPT))
+                raw_texts.append(resp2.text)
+                missed = self._parse_findings(resp2.text)
+                merged = merge_findings(merged, missed)
+
             all_findings.extend(merged)
 
         return AgentResult(
