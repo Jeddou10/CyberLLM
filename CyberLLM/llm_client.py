@@ -414,6 +414,13 @@ class AzureOpenAILLM(LLMClient):
         return (f"{endpoint}/openai/deployments/{deployment}"
                 f"/chat/completions?api-version={api_version}")
 
+    @staticmethod
+    def _is_reasoning_model(deployment: str) -> bool:
+        """gpt-5 and the o-series use `max_completion_tokens` and reject a
+        custom `temperature`, so they need a different request shape."""
+        name = deployment.split("/")[-1].lower()
+        return name.startswith(("o1", "o3", "o4")) or name.startswith("gpt-5")
+
     def complete(self, prompt, system=None):
         import time
         endpoint, deployment, api_version, key = self._resolved()
@@ -422,19 +429,24 @@ class AzureOpenAILLM(LLMClient):
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
-        body = json.dumps({
-            "messages": messages,
-            "temperature": self.cfg.get("temperature", 0.2),
-            "max_tokens": self.cfg.get("max_tokens", 1024),
-        }).encode("utf-8")
+        payload: dict[str, Any] = {"messages": messages}
+        max_out = int(self.cfg.get("max_tokens", 1024))
+        if self._is_reasoning_model(deployment):
+            # gpt-5 / o-series: renamed token param, fixed temperature.
+            payload["max_completion_tokens"] = max_out
+        else:
+            payload["max_tokens"] = max_out
+            payload["temperature"] = self.cfg.get("temperature", 0.2)
+        body = json.dumps(payload).encode("utf-8")
 
+        timeout = float(self.cfg.get("timeout", 120))
         last_detail = ""
         for attempt in range(self.MAX_RETRIES + 1):
             req = urllib.request.Request(
                 url, data=body, method="POST",
                 headers={"Content-Type": "application/json", "api-key": key})
             try:
-                with urllib.request.urlopen(req, timeout=120) as r:
+                with urllib.request.urlopen(req, timeout=timeout) as r:
                     data = json.loads(r.read().decode("utf-8"))
                 return LLMResponse(
                     text=data["choices"][0]["message"]["content"], raw=data)

@@ -131,6 +131,31 @@
   .code .tag{margin-left:14px;font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(0,0,0,.35);
     color:var(--muted);border:1px solid var(--line)}
 
+  /* remediation before/after */
+  .remedgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+  @media(max-width:900px){.remedgrid{grid-template-columns:1fr}}
+  .rhead{font-size:12px;font-weight:700;padding:6px 11px;border-radius:8px 8px 0 0;
+    border:1px solid var(--line);border-bottom:0}
+  .rhead.bad2{background:rgba(248,81,73,.12);color:var(--bad)}
+  .rhead.ok2{background:rgba(63,185,80,.14);color:var(--ok)}
+  .rhead.warn2{background:rgba(255,210,63,.12);color:var(--med)}
+  .remedgrid .code{border-radius:0 0 8px 8px;max-height:520px}
+  .code.safe{border-color:rgba(63,185,80,.45);box-shadow:inset 0 0 0 1px rgba(63,185,80,.14)}
+  .code tr.hl-safe td.src{color:#bfe9c8}
+  /* changed (rewritten) lines in the After panel */
+  .code tr.hl-changed{background:rgba(63,185,80,.16)}
+  .code tr.hl-changed td.ln{color:var(--ok);font-weight:700}
+  .code tr.hl-changed td.src{color:#d6f5de;box-shadow:inset 3px 0 0 var(--ok)}
+  .code .tag.chg{background:rgba(63,185,80,.16);color:var(--ok);border-color:rgba(63,185,80,.4)}
+
+  /* remediation card: drag the left edge to widen it */
+  #remedyCard{position:relative}
+  #remedyCard.wide{z-index:5;box-shadow:0 10px 44px rgba(0,0,0,.55)}
+  .rgrip{position:absolute;left:-8px;top:0;width:14px;height:100%;cursor:ew-resize;z-index:6;
+    display:flex;align-items:center;justify-content:center;touch-action:none}
+  .rgrip::before{content:"";width:4px;height:52px;border-radius:3px;background:var(--line);transition:background .15s}
+  .rgrip:hover::before,.rgrip.active::before{background:var(--accent);height:80px}
+
   .kv{display:grid;grid-template-columns:140px 1fr;gap:7px 14px;font-size:13px}
   .kv .k{color:var(--muted)} .kv .v{color:var(--txt);word-break:break-word}
   .mono{font-family:var(--mono);font-size:12px}
@@ -212,7 +237,7 @@
     </div>
     <div class="spacer"></div>
     <span class="pill" id="provPill"><span class="d gray"></span>checking provider…</span>
-    <label class="toggle" title="Deep mode uses the configured LLM (Azure gpt-4o) when credentials exist; otherwise the deterministic regex+bandit layers run.">
+    <label class="toggle" title="Deep mode uses the configured LLM (Azure gpt-5.5) when credentials exist; otherwise the deterministic regex+bandit layers run.">
       <input type="checkbox" id="deep"><span class="track"></span>
       <span>Deep&nbsp;(AI)</span>
     </label>
@@ -288,6 +313,14 @@
           <div class="stats" id="stats"></div>
           <p class="note" id="decisionSummary"></p>
         </div></div>
+
+        <!-- remediation (fix & verify) -->
+        <div class="card gap" id="remedyCard" style="display:none"><div class="rgrip" id="remedyGrip" title="Drag left to widen · double-click to reset"></div><div class="head">Auto-Remediation
+          <span class="sub">the agent rewrites the code, then re-scans to prove it's safe</span>
+          <button class="btn primary" id="remedyBtn" style="margin-left:auto;padding:8px 16px">🔧 Remediate &amp; verify</button>
+        </div>
+          <div class="body" id="remedy"><p class="note">Click <b>Remediate &amp; verify</b> — the agent fixes every finding with safe-by-construction code, then re-runs the scanners on the result.</p></div>
+        </div>
 
         <!-- findings -->
         <div class="card gap"><div class="head">Findings
@@ -545,6 +578,151 @@ async function runScan(){
 }
 function showErr(m){ const e=$("#err"); e.textContent="⚠ "+m; e.style.display="block"; }
 
+// ---- remediation (fix & verify) ----
+let LAST_SCAN = null;
+$("#remedyBtn").addEventListener("click", runRemediate);
+// Drag the left edge of the remediation card to widen it (it grows leftwards,
+// over the source column, so the before/after code panels get more room).
+(function(){
+  const card=$("#remedyCard"), grip=$("#remedyGrip");
+  if(!card||!grip) return;
+  let extra=0, dragging=false, startX=0, startExtra=0, naturalW=0, maxExtra=0;
+  function apply(){
+    if(extra>0){ card.style.width=(naturalW+extra)+"px"; card.style.marginLeft=(-extra)+"px"; card.classList.add("wide"); }
+    else { card.style.width=""; card.style.marginLeft=""; card.classList.remove("wide"); }
+  }
+  grip.addEventListener("pointerdown",e=>{
+    dragging=true; startX=e.clientX; startExtra=extra;
+    naturalW=card.offsetWidth-extra;
+    const rect=card.getBoundingClientRect();
+    maxExtra=Math.max(0, rect.left+extra-14);   // keep left edge on screen
+    grip.classList.add("active"); grip.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  grip.addEventListener("pointermove",e=>{
+    if(!dragging) return;
+    extra=Math.min(Math.max(0, startExtra+(startX-e.clientX)), maxExtra);
+    apply();
+  });
+  function end(){ dragging=false; grip.classList.remove("active"); }
+  grip.addEventListener("pointerup",end);
+  grip.addEventListener("pointercancel",end);
+  grip.addEventListener("dblclick",()=>{ extra=0; apply(); });   // reset to default width
+  window.addEventListener("resize",()=>{ if(extra){ extra=0; apply(); } });
+})();
+async function runRemediate(){
+  if(!LAST_SCAN){ return; }
+  const btn=$("#remedyBtn"); btn.disabled=true; btn.innerHTML='<span class="spin"></span> Remediating…';
+  $("#remedy").innerHTML=`<p class="note"><span class="spin" style="border-top-color:var(--accent)"></span> Rewriting the code with the LLM and re-scanning the result — this runs several model passes, give it a moment…</p>`;
+  try{
+    const res=await fetch("/api/remediate",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({code:LAST_SCAN.code, filename:LAST_SCAN.filename, deep:true})});
+    const data=await res.json();
+    if(!data.ok){ $("#remedy").innerHTML=`<div class="err">⚠ ${esc(data.error||"remediation failed")}</div>`; return; }
+    renderRemediation(data);
+  }catch(e){ $("#remedy").innerHTML=`<div class="err">⚠ ${esc(String(e))}</div>`; }
+  finally{ btn.disabled=false; btn.innerHTML="🔧 Remediate &amp; verify"; }
+}
+function codeTable(code, findings, safe, changed, tagByLine){
+  const byLine={}; (findings||[]).forEach(f=>{ if(f.line){ (byLine[f.line]=byLine[f.line]||[]).push(f); }});
+  const lines=(code||"").replace(/\n$/,"").split("\n");
+  return `<table>`+lines.map((ln,i)=>{
+    const n=i+1; const fs=byLine[n]; let cls="",tag="";
+    if(fs){ const worst=fs.map(f=>sevClass(f.severity)).sort((a,b)=>SEV.indexOf(a)-SEV.indexOf(b))[0];
+      cls=`hl-${worst}`; tag=`<span class="tag">${fs.map(f=>esc(f.rule_id)).join(", ")}</span>`; }
+    else if(changed&&changed.has(n)){ cls="hl-changed"; tag=(tagByLine&&tagByLine[n])||""; }
+    else if(safe){ cls="hl-safe"; }
+    return `<tr class="${cls}"><td class="ln">${n}</td><td class="src">${esc(ln)||" "}${tag}</td></tr>`;
+  }).join("")+`</table>`;
+}
+// LCS line-diff → set of 1-based line numbers in `after` that were added/rewritten
+function changedLines(before, after){
+  const A=(before||"").replace(/\n$/,"").split("\n");
+  const B=(after||"").replace(/\n$/,"").split("\n");
+  const n=A.length, m=B.length, out=new Set();
+  if(!m) return out;
+  if(n*m>400000){ for(let k=1;k<=m;k++) out.add(k); return out; } // too big → mark all
+  const dp=Array.from({length:n+1},()=>new Int32Array(m+1));
+  for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--)
+    dp[i][j] = A[i]===B[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
+  const same=new Set(); let i=0,j=0;
+  while(i<n&&j<m){
+    if(A[i]===B[j]){ same.add(j); i++; j++; }
+    else if(dp[i+1][j]>=dp[i][j+1]){ i++; } else { j++; }
+  }
+  for(let k=0;k<m;k++) if(!same.has(k)) out.add(k+1);
+  return out;
+}
+// group consecutive changed line numbers into contiguous blocks {start,end}
+function changedBlocks(changed){
+  const nums=[...changed].sort((a,b)=>a-b); const blocks=[]; let cur=null;
+  nums.forEach(n=>{ if(cur&&n===cur.end+1){ cur.end=n; } else { cur={start:n,end:n}; blocks.push(cur); } });
+  return blocks;
+}
+function tokenize(s){ return new Set((s||"").toLowerCase().match(/[a-z_][a-z0-9_]{2,}/g)||[]); }
+// assign each fixed vulnerability to the rewritten block that best matches it,
+// so the After panel can label the green block with the vuln it resolved.
+function blockTags(data, changed){
+  const blocks=changedBlocks(changed);
+  if(!blocks.length) return {};
+  const afterL=(data.fixed_code||"").replace(/\n$/,"").split("\n");
+  const origL=(data.original_code||"").replace(/\n$/,"").split("\n");
+  const fixedF=(data.before||[]).filter(f=>!(data.after||[]).some(x=>x.rule_id===f.rule_id && x.line===f.line));
+  const blockText=blocks.map(bl=>{ let t=""; for(let k=bl.start;k<=bl.end;k++) t+=" "+(afterL[k-1]||""); return tokenize(t); });
+  const assigned=blocks.map(()=>[]);
+  fixedF.forEach(f=>{
+    const toks=tokenize(((f.line&&origL[f.line-1])||"")+" "+(f.title||""));
+    let best=0,bestScore=-1;
+    blockText.forEach((bt,bi)=>{ let sc=0; toks.forEach(t=>{ if(bt.has(t)) sc++; }); if(sc>bestScore){ bestScore=sc; best=bi; } });
+    assigned[best].push(f);
+  });
+  const map={};
+  blocks.forEach((bl,bi)=>{
+    const fs=assigned[bi];
+    map[bl.start] = fs.length
+      ? fs.map(f=>`<span class="tag chg" title="${esc(f.title||'')}">✓ ${esc(f.rule_id)} fixed</span>`).join("")
+      : `<span class="tag chg">✓ fixed</span>`;
+  });
+  return map;
+}
+function renderRemediation(data){
+  const safe=!!data.verified_safe, b=data.before_count||0, a=data.after_count||0;
+  const aSev=data.after_sev||{critical:0,high:0,medium:0,low:0};
+  const exploitable=(aSev.critical||0)+(aSev.high||0);
+  const advisory=data.advisory_after||((aSev.medium||0)+(aSev.low||0)+(aSev.info||0));
+  const changed=changedLines(data.original_code, data.fixed_code);
+  const fixedCount=(data.before||[]).filter(f=>!(data.after||[]).some(x=>x.rule_id===f.rule_id && x.line===f.line)).length;
+  const tagByLine=blockTags(data, changed);
+  const badge = safe
+    ? `<span class="badge pass">✓ Verified safe — no exploitable issues</span>`
+    : `<span class="badge refused">${exploitable} exploitable finding(s) remain</span>`;
+  const model = data.provider&&data.provider.llm_model||"";
+  // per-finding fixed/remaining checklist (matched by rule_id + line)
+  const rows=(data.before||[]).map(f=>{
+    const still=(data.after||[]).some(x=>x.rule_id===f.rule_id && x.line===f.line);
+    return `<div class="vrow"><span class="mark ${still?'bad':'ok'}">${still?'✗':'✓'}</span>`+
+      `<span class="vt"><span class="tag2">${esc(f.rule_id)}</span> <b>${esc(f.title||'')}</b> `+
+      `<span class="vmeta">${esc(f.severity)} · line ${f.line||'?'}</span> `+
+      (still?'<span class="vmeta">still present</span>':'<span class="ok vmeta">fixed</span>')+
+      `</span></div>`;
+  }).join("");
+  $("#remedy").innerHTML =
+    `<div class="banner">${badge}`+
+      `<span class="pill">re-scan <b>${b} → ${a}</b></span>`+
+      (advisory?`<span class="pill">${advisory} advisory note(s)</span>`:"")+
+      `<span class="pill">${esc(data.filename||'')}</span>`+
+      (model?`<span class="pill">fixed by <b>${esc(model)}</b></span>`:"")+
+    `</div>`+
+    (safe&&advisory?`<p class="note">All critical/high vulnerabilities are eliminated. The ${advisory} remaining item(s) are low-severity analyser advisories (e.g. hygiene lints), not exploitable flaws.</p>`:"")+
+    `<div class="remedgrid">`+
+      `<div><div class="rhead bad2">Before · ${b} finding(s)</div>`+
+        `<div class="code">${codeTable(data.original_code, data.before, false, null)}</div></div>`+
+      `<div><div class="rhead ${safe?'ok2':'warn2'}">After · ${exploitable} exploitable${safe?' ✓':''} <span style="font-weight:500;opacity:.75">· ${fixedCount} vulnerabilit${fixedCount===1?'y':'ies'} fixed</span></div>`+
+        `<div class="code ${safe?'safe':''}">${codeTable(data.fixed_code, data.after, safe, changed, tagByLine)}</div></div>`+
+    `</div>`+
+    (rows?`<div class="head" style="border:0;padding:16px 0 6px;font-weight:600">Per-finding result`+
+      `<span class="sub">${(data.before||[]).length - (data.after||[]).length} of ${(data.before||[]).length} fixed</span></div>${rows}`:"");
+}
+
 // ---- render ----
 function render(data){
   $("#placeholder").style.display="none";
@@ -573,6 +751,15 @@ function render(data){
       `<div class="stat sev-${s}"><div class="n">${counts[s]}</div><div class="l">${s}</div></div>`).join("");
 
   $("#decisionSummary").textContent = rec.decision&&rec.decision.summary||"";
+
+  // remediation button — available once a Deep/live scan found something to fix
+  const canRemedy = findings.length>0 && !!data.deep && !!(data.provider&&data.provider.llm_real);
+  LAST_SCAN = canRemedy ? {code:data.code||"", filename:data.filename||"input.py"} : null;
+  $("#remedyCard").style.display = canRemedy ? "" : "none";
+  if(canRemedy){
+    $("#remedy").innerHTML = `<p class="note">Click <b>Remediate &amp; verify</b> — the agent fixes every finding with safe-by-construction code, then re-runs the scanners on the result.</p>`;
+    $("#remedyBtn").disabled=false; $("#remedyBtn").innerHTML="🔧 Remediate &amp; verify";
+  }
 
   // findings list
   $("#findCount").textContent = `${findings.length} total`;
@@ -679,7 +866,7 @@ document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () =>
 function refreshBenchModeNote(){
   const deep = $("#deep").checked, real = HEALTH && HEALTH.llm_real;
   $("#benchModeNote").textContent = (deep && real)
-    ? "Deep: one live gpt-4o call per ingested file (slower, costs tokens)."
+    ? "Deep: one live gpt-5.5 call per ingested file (slower, costs tokens)."
     : (deep && !real) ? "Deep requested but no live LLM — running the deterministic layers."
     : "Fast: deterministic layers only (offline, instant).";
 }
@@ -752,7 +939,7 @@ function renderBench(data){
   $("#benchCovBar").style.width = pct+"%";
   $("#benchCovBar").style.background = covColor(pct);
   $("#benchCovVal").textContent = `${m.covered}/${m.total_vulns} · ${pct}%`+
-    `  (${data.deep?'Deep · gpt-4o':'Fast · static'})`;
+    `  (${data.deep?'Deep · gpt-5.5':'Fast · static'})`;
 
   $("#benchBySev").innerHTML  = barGroup(m.by_severity);
   $("#benchByCat").innerHTML  = barGroup(m.by_category);
@@ -799,7 +986,7 @@ function renderBench(data){
 function refreshAtkModeNote(){
   const deep = $("#deep").checked, real = HEALTH && HEALTH.llm_real;
   $("#atkModeNote").textContent = (deep && real)
-    ? "Deep: live gpt-4o plans the chain and authors the PoC scripts."
+    ? "Deep: live gpt-5.5 plans the chain and authors the PoC scripts."
     : (deep && !real) ? "Deep requested but no live LLM — deterministic demo plan/scripts."
     : "Fast: deterministic plan from the static findings + template scripts (offline).";
 }
