@@ -9,6 +9,8 @@ serves the single-page app in `webapp/index.html` and a small JSON API:
     POST /api/scan         → run the static-first defense pipeline on the
                              posted code (+ optional log / deployment) and
                              return a detailed, UI-ready result
+    POST /api/remediate    → LLM-rewrite the posted code to fix its findings,
+                             then RE-SCAN it to prove the vulns are gone
 
 Run:
     python server.py                      # http://127.0.0.1:8000
@@ -156,6 +158,137 @@ def run_web_scan(code: str, filename: str = "input.py",
             else:
                 os.environ["CYBERLLM_FORCE_STUB"] = prev_force_stub
             shutil.rmtree(tmp, ignore_errors=True)
+
+
+# ---------------------------------------------------------------------------
+# Auto-remediation — LLM rewrites the code, then we RE-SCAN it to prove the
+# vulnerabilities are actually gone (a real before/after, not a claim).
+# ---------------------------------------------------------------------------
+
+def _strip_code_fences(text: str) -> str:
+    """Drop a leading/trailing ```lang fenced-code wrapper if the model added
+    one, so we persist pure source, not markdown."""
+    t = (text or "").strip()
+    if t.startswith("```"):
+        lines = t.split("\n")
+        lines = lines[1:]                                   # opening ``` (+lang)
+        if lines and lines[-1].strip().startswith("```"):
+            lines = lines[:-1]                              # closing ```
+        t = "\n".join(lines)
+    return t.strip("\n") + "\n"
+
+
+def _llm_fix_code(code: str, filename: str, findings: list) -> str:
+    """Ask the configured LLM to rewrite the whole file so every listed
+    vulnerability is fixed, preserving behaviour and the public API.
+    Returns the corrected source (fences stripped)."""
+    # Reasoning models (e.g. gpt-5.5) spend part of max_completion_tokens on
+    # hidden reasoning; give the rewrite a generous ceiling so the visible
+    # answer is never truncated to empty.
+    cfg = dict(_CFG["llm_configs"]["default"])
+    cfg["max_tokens"] = max(int(cfg.get("max_tokens", 2048) or 2048), 8000)
+    # Large secure rewrites through a reasoning model can run well past the
+    # default 120s HTTP timeout, so give this call a generous ceiling.
+    cfg["timeout"] = 600
+    client = LLMClient.create(cfg)
+    if findings:
+        vulns = "\n".join(
+            f"- [{f.get('severity', '?')}] {f.get('rule_id', '?')} "
+            f"(line {f.get('line', '?')}): {f.get('title', '')} — "
+            f"{f.get('detail', '')}"
+            for f in findings)
+    else:
+        vulns = "(no scanner findings — harden defensively anyway)"
+    system = (
+        "You are a senior secure-coding engineer. You are given a source file "
+        "and the security vulnerabilities found in it. Rewrite the ENTIRE file "
+        "so that every listed vulnerability is fixed using safe-by-"
+        "construction patterns: parameterised SQL queries; no shell=True (use "
+        "shlex.split + an allow-list, or argument lists); secrets read from "
+        "environment variables / a secret manager; strict input validation and "
+        "path-traversal guards; safe deserialisation; constant-time secret "
+        "comparisons; least privilege. Preserve the original behaviour, public "
+        "function signatures and overall structure as closely as possible.\n"
+        "Also write code that is clean under static analysers (bandit / "
+        "semgrep):\n"
+        "- When you must run an external process, resolve the executable to a "
+        "full path (e.g. via shutil.which) and pass arguments as a list; never "
+        "a partial name and never shell=True.\n"
+        "- Avoid time-of-check/time-of-use (TOCTOU) races: open the file first, "
+        "then validate via the open descriptor (os.fstat), instead of checking "
+        "the path and opening it afterwards.\n"
+        "- Do not leave unused imports.\n"
+        "Output ONLY the complete corrected file contents — no markdown code "
+        "fences, no explanations, no commentary.")
+    prompt = (
+        f"Filename: {filename}\n\n"
+        f"Vulnerabilities to fix:\n{vulns}\n\n"
+        f"Original file:\n{code}\n\n"
+        "Return the full corrected file now.")
+    resp = client.complete(prompt, system=system)
+    return _strip_code_fences(resp.text)
+
+
+def run_web_remediate(code: str, filename: str = "input.py",
+                      deep: bool = True) -> dict:
+    """Fix-and-verify loop for the demo: scan the original code, ask the LLM
+    to rewrite it securely, then RE-SCAN the fixed code with the same static
+    layers so the UI can show a provable before/after. Thread-safe (the two
+    `_scan_findings` calls each take the scan lock internally)."""
+    info = _provider_info()
+    if not info["llm_real"]:
+        return {"ok": False,
+                "error": ("Auto-remediation needs a live LLM (Deep mode). "
+                          "Set the AZURE_OPENAI_* values in .env.")}
+    name = Path(filename).name or "input.py"
+    tmp = Path(tempfile.mkdtemp(prefix="cyberllm_fix_"))
+    try:
+        orig_path = tmp / name
+        orig_path.write_text(code, encoding="utf-8")
+        before, _ = _scan_findings(code, name, orig_path, deep=True)
+
+        fixed_code = _llm_fix_code(code, name, before)
+        # Guard: a reasoning model can occasionally return an empty/truncated
+        # body. Scanning an empty file would falsely report "verified safe",
+        # so surface it as an error instead of a green verdict.
+        if len(fixed_code.strip()) < max(20, len(code.strip()) // 4):
+            return {"ok": False,
+                    "error": ("The model returned an incomplete rewrite. "
+                              "Please try again.")}
+
+        fixed_path = tmp / ("fixed__" + name)
+        fixed_path.write_text(fixed_code, encoding="utf-8")
+        after, _ = _scan_findings(fixed_code, name, fixed_path, deep=True)
+
+        def _sev_counts(items):
+            c = {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}
+            for f in items:
+                s = str(f.get("severity", "")).lower()
+                c[s if s in c else "info"] += 1
+            return c
+
+        before_sev = _sev_counts(before)
+        after_sev = _sev_counts(after)
+        # "verified safe" = no exploitable (critical/high) findings remain on
+        # the rewritten code. Any residual low/medium are shown as advisories.
+        blocking_after = after_sev["critical"] + after_sev["high"]
+        return {
+            "ok": True,
+            "provider": info,
+            "filename": name,
+            "original_code": code,
+            "fixed_code": fixed_code,
+            "before": before,
+            "after": after,
+            "before_count": len(before),
+            "after_count": len(after),
+            "before_sev": before_sev,
+            "after_sev": after_sev,
+            "advisory_after": after_sev["medium"] + after_sev["low"] + after_sev["info"],
+            "verified_safe": blocking_after == 0,
+        }
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _examples() -> list[dict]:
@@ -483,6 +616,21 @@ class Handler(BaseHTTPRequestHandler):
                     scenario=payload.get("scenario") or "",
                     deployment_text=payload.get("deployment") or None,
                     deep=bool(payload.get("deep")))
+                return self._json(200, result)
+            except Exception as exc:        # noqa: BLE001
+                traceback.print_exc()
+                return self._json(500, {"ok": False,
+                                        "error": f"{type(exc).__name__}: {exc}"})
+        if self.path == "/api/remediate":
+            try:
+                length = int(self.headers.get("Content-Length") or 0)
+                payload = json.loads(self.rfile.read(length) or b"{}")
+                code = (payload.get("code") or "").strip()
+                if not code:
+                    return self._json(400, {"ok": False, "error": "no code provided"})
+                result = run_web_remediate(
+                    code=code, filename=payload.get("filename") or "input.py",
+                    deep=bool(payload.get("deep", True)))
                 return self._json(200, result)
             except Exception as exc:        # noqa: BLE001
                 traceback.print_exc()

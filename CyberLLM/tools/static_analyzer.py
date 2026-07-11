@@ -421,8 +421,8 @@ def merge_static_layers(primary: list[StaticFinding],
 # bandit test-id → our CODE-* rule-id (so a bandit hit inherits our title,
 # severity and asset category). Unmapped ids are kept as `BANDIT-<id>`.
 _BANDIT_TO_RULE = {
-    "B602": "CODE-001", "B603": "CODE-001", "B604": "CODE-001",
-    "B605": "CODE-001", "B606": "CODE-001", "B609": "CODE-001",
+    "B602": "CODE-001", "B604": "CODE-001",
+    "B605": "CODE-001", "B609": "CODE-001",
     "B303": "CODE-002", "B324": "CODE-002",
     "B105": "CODE-003", "B106": "CODE-003", "B107": "CODE-003",
     "B608": "CODE-012",
@@ -432,6 +432,13 @@ _BANDIT_TO_RULE = {
     "B501": "CODE-006", "B502": "CODE-006", "B503": "CODE-006",
     "B311": "CODE-008",
 }
+# Note: B603 (subprocess_without_shell_equals_true) and B606
+# (start_process_with_no_shell) are bandit LOW-severity *advisories* that
+# fire on the SAFE argv-list subprocess pattern. Mapping them to the high
+# CODE-001 "command injection sink" produced false positives on correctly
+# remediated code, so they are intentionally left unmapped (surfaced as a
+# low-severity BANDIT-B603 / BANDIT-B606 advisory instead). The genuinely
+# dangerous shell paths (B602/B604 shell=True, B605 os.system) stay mapped.
 
 _BANDIT_SEV = {"HIGH": "high", "MEDIUM": "medium", "LOW": "low"}
 _SEMGREP_SEV = {"ERROR": "high", "WARNING": "medium", "INFO": "low"}
