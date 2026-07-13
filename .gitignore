@@ -44,3 +44,12 @@ mcp_workspace/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# --- Presentation & paper notes (local-only, not part of the code handoff) ---
+Papers_Notes/
+CyberLLM_Presentation.pptx
+*.pptx
+presentation.html
+presentation_script.md
+generate_pptx.py
+generate_script_pdf.py
