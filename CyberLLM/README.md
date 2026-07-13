@@ -2,11 +2,12 @@
 
 CyberLLM is a research prototype that pairs a **deterministic static-analysis
 floor** with **LLM reasoning** and a **guarded action engine** to both *defend*
-and *red-team* software — with a focus on automotive / edge (SDV) code. It
-**analyses code statically** (as text + AST + LLM reasoning) and **never executes
-the code under test**; any remediation or response action defaults to **dry-run**.
+and *red-team* software — with a focus on automotive / software-defined-vehicle
+(SDV) code. It **analyses code statically** (as text + AST + LLM reasoning) and
+**never executes the code under test**; any remediation or response action
+defaults to **dry-run**.
 
-It ships two mirror pipelines and a polished local web UI:
+It ships two mirror pipelines and a polished, dependency-free local web UI:
 
 - **Defense (blue team):** scan source code / logs / deployment topology →
   detect vulnerabilities → decide a response *tier* → build a **guarded,
@@ -21,31 +22,42 @@ It ships two mirror pipelines and a polished local web UI:
 
 ---
 
+## The five reference papers
+
+The whole design is derived from five papers and cited by shorthand
+(**P1**–**P5**) throughout the code and this document. This is the research
+foundation of the project — read it first.
+
+| # | Paper | Authors (year) | What CyberLLM takes from it |
+|---|-------|----------------|------------------------------|
+| **P1** | *A Framework for Formalizing LLM Agent Security* | **Siu, He, Montgomery, Wang, Gong, Wang, Song** — UC Santa Cruz / UC Berkeley / Duke (2026) · arXiv:2603.19469 | Four contextual-security properties (task / action / source-authorization / data-isolation) + the **H_a** "does this action serve the objective?" oracle → the `SecurityGuard` / `EthicsGuard`. |
+| **P2** | *Agent2Agent Threats in Safety-Critical LLM Assistants: A Human-Centric Taxonomy* | **Stappen, Turan, Hagerer, Groh** — BMW Group + TUM (2026) · arXiv:2602.05877 | Human-centric asset taxonomy and the actor / datasource graph with **poison-path vs trigger-path** attack modelling → deployment scanner + attack side. |
+| **P3** | *LLM-Empowered Functional Safety and Security by Design in Automotive Systems* | **Petrovic, Zolfaghari, Pan, Knoll** — TUM (2026) · arXiv:2601.02215 | Rules-as-context (OCL-style topology rules), retrieve-and-refine prompting, and the automated code-correction loop → `rules/*.yaml`, remediation. |
+| **P4** | *Specification and Evaluation of Multi-Agent LLM Systems* | **Felix Härer** — FHNW (2025) · arXiv:2506.10467 | The engineering backbone: schema-driven agents, prompt templating, provider abstraction, typed agent-to-agent hand-off → `agents/base_agent.py`, `llm_client.py`, `config.yaml`. |
+| **P5** | *LLM-Orchestrated Multi-Agent Coordination for Adaptive Cyber Defense at the Edge* | **Collins, James, Thomas** (2026) | The layered architecture, **tiered/adaptive response**, and the learning-from-memory loop → pipeline orchestration, response tiers, signed memory. |
+
+---
+
 ## Highlights
 
-- **Three-layer detection** — regex floor ⊕ AST analysers (bandit / semgrep) ⊕
-  LLM refinement, merged so the deterministic layers win on duplicates.
-- **Contextual security guard (paper 1)** — four properties (task / action /
-  source-authorization / data-isolation) + the **H_a** "does this action serve
-  the objective?" oracle, applied per-step and per-trajectory.
-- **Action engine** — rule-specific **playbooks** → typed `ActionPlan` →
+- **Three-layer detection (P3/P4)** — regex floor ⊕ AST analysers (bandit /
+  semgrep) ⊕ LLM refinement, merged so the deterministic layers win on
+  duplicates.
+- **Contextual security guard (P1)** — four properties + the **H_a** action-
+  alignment oracle, applied per-step and per-trajectory; the LLM can only
+  *tighten* the deterministic floor, never loosen it.
+- **Action engine (P5)** — rule-specific **playbooks** → typed `ActionPlan` →
   executor over a schema-validated, audited **MCP tool registry**, dry-run by
   default.
-- **Signed cross-session memory** — HMAC-signed SQLite incident store; reads
-  verify signature + source, defeating memory-poisoning.
-- **Automotive security benchmark** — 47 ground-truthed vulnerabilities across
-  original C / C++ / Rust ECU code, with detection *and* remediation metrics.
+- **Signed cross-session memory (P5/P1)** — HMAC-signed SQLite incident store;
+  reads verify signature + source, defeating memory-poisoning.
+- **Automotive security benchmark (P2)** — 47 ground-truthed vulnerabilities
+  across original C / C++ / Rust ECU code, with detection *and* remediation
+  metrics, plus clean controls for false-positive measurement.
 - **Local web UI** (zero dependencies) — **Scan**, **Benchmark**, and **Attack**
   tabs with a Finding Explorer, auto-remediation, and PoC simulation.
 - **Runs on clone** — with no LLM credentials it falls back to a deterministic
-  offline stub, so the pipeline and tests always run.
-
-### Research basis
-The design cites five papers by shorthand throughout the code:
-**P1** contextual security (4 properties + H_a oracle) · **P2** AgentHeLLM (asset
-taxonomy + actor/datasource graph, poison/trigger paths) · **P3** rules-as-context
-/ OCL topology checks · **P4** Härer schema-driven agents · **P5** layered,
-tiered, adaptive response.
+  offline stub, so the pipeline and the full test suite always run.
 
 ---
 
@@ -56,18 +68,19 @@ pip install -r requirements.txt          # PyYAML is the only hard dependency
 pip install bandit                        # optional: real AST layer for Python (recommended)
 ```
 
-**LLM provider (optional but recommended).** The default is **Azure OpenAI
-gpt-4o**. Put credentials in a git-ignored `.env` at the project root:
+**LLM provider (optional but recommended).** The default is **Azure OpenAI**.
+Put credentials in a git-ignored `.env` at the project root:
 
 ```dotenv
 AZURE_OPENAI_API_KEY=...
 AZURE_OPENAI_ENDPOINT=https://<your-resource>.openai.azure.com
-AZURE_OPENAI_DEPLOYMENT=gpt-4o
+AZURE_OPENAI_DEPLOYMENT=<your-deployment-name>
 AZURE_OPENAI_API_VERSION=2024-10-21
 ```
 
 Without valid credentials, CyberLLM automatically uses the **offline stub** (a
-deterministic, network-free model) so everything still runs.
+deterministic, network-free model) so everything still runs. Other providers
+(`openai`, `anthropic`, `ollama`, `github`) are selectable in `config.yaml`.
 
 ### 1. Web UI (recommended)
 
@@ -123,13 +136,15 @@ clean controls):
 | Mode | Coverage | Precision | Recall | F1 |
 |------|:--------:|:---------:|:------:|:--:|
 | **Fast** (offline: regex + bandit/semgrep) | ~34% | 1.000 | 0.34 | 0.51 |
-| **Deep** (live gpt-4o + completeness pass) | ~70% | 1.000 | 0.70 | ~0.83 |
+| **Deep** (live LLM + completeness pass) | ~70% | 1.000 | 0.70 | ~0.83 |
 
 Deep numbers vary a few points run-to-run (the model is non-deterministic).
 
 ---
 
 ## Repository structure
+
+The code lives in this `CyberLLM/` project directory.
 
 ```
 CyberLLM/
@@ -139,6 +154,7 @@ CyberLLM/
 ├── run_logger.py           # per-run forensic trace writer (run_logs/)
 ├── evaluate.py             # static evaluation harness (recall / false-positive rate)
 ├── verify.py               # 30-second offline smoke test (no pytest needed)
+├── run_blind_tests.py      # runs the pipeline over unlabelled inputs for spot-checking
 ├── config.yaml             # all tunables: LLM, agents, scanners, guard, memory, examples
 ├── requirements.txt · pytest.ini
 │
@@ -147,9 +163,9 @@ CyberLLM/
 │   ├── source_code_scanner.py · log_analyzer.py · deployment_scanner.py
 │   ├── decision_agent.py   #   response-tier decision (P5) + asset tagging (P2)
 │   ├── security_guard.py   #   P1 four-property guard (check / check_step / check_trajectory)
-│   ├── ha_judge.py         #   H_a action-alignment oracle
-│   ├── memory_store.py     #   signed (HMAC) cross-session incident memory
-│   ├── action_engine/      #   playbooks → ActionPlan → executor → MCP tool registry
+│   ├── ha_judge.py         #   H_a action-alignment oracle (P1)
+│   ├── memory_store.py     #   signed (HMAC) cross-session incident memory (P5)
+│   ├── action_engine/      #   playbooks → ActionPlan → executor → MCP tool registry (P5)
 │   └── attack/             #   red-team mirror (recon, exploiters, orchestrator, ethics, generator)
 │
 ├── tools/
@@ -161,7 +177,7 @@ CyberLLM/
 ├── webapp/index.html       # single-page UI (Scan · Benchmark · Attack) — inline CSS/JS
 ├── benchmark/automotive/   # ground-truthed C/C++/Rust security benchmark + labels
 ├── examples/               # sample code, logs, deployments, labelled scenario sets
-├── tests/                  # pytest suite (185 tests)
+├── tests/                  # pytest suite (180+ tests)
 └── memory/                 # runtime incident store (git-ignored; .gitkeep only)
 ```
 
@@ -176,10 +192,11 @@ CyberLLM/
   "would-execute" envelope unless explicitly run live. `CYBERLLM_FORCE_DRY_RUN`
   can force dry-run on but nothing can force real execution against your intent;
   the web server hard-forces dry-run.
-- **Guarded:** every action/step passes the P1 `SecurityGuard`; the H_a oracle
+- **Guarded (P1):** every action/step passes the `SecurityGuard`; the H_a oracle
   can only *tighten* the deterministic floor. The attack side is gated by an
   `EthicsGuard` that checks scope/target and redacts destructive payloads.
-- **Signed memory:** incidents are HMAC-signed; reads verify signature + source.
+- **Signed memory (P5):** incidents are HMAC-signed; reads verify signature +
+  source, so a poisoned memory row cannot steer a future decision.
 
 ---
 
@@ -187,7 +204,7 @@ CyberLLM/
 
 ```bash
 python verify.py                                  # 30-second offline smoke check
-python -m pytest tests/ -q                        # full suite (185 tests)
+python -m pytest tests/ -q                        # full suite (180+ tests)
 ```
 
 The suite is hermetic via three env kill-switches (set automatically in
@@ -228,3 +245,12 @@ also set a real `CYBERLLM_MEMORY_KEY` instead of the dev signing key.
 - This is a research prototype: P1's oracles are approximations (each guard check
   is *named* so it can be replaced), and the LLM layer is probabilistic — hence
   the deterministic floor and the guard.
+
+---
+
+## License & ethics
+
+Intended for academic use, authorised red-team exercises, and defensive
+research. The `EthicsGuard` is a **policy enforcement point**, not a legal
+indemnity. Do not run the attack pipeline against systems you do not own or have
+explicit written authorisation to test.
