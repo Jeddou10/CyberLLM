@@ -157,7 +157,6 @@ paths:
   rules_dir: rules
   examples_dir: examples\small       # default example set used when --example is not given
   memory_dir: memory
-  prompts_dir: prompts
 
 # ---- Defaults used when CLI flags are not provided ------------------------
 defaults:

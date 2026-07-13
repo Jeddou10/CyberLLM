@@ -178,14 +178,21 @@ class SecurityGuard:
         side_effect = getattr(getattr(step, "side_effect", None), "value",
                               str(getattr(step, "side_effect", "read")))
         requires_auth = bool(getattr(step, "requires_authorization", False))
+        # A step is *privileged* when it changes state destructively or has
+        # explicitly declared it needs authorization. Computed up-front so the
+        # action-alignment check can reserve the H_a oracle for these.
+        privileged = side_effect == "destructive" or requires_auth
 
         # 1. Task alignment — objective must be in the allowed set O.
         task_ok = objective in self.allowed_objectives
         if not task_ok:
             reasons.append(f"objective '{objective}' is not in allowed set O")
 
-        # 2. Action alignment — static map is the floor; H_a tightens it,
-        #    now with the *full* step context.
+        # 2. Action alignment — static map is the floor. The (probabilistic)
+        #    H_a oracle is consulted ONLY for *privileged* steps: that is where
+        #    P1 shows it pays off, and it stops the judge from spuriously
+        #    refusing benign defensive steps (code patches, notifications,
+        #    observations), which pass on the deterministic floor alone.
         compatible = _ACTION_OBJECTIVES.get(kind, set())
         static_action_ok = bool(compatible & {objective})
         action_ok = static_action_ok
@@ -193,7 +200,7 @@ class SecurityGuard:
             reasons.append(
                 f"step tool '{tool}' (kind '{kind}') incompatible with "
                 f"objective '{objective}'")
-        elif self.ha_judge is not None:
+        elif privileged and self.ha_judge is not None:
             ctx = (f"tool={tool}; rule_id={getattr(step, 'rule_id', '?')}; "
                    f"side_effect={side_effect}; "
                    f"step={getattr(step, 'description', '')}; "
@@ -203,10 +210,8 @@ class SecurityGuard:
                 action_ok = False
                 reasons.append(f"H_a judge refused step '{tool}': {ha_reason}")
 
-        # 3. Source authorization — a *privileged* step (declares a
-        #    destructive side-effect or explicit authorization) requires an
+        # 3. Source authorization — a privileged step requires an
         #    authenticated source among the inputs.
-        privileged = side_effect == "destructive" or requires_auth
         has_auth = any(i.trust_level == "authenticated" for i in inputs)
         source_ok = (not privileged) or has_auth
         if not source_ok:

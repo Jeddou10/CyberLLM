@@ -941,6 +941,11 @@ def run_attack_pipeline(
             "confidence": plan.confidence,
             "justification": plan.justification,
         },
+        # All exploit findings (code + topology), enriched, so a UI can list
+        # them and link each to its generated PoC script by rule_id.
+        "findings": _enrich_findings(
+            list(code_result.findings) + list(dep_result.findings),
+            rules, code_paths),
         "ethics_verdict": asdict(verdict),
         "scripts": [
             {

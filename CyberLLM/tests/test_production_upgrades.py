@@ -167,12 +167,31 @@ class TestCheckStep:
     def test_ha_judge_can_refuse_step_via_context(self, stub_llm):
         from agents.ha_judge import HaJudge
         g = _guard(HaJudge(stub_llm))
-        # block_ip step whose context flags a trusted asset → H_a refuses
-        step = _step("firewall.block_ipv4", side_effect=SideEffect.WRITE)
+        # A *privileged* block_ip step (requires authorisation) whose context
+        # flags a trusted asset → the H_a oracle refuses it. (H_a is reserved
+        # for privileged steps; benign steps pass on the deterministic floor.)
+        step = _step("firewall.block_ipv4", side_effect=SideEffect.WRITE,
+                     requires_auth=True)
         v = g.check_step(step, "produce defensive action",
                          [Input("op", "user", "authenticated")],
                          decision_summary="target is a trusted-asset internal node")
         assert not v.allowed and not v.action_alignment
+
+    def test_ha_judge_not_consulted_for_benign_step(self):
+        # A non-privileged defensive step passes without invoking H_a, even
+        # when the context looks suspicious — the deterministic floor decides.
+        from agents.ha_judge import HaJudge
+
+        class _Boom(HaJudge):
+            def __init__(self): pass
+            def judges(self, *a, **k): raise AssertionError("H_a must not run here")
+        g = _guard(_Boom())
+        step = _step("code.propose_patch", kind=StepKind.ERADICATE,
+                     side_effect=SideEffect.WRITE)
+        v = g.check_step(step, "auto-correct insecure code",
+                         [Input("op", "user", "authenticated")],
+                         decision_summary="trusted-asset misaligned")
+        assert v.allowed
 
 
 # ===========================================================================

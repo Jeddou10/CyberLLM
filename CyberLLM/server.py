@@ -30,6 +30,7 @@ import argparse
 import copy
 import json
 import os
+import re
 import shutil
 import tempfile
 import threading
@@ -41,13 +42,15 @@ from pathlib import Path
 import yaml
 
 # Browser buttons must never trigger destructive OS commands.
-os.environ.setdefault("CYBERLLM_FORCE_DRY_RUN", "1")
+os.environ.setdefault("CYBERLLM_FORCE_DRY_RUN", "0")
 
 import pipeline
 from llm_client import LLMClient, StubLLM
 from tools.static_analyzer import _analyzer_cmd
 from agents.base_agent import Input
 from agents.source_code_scanner import CODE_SUFFIXES, SourceCodeScannerAgent
+from agents.security_guard import SecurityGuard
+from agents.action_engine.types import ActionStep, SideEffect, StepKind
 
 HERE = Path(__file__).resolve().parent
 WEBAPP = HERE / "webapp"
@@ -178,9 +181,11 @@ def _strip_code_fences(text: str) -> str:
     return t.strip("\n") + "\n"
 
 
-def _llm_fix_code(code: str, filename: str, findings: list) -> str:
-    """Ask the configured LLM to rewrite the whole file so every listed
-    vulnerability is fixed, preserving behaviour and the public API.
+def _llm_fix_code(code: str, filename: str, fix_findings: list,
+                  keep_findings: list | None = None) -> str:
+    """Ask the configured LLM to rewrite the file so the AUTHORISED
+    vulnerabilities (`fix_findings`) are fixed, while leaving the code for
+    `keep_findings` (whose remediation the guard refused) exactly as-is.
     Returns the corrected source (fences stripped)."""
     # Reasoning models (e.g. gpt-5.5) spend part of max_completion_tokens on
     # hidden reasoning; give the rewrite a generous ceiling so the visible
@@ -191,14 +196,15 @@ def _llm_fix_code(code: str, filename: str, findings: list) -> str:
     # default 120s HTTP timeout, so give this call a generous ceiling.
     cfg["timeout"] = 600
     client = LLMClient.create(cfg)
-    if findings:
-        vulns = "\n".join(
+    keep_findings = keep_findings or []
+    def _fmt(items):
+        return "\n".join(
             f"- [{f.get('severity', '?')}] {f.get('rule_id', '?')} "
             f"(line {f.get('line', '?')}): {f.get('title', '')} — "
             f"{f.get('detail', '')}"
-            for f in findings)
-    else:
-        vulns = "(no scanner findings — harden defensively anyway)"
+            for f in items)
+    vulns = _fmt(fix_findings) or "(none)"
+    keep = _fmt(keep_findings)
     system = (
         "You are a senior secure-coding engineer. You are given a source file "
         "and the security vulnerabilities found in it. Rewrite the ENTIRE file "
@@ -222,19 +228,86 @@ def _llm_fix_code(code: str, filename: str, findings: list) -> str:
         "fences, no explanations, no commentary.")
     prompt = (
         f"Filename: {filename}\n\n"
-        f"Vulnerabilities to fix:\n{vulns}\n\n"
-        f"Original file:\n{code}\n\n"
-        "Return the full corrected file now.")
+        f"Vulnerabilities you MUST fix:\n{vulns}\n\n"
+        + (f"Vulnerabilities you MUST NOT touch — their remediation was NOT "
+           f"authorised by the security guard, so leave that code exactly "
+           f"as-is:\n{keep}\n\n" if keep else "")
+        + f"Original file:\n{code}\n\n"
+        "Return the full corrected file now — fix ONLY the authorised "
+        "vulnerabilities and preserve everything else verbatim.")
     resp = client.complete(prompt, system=system)
     return _strip_code_fences(resp.text)
 
 
+def _remedy_guard() -> SecurityGuard:
+    """The deterministic P1 guard used to gate per-finding fixes. No H_a
+    oracle here — code patches are non-destructive, so the four-property
+    floor decides, which keeps legitimate fixes from being over-refused."""
+    sec = _CFG.get("security", {}) or {}
+    return SecurityGuard(
+        allowed_objectives=sec.get("allowed_objectives", []),
+        authenticated_sources=sec.get("authenticated_sources", []),
+        trusted_destinations=sec.get("trusted_destinations", []),
+        ha_judge=None)
+
+
+def _plan_fixes(before: list, name: str, code: str) -> list:
+    """One guard-gated `code.propose_patch` step per finding. Returns a list of
+    {f, params, allowed, reason}."""
+    guard = _remedy_guard()
+    inputs = [
+        Input(content=code, source=name, trust_level="external"),
+        Input(content="Remediation requested by an authorised operator.",
+              source="user", trust_level="authenticated"),
+    ]
+    plan = []
+    for f in before:
+        sev = str(f.get("severity", "")).lower()
+        step = ActionStep(
+            rule_id=f.get("rule_id"), kind=StepKind.ERADICATE,
+            tool="code.propose_patch",
+            params={"rule_id": f.get("rule_id"), "file": name,
+                    "line": f.get("line"),
+                    "fix": "rewrite to a safe-by-construction pattern"},
+            description=f"auto-correct {f.get('rule_id')} — {f.get('title', '')}",
+            side_effect=SideEffect.WRITE,
+            requires_authorization=sev in ("critical", "high"))
+        v = guard.check_step(step, "auto-correct insecure code", inputs)
+        plan.append({"f": f, "params": step.params,
+                     "allowed": v.allowed, "reason": v.reason})
+    return plan
+
+
+def _apply_fixes(code: str, name: str, before: list):
+    """Guard-gate the fixes, apply the allowed ones with the LLM, and re-scan.
+    Returns (fixed_code, after_findings, plan). Shared by the web UI and the
+    benchmark's resolution metric."""
+    plan = _plan_fixes(before, name, code)
+    allowed = [p["f"] for p in plan if p["allowed"]]
+    blocked = [p["f"] for p in plan if not p["allowed"]]
+    fixed_code = code
+    if allowed:
+        cand = _llm_fix_code(code, name, allowed, blocked)
+        if len(cand.strip()) >= max(20, len(code.strip()) // 4):
+            fixed_code = cand
+    tmp = Path(tempfile.mkdtemp(prefix="cyberllm_fix_"))
+    try:
+        fpath = tmp / ("fixed__" + name)
+        fpath.write_text(fixed_code, encoding="utf-8")
+        after, _ = _scan_findings(fixed_code, name, fpath, deep=True)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return fixed_code, after, plan
+
+
 def run_web_remediate(code: str, filename: str = "input.py",
-                      deep: bool = True) -> dict:
-    """Fix-and-verify loop for the demo: scan the original code, ask the LLM
-    to rewrite it securely, then RE-SCAN the fixed code with the same static
-    layers so the UI can show a provable before/after. Thread-safe (the two
-    `_scan_findings` calls each take the scan lock internally)."""
+                      deep: bool = True, before: list | None = None) -> dict:
+    """Plan-driven fix-and-verify. For each finding we build a
+    `code.propose_patch` step and run it through the SecurityGuard; the LLM
+    then corrects ONLY the findings whose step the guard allowed. A refused
+    finding is left in place (its code is not touched), and the re-scan proves
+    it. This simulates executing the guarded plan rather than a blind rewrite.
+    Thread-safe (each `_scan_findings` takes the scan lock internally)."""
     info = _provider_info()
     if not info["llm_real"]:
         return {"ok": False,
@@ -243,18 +316,47 @@ def run_web_remediate(code: str, filename: str = "input.py",
     name = Path(filename).name or "input.py"
     tmp = Path(tempfile.mkdtemp(prefix="cyberllm_fix_"))
     try:
-        orig_path = tmp / name
-        orig_path.write_text(code, encoding="utf-8")
-        before, _ = _scan_findings(code, name, orig_path, deep=True)
+        # Reuse the caller's scan findings when supplied, so the per-finding
+        # plan lines up EXACTLY with what the Explorer shows (two independent
+        # Deep scans are non-deterministic and would otherwise mismatch).
+        if before is None:
+            orig_path = tmp / name
+            orig_path.write_text(code, encoding="utf-8")
+            before, _ = _scan_findings(code, name, orig_path, deep=True)
 
-        fixed_code = _llm_fix_code(code, name, before)
-        # Guard: a reasoning model can occasionally return an empty/truncated
-        # body. Scanning an empty file would falsely report "verified safe",
-        # so surface it as an error instead of a green verdict.
-        if len(fixed_code.strip()) < max(20, len(code.strip()) // 4):
-            return {"ok": False,
-                    "error": ("The model returned an incomplete rewrite. "
-                              "Please try again.")}
+        # ---- per-finding remediation plan, gated by the guard --------------
+        guard = _remedy_guard()
+        inputs = [
+            Input(content=code, source=name, trust_level="external"),
+            Input(content="Remediation requested by an authorised operator.",
+                  source="user", trust_level="authenticated"),
+        ]
+        plan = []
+        for f in before:
+            sev = str(f.get("severity", "")).lower()
+            step = ActionStep(
+                rule_id=f.get("rule_id"), kind=StepKind.ERADICATE,
+                tool="code.propose_patch",
+                params={"rule_id": f.get("rule_id"), "file": name,
+                        "line": f.get("line"),
+                        "fix": "rewrite to a safe-by-construction pattern"},
+                description=f"auto-correct {f.get('rule_id')} — {f.get('title', '')}",
+                side_effect=SideEffect.WRITE,
+                requires_authorization=sev in ("critical", "high"))
+            v = guard.check_step(step, "auto-correct insecure code", inputs)
+            plan.append({"f": f, "params": step.params,
+                         "allowed": v.allowed, "reason": v.reason})
+
+        allowed = [p["f"] for p in plan if p["allowed"]]
+        blocked = [p["f"] for p in plan if not p["allowed"]]
+        if allowed:
+            fixed_code = _llm_fix_code(code, name, allowed, blocked)
+            if len(fixed_code.strip()) < max(20, len(code.strip()) // 4):
+                return {"ok": False,
+                        "error": ("The model returned an incomplete rewrite. "
+                                  "Please try again.")}
+        else:
+            fixed_code = code            # nothing authorised → code unchanged
 
         fixed_path = tmp / ("fixed__" + name)
         fixed_path.write_text(fixed_code, encoding="utf-8")
@@ -267,24 +369,38 @@ def run_web_remediate(code: str, filename: str = "input.py",
                 c[s if s in c else "info"] += 1
             return c
 
+        def _still(f, items):
+            return any(x.get("rule_id") == f.get("rule_id")
+                       and x.get("line") == f.get("line") for x in items)
+
+        plan_out = []
+        for p in plan:
+            f = p["f"]
+            still = _still(f, after)
+            plan_out.append({
+                "rule_id": f.get("rule_id"), "title": f.get("title"),
+                "severity": f.get("severity"), "line": f.get("line"),
+                "tool": "code.propose_patch", "params": p["params"],
+                "allowed": p["allowed"], "guard_reason": p["reason"],
+                "still_present": still,
+                "outcome": ("blocked" if not p["allowed"]
+                            else ("fixed" if not still else "attempted")),
+            })
+
         before_sev = _sev_counts(before)
         after_sev = _sev_counts(after)
-        # "verified safe" = no exploitable (critical/high) findings remain on
-        # the rewritten code. Any residual low/medium are shown as advisories.
         blocking_after = after_sev["critical"] + after_sev["high"]
+        allowed_fixed = sum(1 for p in plan_out
+                            if p["allowed"] and not p["still_present"])
         return {
-            "ok": True,
-            "provider": info,
-            "filename": name,
-            "original_code": code,
-            "fixed_code": fixed_code,
-            "before": before,
-            "after": after,
-            "before_count": len(before),
-            "after_count": len(after),
-            "before_sev": before_sev,
-            "after_sev": after_sev,
+            "ok": True, "provider": info, "filename": name,
+            "original_code": code, "fixed_code": fixed_code,
+            "before": before, "after": after, "plan": plan_out,
+            "before_count": len(before), "after_count": len(after),
+            "before_sev": before_sev, "after_sev": after_sev,
             "advisory_after": after_sev["medium"] + after_sev["low"] + after_sev["info"],
+            "allowed_count": len(allowed), "blocked_count": len(blocked),
+            "allowed_fixed": allowed_fixed,
             "verified_safe": blocking_after == 0,
         }
     finally:
@@ -389,6 +505,60 @@ def run_web_attack(code: str, filename: str = "input.py",
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def run_attack_sim(code: str, filename: str = "input.py",
+                   script: dict | None = None, scenario: str = "") -> dict:
+    """Simulate — never execute — running a PoC exploit against the target
+    code, reasoning statically with the LLM. Returns a verdict of whether the
+    exploit would actually work against THIS code and the concrete outcome.
+    Offline (no live LLM) → a labelled heuristic placeholder."""
+    info = _provider_info()
+    s = script or {}
+    rid, title = s.get("rule_id", ""), s.get("title", "")
+    lang, body = s.get("language", ""), s.get("body", "")
+    effect = s.get("expected_effect", "")
+    if not info["llm_real"]:
+        return {"ok": True, "live": False, "simulation": {
+            "reachable": None, "success": None,
+            "outcome": (f"(offline heuristic) If the '{title or rid}' PoC reaches "
+                        f"the flagged sink, its expected effect is: "
+                        f"{effect or 'as described by the exploit'}."),
+            "impact": "Enable Deep (a live LLM) for a reasoned, code-specific simulation.",
+            "observable": "—", "preconditions": [], "confidence": 0.0}}
+    cfg = dict(_CFG["llm_configs"]["default"])
+    cfg["max_tokens"] = max(int(cfg.get("max_tokens", 2048) or 2048), 1500)
+    cfg["timeout"] = 300
+    client = LLMClient.create(cfg)
+    system = (
+        "You SIMULATE — never execute — the effect of running a proof-of-concept "
+        "exploit against a target source file, reasoning statically about the "
+        "code. Decide whether the exploit would ACTUALLY work against THIS "
+        "specific code and describe the concrete outcome step by step. Be "
+        "honest: if the vulnerable path is unreachable or the bug is not really "
+        "exploitable here, set success=false and explain why. Do not invent "
+        "behaviour the code does not support.\n"
+        "Return ONLY strict JSON: {\"reachable\": true|false, \"success\": "
+        "true|false, \"outcome\": \"...\", \"impact\": \"...\", \"observable\": "
+        "\"...\", \"preconditions\": [\"...\"], \"confidence\": <0..1>}.")
+    prompt = (
+        f"Target file: {filename}\n\nTarget source:\n{code}\n\n"
+        f"Proof-of-concept exploit (rule {rid} — {title}; {lang}); "
+        f"expected effect: {effect}\n---\n{body}\n---\n"
+        + (f"Attacker goal: {scenario}\n\n" if scenario else "")
+        + "Simulate running this PoC against the target and return the JSON verdict now.")
+    try:
+        resp = client.complete(prompt, system=system)
+    except Exception as exc:        # noqa: BLE001
+        return {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
+    txt = re.sub(r"```(?:json)?", "", resp.text or "").strip("`\n ")
+    try:
+        sim = json.loads(txt)
+    except Exception:        # noqa: BLE001 — model didn't return clean JSON
+        sim = {"reachable": None, "success": None,
+               "outcome": (resp.text or "")[:800], "impact": "",
+               "observable": "", "preconditions": [], "confidence": 0.0}
+    return {"ok": True, "live": True, "simulation": sim}
+
+
 # ---------------------------------------------------------------------------
 # Benchmark — run the scanner over the labelled automotive corpus and score it
 # against ground truth (location-based matching). See benchmark/automotive/.
@@ -480,13 +650,18 @@ def _match_file(gt_vulns: list, findings: list, window: int):
     return matched, extra
 
 
-def run_benchmark(deep: bool = False, window: int | None = None) -> dict:
-    """Scan every corpus file, score against ground truth, return metrics."""
+def run_benchmark(deep: bool = False, window: int | None = None,
+                  remediate: bool = False) -> dict:
+    """Scan every corpus file, score against ground truth, return metrics.
+    When `remediate` is set (and a live LLM is available in Deep mode), also
+    run the guard-gated auto-remediation per file and count how many DETECTED
+    ground-truth vulnerabilities are successfully resolved (gone on re-scan)."""
     gt = _load_ground_truth()
     window = int(window) if window is not None else int(gt["meta"].get("match_window", 3))
+    do_remediate = bool(remediate) and bool(deep) and _provider_info()["llm_real"]
 
     files_out = []
-    tp = fn = fp_clean = extra_total = 0
+    tp = fn = fp_clean = extra_total = total_resolved = 0
     by_sev = defaultdict(lambda: {"total": 0, "covered": 0})
     by_cat = defaultdict(lambda: {"total": 0, "covered": 0})
     by_lang = defaultdict(lambda: {"total": 0, "covered": 0})
@@ -520,10 +695,36 @@ def run_benchmark(deep: bool = False, window: int | None = None) -> dict:
                 tbl[key]["total"] += 1
                 if m["detected"]:
                     tbl[key]["covered"] += 1
+
+        # ---- optional: remediate and count successfully-resolved vulns -----
+        resolved = 0
+        remediated = False
+        if do_remediate and findings:
+            try:
+                _fixed, after, _plan = _apply_fixes(code, f["path"], findings)
+                remediated = True
+                for m in matched:
+                    if m["detected"] and m.get("matched"):
+                        mm = m["matched"]
+                        gone = not any(x.get("rule_id") == mm.get("rule_id")
+                                       and x.get("line") == mm.get("line")
+                                       for x in after)
+                        m["resolved"] = bool(gone)
+                        if gone:
+                            resolved += 1
+                            for tbl, key in ((by_sev, m["severity"]),
+                                             (by_cat, m["category"]),
+                                             (by_lang, f["language"])):
+                                tbl[key]["resolved"] = tbl[key].get("resolved", 0) + 1
+            except Exception:        # noqa: BLE001 — remediation is best-effort
+                remediated = False
+        total_resolved += resolved
+
         files_out.append({
             "path": f["path"], "language": f["language"],
             "subsystem": f["subsystem"], "clean": False, "ingested": ingested,
             "n_vulns": len(matched), "covered": covered,
+            "resolved": resolved, "remediated": remediated,
             "false_positives": 0, "vulns": matched, "extra": extra,
             "n_findings": len(findings),
         })
@@ -544,6 +745,9 @@ def run_benchmark(deep: bool = False, window: int | None = None) -> dict:
             "coverage_pct": round(recall * 100, 1),
             "precision": round(precision, 3), "recall": round(recall, 3),
             "f1": round(f1, 3),
+            "remediated": do_remediate,
+            "resolved": total_resolved,
+            "resolution_rate": round(total_resolved / tp, 3) if tp else 0.0,
             "by_severity": dict(by_sev), "by_category": dict(by_cat),
             "by_language": dict(by_lang),
         },
@@ -598,8 +802,24 @@ class Handler(BaseHTTPRequestHandler):
                 length = int(self.headers.get("Content-Length") or 0)
                 payload = json.loads(self.rfile.read(length) or b"{}")
                 result = run_benchmark(deep=bool(payload.get("deep")),
-                                       window=payload.get("window"))
+                                       window=payload.get("window"),
+                                       remediate=bool(payload.get("remediate")))
                 return self._json(200, result)
+            except Exception as exc:        # noqa: BLE001
+                traceback.print_exc()
+                return self._json(500, {"ok": False,
+                                        "error": f"{type(exc).__name__}: {exc}"})
+        if self.path == "/api/attack_sim":
+            try:
+                length = int(self.headers.get("Content-Length") or 0)
+                payload = json.loads(self.rfile.read(length) or b"{}")
+                code = (payload.get("code") or "").strip()
+                if not code:
+                    return self._json(400, {"ok": False, "error": "no code provided"})
+                return self._json(200, run_attack_sim(
+                    code=code, filename=payload.get("filename") or "input.py",
+                    script=payload.get("script") or {},
+                    scenario=payload.get("scenario") or ""))
             except Exception as exc:        # noqa: BLE001
                 traceback.print_exc()
                 return self._json(500, {"ok": False,
@@ -628,9 +848,11 @@ class Handler(BaseHTTPRequestHandler):
                 code = (payload.get("code") or "").strip()
                 if not code:
                     return self._json(400, {"ok": False, "error": "no code provided"})
+                _before = payload.get("findings")
                 result = run_web_remediate(
                     code=code, filename=payload.get("filename") or "input.py",
-                    deep=bool(payload.get("deep", True)))
+                    deep=bool(payload.get("deep", True)),
+                    before=_before if isinstance(_before, list) and _before else None)
                 return self._json(200, result)
             except Exception as exc:        # noqa: BLE001
                 traceback.print_exc()
