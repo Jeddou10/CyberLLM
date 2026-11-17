@@ -51,7 +51,7 @@ See [research background](docs/research.md) for the detailed implementation
 mapping. P5 is preserved from the original project bibliography; its direct
 publication link has not yet been confirmed.
 
-[CyberLLM: A Multi-Agent LLM Framework for Autonomous Detection and Guarded Response in Automotive Cybersecurity](https://arxiv.org/pdf/2608.06651)
+[CyberLLM: A Multi-Agent LLM Framework for Autonomous Detection and Guarded Response in Automotive Cybersecurity](https://arxiv.org/abs/2608.06651)
 
 ## Quick start
 
