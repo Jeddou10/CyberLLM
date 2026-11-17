@@ -778,6 +778,17 @@ class Handler(BaseHTTPRequestHandler):
         self._send(code, json.dumps(obj).encode("utf-8"), "application/json")
 
     def do_GET(self):
+        # Serve only the two application assets, never arbitrary local paths.
+        assets = {
+            "/assets/styles.css": ("assets/styles.css", "text/css; charset=utf-8"),
+            "/assets/app.js": ("assets/app.js", "text/javascript; charset=utf-8"),
+        }
+        if self.path in assets:
+            relative_path, content_type = assets[self.path]
+            asset = WEBAPP / relative_path
+            if not asset.is_file():
+                return self._json(404, {"ok": False, "error": "asset not found"})
+            return self._send(200, asset.read_bytes(), content_type)
         if self.path in ("/", "/index.html"):
             f = WEBAPP / "index.html"
             if not f.exists():

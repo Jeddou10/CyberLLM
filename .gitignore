@@ -1,3 +1,6 @@
+# Local verification artifacts (not part of the public repository)
+/.local-review/
+
 # --- PDFs ---
 *.pdf
 
@@ -29,13 +32,23 @@ ENV/
 # --- Environment / secrets ---
 .env
 .env.*
+!.env.example
+*.pem
+*.key
 
 # --- Runtime artifacts ---
 # Timestamped run outputs (keep example fixtures in examples/logs/)
 run_logs/
 memory/last_run.json
+/CyberLLM/memory/*
+!/CyberLLM/memory/.gitkeep
+/CyberLLM/examples/last_batch_results.json
+/CyberLLM/examples/juliet/
 # Signed incident store (Phase E) — regenerated on every run
 *.db
+*.db-journal
+*.db-wal
+*.db-shm
 incidents.db
 # Action-engine scratch dir (patches, snapshots, secret store, runbooks)
 mcp_workspace/
@@ -44,6 +57,7 @@ mcp_workspace/
 .DS_Store
 Thumbs.db
 desktop.ini
+*.swp
 
 # --- Presentation & paper notes (local-only, not part of the code handoff) ---
 Papers_Notes/
@@ -53,3 +67,6 @@ presentation.html
 presentation_script.md
 generate_pptx.py
 generate_script_pdf.py
+/CyberLLM/prompts/
+/CyberLLM/all_info/
+/CyberLLM/improvements_and_exploration.md

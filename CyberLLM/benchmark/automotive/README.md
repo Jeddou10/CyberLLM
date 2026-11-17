@@ -41,9 +41,10 @@ python server.py            # → http://127.0.0.1:8000  → "Benchmark" tab →
 ```
 
 - **Fast** (default): the deterministic layers only (regex floor; bandit/semgrep
-  if present). Offline, instant, free.
-- **Deep (AI)**: toggle it on to run the live LLM (Azure gpt-4o) once per
-  ingested file — the realistic detector for C/C++/Rust. Costs tokens, ~30 s.
+  if present). Disable external analyzers for a fully offline run.
+- **Deep (AI)**: toggle it on to use the configured live LLM. The optional
+  completeness pass makes an additional call per file. Latency and cost depend
+  on the provider, input size, and model.
 
 The UI shows coverage %, precision/recall/F1, false positives, coverage bars by
 **severity / category / language**, and a per-file accordion marking each
@@ -67,58 +68,21 @@ Programmatically: `POST /api/benchmark {"deep": false, "window": 3}` (or
   **extra (unlabeled)** and are *not* scored as wrong — the label set is
   must-have, not exhaustive (same convention as `evaluate.py`).
 
-## Results (reference)
+## Reproducibility and limits
 
-Measured on this corpus with greedy location matching (±3 lines). Precision is
-1.000 in every run — the clean controls produce zero findings.
+The original documentation reported roughly 34% Fast coverage and 70% Deep
+coverage. Those historical figures are not accompanied by reproducible run
+artifacts in the current tree and are not a performance guarantee. Run the
+benchmark again before citing results, and record the commit, provider/model,
+optional analyzer versions, configuration, and match window.
 
-| Run | Coverage | Precision | Recall | F1 | C | C++ | Rust |
-|-----|:--------:|:---------:|:------:|:--:|:---:|:---:|:----:|
-| Fast (offline) | **34.0%** (16/47) | 1.000 | 0.340 | 0.508 | 3/15 | 6/16 | 7/16 |
-| Deep (gpt-4o + completeness pass) | **~70%** (33/47) | 1.000 | 0.70 | **0.83** | 9/15 | 12/16 | 12/16 |
+A precision of 1.0 here means that the two clean controls produced no findings
+in that run. It does not establish general precision on arbitrary source code.
+Model prompts that request high-confidence findings do not guarantee the absence
+of false positives. A disappearing finding after remediation is not proof of
+functional correctness.
 
-Deep is the LLM run *with the completeness second pass on*; medium-severity
-coverage (races, off-by-one, UAF, reachable panics) rises from 3/11 to ~8/11.
-Deep numbers vary a few points run-to-run (the model is non-deterministic);
-precision stays 1.000 because the second-pass critic is told to treat
-defensive patterns as safe and only report high-confidence defects.
-
-**Progression** (each improvement, Deep coverage / F1):
-first cut 25.5% / 0.41  →  +multi-language & native rules 55.3% / 0.71  →
-+completeness second pass ~70% / ~0.83.
-
-## Improvements applied to make detection production-grade
-
-- **Multi-language ingestion.** The scanner now accepts `.c/.h/.cc/.cpp/.cxx/
-  .hpp/.rs/.go/.java/.js/.ts` (was `.py/.c/.cpp`), so Rust and headers are
-  actually analysed (`agents/source_code_scanner.py: CODE_SUFFIXES`).
-- **Native-language rules.** `rules/native_rules.yaml` adds C/C++/Rust patterns
-  (banned string functions, `system`/`popen`, `unsafe`, `unwrap/expect`,
-  `transmute`, weak RNG, `format!` SQL, shell spawning) that lift the offline
-  regex floor *and* anchor the LLM (rules-as-context). Each pattern is verified
-  not to fire on the clean controls, so precision stays 1.000.
-- **Larger LLM budget.** `config.yaml` default `max_tokens` 1024 → 2048 so
-  multi-finding scans of larger files aren't truncated.
-- **Completeness second pass.** After the first LLM pass, a focused
-  "what did you miss?" critic (`scanners.second_pass`) hunts the subtle classes
-  pattern-matching misses — races, off-by-one, use-after-free, integer
-  over/underflow, reachable panics, missing authorization, TOCTOU. It is told to
-  report only high-confidence defects and to treat defensive patterns
-  (parameterized queries, bounds-checked copies, constant-time compares,
-  Result/Option handling) as safe, so precision is preserved. Gated by `use_llm`
-  and a no-op under the offline stub.
-- **semgrep**: the AST layer is wired (`scan_code_external`) and activates
-  automatically wherever the `semgrep` binary/module is installed — a strong
-  offline boost for C/C++/Rust on Linux/CI. It is simply skipped (gracefully)
-  where semgrep is absent.
-
-## Honest limitations (read before quoting numbers)
-
-- **Fast vs Deep.** Fast is the deterministic floor (regex + bandit/semgrep
-  where present); Deep adds the LLM. Quote Deep for a realistic capability
-  number, Fast for the offline/zero-cost baseline.
-- **Medium-severity logic/DoS** (subtle races, off-by-one, NULL deref) remain
-  the hardest class and are where most remaining misses sit — the most useful
-  signal for where to invest next.
-- The label set is *must-have*, not exhaustive: "extra (unlabeled)" findings on
-  vulnerable files are reported but not scored as wrong.
+Keep source lines and `ground_truth.yaml` synchronized when intentionally
+changing the corpus. Do not reformat these fixtures during repository cleanup.
+The [evaluation guide](../../../docs/evaluation.md) explains both evaluation
+paths; [testing](../../../docs/testing.md) describes the offline checks.

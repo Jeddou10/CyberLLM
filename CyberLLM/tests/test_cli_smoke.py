@@ -7,6 +7,7 @@ work. Cheap insurance against argparse / import-time bugs.
 from __future__ import annotations
 
 import os
+import site
 import subprocess
 import sys
 from pathlib import Path
@@ -19,12 +20,10 @@ def _env_for_subprocess() -> dict:
     """Propagate the user-site-packages path on Windows + force UTF-8."""
     env = os.environ.copy()
     env["PYTHONIOENCODING"] = "utf-8"
-    site = (
-        r"C:\Users\Oussama_Jeddou\AppData\Roaming\Python\Python311\site-packages"
-    )
-    if os.path.isdir(site):
+    user_site = site.getusersitepackages()
+    if site.ENABLE_USER_SITE and os.path.isdir(user_site):
         existing = env.get("PYTHONPATH", "")
-        env["PYTHONPATH"] = (site + os.pathsep + existing) if existing else site
+        env["PYTHONPATH"] = (user_site + os.pathsep + existing) if existing else user_site
     return env
 
 

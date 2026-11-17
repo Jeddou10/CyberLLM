@@ -1,103 +1,39 @@
-# Examples — test inputs for the CyberLLM pipeline
+# Example inputs
 
-This directory holds a graded set of realistic test inputs, ranging
-from one-file toy programs to a multi-module backend. Use them to
-stress-test the pipeline, measure detection vs false-positive rates,
-and develop new rules.
+These are synthetic analysis fixtures, including intentionally vulnerable source
+code. Read them as test inputs; they are not deployable application templates.
+The pipeline does not need their third-party application dependencies installed.
 
 ## Layout
 
-```
-examples/
-├── README.md                ← this file
-├── scenarios.md             ← per-example expected findings table
-├── run_examples.py          ← batch test runner
-│
-├── sample_code.py           ← legacy 1st-pipeline file (kept for back-compat)
-├── sample_log.log
-├── sample_deployment.yaml
-│
-├── small/                   ← single-file scenarios
-│   ├── 01_clean_auth.py             (negative control — should be clean)
-│   ├── 02_can_gateway.py            (automotive CAN gateway)
-│   ├── 03_ota_updater.py            (firmware OTA installer)
-│   ├── 04_telemetry_uploader.py     (IoT uploader)
-│   └── 05_mqtt_handler.c            (embedded C, MQTT callback)
-│
-├── medium/                  ← multi-file mini-projects
-│   ├── ev_charging_api/             (Flask EV-charging REST API)
-│   └── adas_decision/               (ADAS perception → decision → actuator)
-│
-├── large/                   ← realistic backend layout
-│   └── fleet_management/            (FastAPI + Kafka + Postgres fleet backend)
-│
-├── logs/                    ← log scenarios paired with the source files
-│   ├── 01_clean_baseline.log
-│   ├── 02_brute_force_ssh.log
-│   ├── 03_can_injection.log
-│   ├── 04_data_exfiltration.log
-│   ├── 05_lateral_movement.log
-│   └── 06_ddos_pattern.log
-│
-└── deployments/             ← topology / deployment configs
-    ├── 01_clean_minimal.yaml
-    ├── 02_misconfigured_cloud.yaml
-    └── 03_complex_sdv.yaml
-```
+| Path | Contents |
+| --- | --- |
+| `small/` | Five single-file examples, including a clean authentication control. |
+| `medium/` | EV charging API and ADAS decision mini-projects. |
+| `large/fleet_management/` | Multi-module fleet backend fixture. |
+| `logs/` | Clean, brute-force, CAN injection, exfiltration, lateral movement, and DDoS logs. |
+| `deployments/` | Clean, misconfigured cloud, and SDV actor/datasource topologies. |
+| `attack_scenarios/` | Scenario text for attack-modeling runs. |
+| `test_vulns/`, `test_blind/` | Additional source fixtures and blind-test expected findings. |
+| `labels.yaml` | Ground truth for the static evaluation harness. |
+| `scenarios.md` | Narrative scenario descriptions and expected findings. |
+| `sample_*` | Original sample inputs retained for compatibility and CLI defaults. |
 
-## How to run
+## Run
 
-The pipeline accepts one of each input type per run (code / log /
-deployment). To run a single combination:
+From `CyberLLM/`:
 
 ```bash
-python pipeline.py \
-    --code        examples/small/02_can_gateway.py \
-    --log         examples/logs/03_can_injection.log \
-    --deployment  examples/deployments/03_complex_sdv.yaml
+python pipeline.py --example small
+python pipeline.py --mode both --example medium
+python pipeline.py --code examples/test_blind/01_fleet_db_service.py
+python evaluate.py
 ```
 
-To run **every** suggested combination (defined in `scenarios.md`)
-and write a results table to disk:
+Use the [offline switches](../../docs/getting-started.md#deterministic-offline-runs)
+to force deterministic local execution. CLI stub responses can contain canned
+findings; use the static harness or Fast web scanning for detection measurements.
 
-```bash
-python examples/run_examples.py
-```
-
-## What the stub LLM will and won't catch
-
-`run_examples.py` will work, but with the default `provider: stub`
-the baseline detection rate is intentionally low — the stub returns
-canned findings for the three original demo files and doesn't know
-about the new ones. **That is by design**: the harness is what you
-need first; the LLM is what makes the numbers go up.
-
-Recommended next step: switch `config.yaml` to a real provider (Ollama
-locally, or OpenAI / Anthropic) and re-run `run_examples.py`. The
-scorecard format stays the same; the detection rates should improve
-substantially.
-
-## Notes on the "clean" examples
-
-`small/01_clean_auth.py`, parts of `large/fleet_management/auth/`,
-`large/fleet_management/utils/logging_setup.py`, and
-`deployments/01_clean_minimal.yaml` are deliberately CLEAN. They serve
-two purposes:
-
-1. **False-positive baseline.** If your real LLM raises findings on
-   these, you have a precision problem to fix in your prompts or
-   rules.
-2. **Confidence calibration.** The decision agent should pick the
-   `none` tier with high confidence here. If it doesn't, the scoring
-   needs more weight on "did *any* scanner produce a finding".
-
-## Notes on the "deliberately bad" examples
-
-Every vulnerability is tagged in a comment with a `CODE-NNN`,
-`SAFE-NNN`, `TOP-NNN`, or `LOG-…` rule id. The id corresponds to an
-entry in either `../rules/example_rules.yaml` or
-`../rules/extended_rules.yaml`.
-
-This lets you run the pipeline and then **diff** the rule ids it
-reported against the rule ids hidden in the comments — that's your
-detection rate.
+`run_examples.py` and `../run_blind_tests.py` are legacy helpers with known record
+format mismatches. See [known limitations](../../docs/known-limitations.md).
+The optional Juliet corpus is not included in this repository.

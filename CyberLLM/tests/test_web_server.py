@@ -154,6 +154,26 @@ class TestHttpApi:
         with urllib.request.urlopen(live_server + "/", timeout=30) as r:
             body = r.read().decode()
         assert "CyberLLM" in body and "<html" in body.lower()
+        assert 'href="/assets/styles.css"' in body
+        assert 'src="/assets/app.js"' in body
+
+    @pytest.mark.parametrize("path, content_type", [
+        ("/assets/styles.css", "text/css"),
+        ("/assets/app.js", "text/javascript"),
+    ])
+    def test_ui_assets_served(self, live_server, path, content_type):
+        with urllib.request.urlopen(live_server + path, timeout=30) as response:
+            assert response.headers.get_content_type() == content_type
+            assert response.headers["Cache-Control"] == "no-store"
+            assert response.read() == (server.WEBAPP / path.lstrip("/")).read_bytes()
+
+    @pytest.mark.parametrize("path", [
+        "/assets/missing.js", "/assets/../config.yaml", "/config.yaml", "/.env",
+    ])
+    def test_nonpublic_files_not_served(self, live_server, path):
+        with pytest.raises(urllib.error.HTTPError) as exc:
+            urllib.request.urlopen(live_server + path, timeout=30)
+        assert exc.value.code == 404
 
     def test_health(self, live_server):
         h = _get(live_server + "/api/health")
